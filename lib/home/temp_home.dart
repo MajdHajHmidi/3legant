@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
 
           SliverToBoxAdapter(
             child: ElevatedButton(
-              onPressed: () => context.pushNamed(AppRoute.blogs.name),
+              onPressed: () => context.pushNamed(AppRoutes.blogs.name),
               child: Text('See Other Blogs'),
             ),
           ),

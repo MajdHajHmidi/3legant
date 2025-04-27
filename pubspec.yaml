@@ -42,7 +42,8 @@ dependencies:
   flutter_svg: ^2.1.0
   device_preview: ^1.2.0
   responsive_sizer: ^3.3.1
-  bloc: ^9.0.0
+  shimmer: ^3.0.0
+  flutter_async_value: ^1.0.0
 
 dev_dependencies:
   flutter_test:

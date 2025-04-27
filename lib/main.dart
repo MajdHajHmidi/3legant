@@ -1,9 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:e_commerce/core/navigation/router.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:e_commerce/core/styles/themes.dart';
 import 'package:e_commerce/core/util/bloc_observer.dart';
-import 'package:e_commerce/home/temp_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,11 +19,9 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
-  // ------ Run app ------
-  // BlocOverrides.runZoned(
-  //   () => runApp(DevicePreview(builder: (context) => const MyApp())),
-  //   blocObserver: AppBlocObserver(),
-  // );
+  // ------ Attach Bloc Observer ------
+  Bloc.observer = AppBlocObserver();
+
   runApp(DevicePreview(builder: (context) => const MyApp()));
 
 }
