@@ -1,9 +1,12 @@
-import 'package:e_commerce/auth/temp_auth.dart';
+import 'package:e_commerce/auth/cubit/auth_cubit.dart';
+import 'package:e_commerce/auth/presentation/screens/auth_forgot_password.dart';
+import 'package:e_commerce/auth/presentation/screens/auth_screen.dart';
 import 'package:e_commerce/blogs/temp_blogs.dart';
 import 'package:e_commerce/core/widgets/bottom_navbar.dart';
 import 'package:e_commerce/home/temp_home.dart';
 import 'package:e_commerce/profile/temp_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,7 +14,8 @@ enum AppRoutes {
   home(name: 'home', path: '/'),
   profile(name: 'profile', path: '/profile'),
   blogs(name: 'blogs', path: '/blogs'),
-  login(name: 'login', path: '/login');
+  auth(name: 'auth', path: '/auth'),
+  forgotPassword(name: 'forgotPassword', path: '/auth/forgotPassword');
 
   const AppRoutes({required this.name, required this.path});
   final String name;
@@ -23,18 +27,23 @@ final _homeNavigatorKey = GlobalKey<NavigatorState>();
 final _profileNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
+  debugLogDiagnostics: true,
   navigatorKey: _rootNavigatorKey,
   initialLocation: AppRoutes.home.path,
   redirect: (context, state) {
     final session = Supabase.instance.client.auth.currentSession;
     final isLoggedIn = session != null;
 
-    final isLoggingIn = state.path == '/login';
+    final isOnAuthScreen = state.matchedLocation == AppRoutes.auth.path;
+    final isOnForgotPassword =
+        state.matchedLocation == AppRoutes.forgotPassword.path;
 
-    if (!isLoggedIn && !isLoggingIn) {
-      return '/login';
-    } else if (isLoggedIn && isLoggingIn) {
-      return '/';
+    if (!isLoggedIn && !isOnAuthScreen && !isOnForgotPassword) {
+      return AppRoutes.auth.path;
+    }
+
+    if (isLoggedIn && isOnAuthScreen) {
+      return AppRoutes.home.path;
     }
 
     return null;
@@ -73,9 +82,22 @@ final router = GoRouter(
       builder: (context, state) => const BlogsScreen(),
     ),
     GoRoute(
-      name: AppRoutes.login.name,
-      path: AppRoutes.login.path,
-      builder: (context, state) => const LoginScreen(),
+      name: AppRoutes.auth.name,
+      path: AppRoutes.auth.path,
+      builder:
+          (context, state) => BlocProvider(
+            create: (context) => AuthCubit(),
+            child: const AuthScreen(),
+          ),
+    ),
+    GoRoute(
+      name: AppRoutes.forgotPassword.name,
+      path: AppRoutes.forgotPassword.path,
+      builder:
+          (context, state) => BlocProvider.value(
+            value: state.extra! as AuthCubit,
+            child: const AuthForgotPassword(),
+          ),
     ),
   ],
 );
