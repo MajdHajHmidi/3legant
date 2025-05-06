@@ -12,6 +12,7 @@ class AppTextFormField extends StatelessWidget {
   final String? Function(String? value)? validator;
   final void Function(String value)? onChanged;
   final void Function(String value)? onFieldSubmitted;
+  final TextInputType? keyboardType;
   const AppTextFormField({
     super.key,
     required this.controller,
@@ -22,7 +23,8 @@ class AppTextFormField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     this.onSuffixIconPressed,
-    this.onFieldSubmitted
+    this.onFieldSubmitted,
+    this.keyboardType,
   });
 
   @override
@@ -36,6 +38,7 @@ class AppTextFormField extends StatelessWidget {
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: AppTextStyles.caption1.copyWith(

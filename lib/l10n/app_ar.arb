@@ -22,5 +22,11 @@
     "authEnterValidPasswordError": "Password must be at least 8 characters long",
     "authConfirmPasswordError": "Please confirm your password",
     "authPasswordsDontMatchError": "Passwords do not match",
-    "authForgotPasswordTitle": "Forgot password"
+    "authForgotPasswordTitle": "Forgot password",
+    "authVerifyEmailDialogTitle": "Verify Email",
+    "authVerifyEmailDialogContent": "A confirmation link has been sent to your email. Please check your inbox",
+    "authEmailSigninError": "{code, select, 400{Invalid login credentials} 0{An error occurred} other{An error occurred}}",
+    "authGoogleSigninError": "{code, select, 0{An error occurred} other{An error occurred}}",
+    "authGoogleSignupError": "{code, select, 0{An error occurred} other{An error occurred}}",
+    "authEmailSignupError": "{code, select, 422{User already registered} 429{Please wait 1 minute before trying again} 0{An error occurred} other{An error occurred}}"
 }

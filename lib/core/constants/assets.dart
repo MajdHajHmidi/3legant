@@ -24,3 +24,10 @@ class AppIcons {
   static const ticket = '${_directory}ticket$_fileType';
   static const youtube = '${_directory}youtube$_fileType';
 }
+
+class AppImages {
+  static const _directory = 'assets/images/';
+  static const _pngFileType = '.png';
+
+  static const authScreenChair = '${_directory}auth_screen_chair$_pngFileType';
+}

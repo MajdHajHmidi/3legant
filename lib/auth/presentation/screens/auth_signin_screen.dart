@@ -147,6 +147,7 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                           controller: cubit.emailFieldController,
                           textInputAction: TextInputAction.next,
                           validator: (value) => cubit.validateEmail(context),
+                          keyboardType: TextInputType.emailAddress,
                         ),
                         const SizedBox(height: 32),
                         BlocBuilder<AuthCubit, AuthState>(
@@ -158,10 +159,11 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
 
                             return AppTextFormField(
                               hint: localization(context).authFieldPassword,
-                              controller:
-                                  cubit.signinPasswordFieldController,
+                              controller: cubit.signinPasswordFieldController,
                               textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (value) => cubit.signinWithEmailAndPassword(context),
+                              onFieldSubmitted:
+                                  (value) =>
+                                      cubit.signinWithEmailAndPassword(context),
                               validator:
                                   (value) =>
                                       cubit.validateSigninPassword(context),
@@ -191,7 +193,11 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                   ),
                   const SizedBox(height: 12),
                   GestureDetector(
-                    onTap: () => context.pushNamed(AppRoutes.forgotPassword.name, extra: cubit),
+                    onTap:
+                        () => context.pushNamed(
+                          AppRoutes.forgotPassword.name,
+                          extra: cubit,
+                        ),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
@@ -204,9 +210,22 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                   ),
 
                   const SizedBox(height: 32),
-                  AppButton(
-                    onPressed: () => cubit.signinWithEmailAndPassword(context),
-                    text: localization(context).authSignIn,
+                  BlocBuilder<AuthCubit, AuthState>(
+                    buildWhen:
+                        (_, state) =>
+                            state is AuthEmailSigninLoadingState ||
+                            state is AuthEmailSigninSuccessState ||
+                            state is AuthEmailSigninErrorState,
+                    builder: (context, state) {
+                      final cubit = context.read<AuthCubit>();
+
+                      return AppButton(
+                        onPressed:
+                            () => cubit.signinWithEmailAndPassword(context),
+                        loading: cubit.emailSignInLoading,
+                        text: localization(context).authSignIn,
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
                   Row(
@@ -237,11 +256,23 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                     ],
                   ),
                   const SizedBox(height: 32),
-                  AppButton(
-                    onPressed: () => cubit.signinWithGoogle(context),
-                    text: localization(context).authSigninWithGoogle,
-                    lightTheme: true,
-                    prefixIcon: SvgPicture.asset(AppIcons.google),
+                  BlocBuilder<AuthCubit, AuthState>(
+                    buildWhen:
+                        (_, state) =>
+                            state is AuthGoogleSigninLoadingState ||
+                            state is AuthGoogleSigninSuccessState ||
+                            state is AuthGoogleSigninErrorState,
+                    builder: (context, state) {
+                      final cubit = context.read<AuthCubit>();
+
+                      return AppButton(
+                        onPressed: () => cubit.signinWithGoogle(context),
+                        text: localization(context).authSigninWithGoogle,
+                        loading: cubit.googleSignInLoading,
+                        lightTheme: true,
+                        prefixIcon: SvgPicture.asset(AppIcons.google),
+                      );
+                    },
                   ),
                   const SizedBox(height: 40),
                 ],

@@ -1,4 +1,5 @@
 import 'package:e_commerce/auth/cubit/auth_cubit.dart';
+import 'package:e_commerce/auth/data/auth_repo.dart';
 import 'package:e_commerce/auth/presentation/screens/auth_forgot_password.dart';
 import 'package:e_commerce/auth/presentation/screens/auth_screen.dart';
 import 'package:e_commerce/blogs/temp_blogs.dart';
@@ -23,8 +24,6 @@ enum AppRoutes {
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _homeNavigatorKey = GlobalKey<NavigatorState>();
-final _profileNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   debugLogDiagnostics: true,
@@ -34,15 +33,21 @@ final router = GoRouter(
     final session = Supabase.instance.client.auth.currentSession;
     final isLoggedIn = session != null;
 
-    final isOnAuthScreen = state.matchedLocation == AppRoutes.auth.path;
-    final isOnForgotPassword =
-        state.matchedLocation == AppRoutes.forgotPassword.path;
+    // List of auth-related screens
+    final isAuthRoute = [
+      AppRoutes.auth.path,
+      AppRoutes.forgotPassword.path,
+      '/login-callback',
+    ].any((path) => state.uri.toString().contains(path));
 
-    if (!isLoggedIn && !isOnAuthScreen && !isOnForgotPassword) {
+    // While not authenticated:
+    // redirect to auth screen unless currently in an auth-related screen
+    if (!isLoggedIn && !isAuthRoute) {
       return AppRoutes.auth.path;
     }
 
-    if (isLoggedIn && isOnAuthScreen) {
+    // If tried to access auth screen while already authenticated, redirect to home
+    if (isLoggedIn && state.uri.path == AppRoutes.auth.path) {
       return AppRoutes.home.path;
     }
 
@@ -55,7 +60,6 @@ final router = GoRouter(
       },
       branches: [
         StatefulShellBranch(
-          navigatorKey: _homeNavigatorKey,
           routes: [
             GoRoute(
               path: AppRoutes.home.path,
@@ -65,7 +69,6 @@ final router = GoRouter(
           ],
         ),
         StatefulShellBranch(
-          navigatorKey: _profileNavigatorKey,
           routes: [
             GoRoute(
               path: AppRoutes.profile.path,
@@ -86,7 +89,7 @@ final router = GoRouter(
       path: AppRoutes.auth.path,
       builder:
           (context, state) => BlocProvider(
-            create: (context) => AuthCubit(),
+            create: (context) => AuthCubit(authRepo: SupabaseAuthRepo()),
             child: const AuthScreen(),
           ),
     ),

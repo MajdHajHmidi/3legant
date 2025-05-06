@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:e_commerce/auth/cubit/auth_cubit.dart';
 import 'package:e_commerce/core/constants/assets.dart';
 import 'package:e_commerce/core/styles/colors.dart';
@@ -153,6 +152,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                           hint: localization(context).authFieldEmail,
                           controller: cubit.emailFieldController,
                           textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.emailAddress,
                           validator: (value) => cubit.validateEmail(context),
                         ),
                         const SizedBox(height: 32),
@@ -222,46 +222,49 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                         },
                       ),
                       const SizedBox(width: 8),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '${localization(context).authAgreeWith} ',
-                              style: AppTextStyles.caption2.copyWith(
-                                color: AppColors.neutral_04,
+                      Flexible(
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '${localization(context).authAgreeWith} ',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: AppColors.neutral_04,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: localization(context).authPrivacyPolicy,
-                              style: AppTextStyles.caption2Semi.copyWith(
-                                color: AppColors.neutral_07,
+                              TextSpan(
+                                text: localization(context).authPrivacyPolicy,
+                                style: AppTextStyles.caption2Semi.copyWith(
+                                  color: AppColors.neutral_07,
+                                ),
+                                recognizer:
+                                    TapGestureRecognizer()
+                                      ..onTap =
+                                          () =>
+                                              cubit.launchPrivacyPolicyWebpage(
+                                                context,
+                                              ),
                               ),
-                              recognizer:
-                                  TapGestureRecognizer()
-                                    ..onTap =
-                                        () => cubit.launchPrivacyPolicyWebpage(
-                                          context,
-                                        ),
-                            ),
-                            TextSpan(
-                              text: ' ${localization(context).authAnd} ',
-                              style: AppTextStyles.caption2.copyWith(
-                                color: AppColors.neutral_04,
+                              TextSpan(
+                                text: ' ${localization(context).authAnd} ',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: AppColors.neutral_04,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: localization(context).authTermsOfUse,
-                              style: AppTextStyles.caption2Semi.copyWith(
-                                color: AppColors.neutral_07,
+                              TextSpan(
+                                text: localization(context).authTermsOfUse,
+                                style: AppTextStyles.caption2Semi.copyWith(
+                                  color: AppColors.neutral_07,
+                                ),
+                                recognizer:
+                                    TapGestureRecognizer()
+                                      ..onTap =
+                                          () => cubit.launchTermsOfUseWebpage(
+                                            context,
+                                          ),
                               ),
-                              recognizer:
-                                  TapGestureRecognizer()
-                                    ..onTap =
-                                        () => cubit.launchTermsOfUseWebpage(
-                                          context,
-                                        ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -269,7 +272,11 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                   const SizedBox(height: 32),
                   BlocBuilder<AuthCubit, AuthState>(
                     buildWhen:
-                        (_, state) => state is AuthPrivacyPolicyToggledState,
+                        (_, state) =>
+                            state is AuthPrivacyPolicyToggledState ||
+                            state is AuthEmailSignupLoadingState ||
+                            state is AuthEmailSignupSuccessState ||
+                            state is AuthEmailSignupErrorState,
                     builder: (context, state) {
                       final cubit = context.read<AuthCubit>();
 
@@ -279,6 +286,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                                 ? () =>
                                     cubit.signupWithEmailAndPassword(context)
                                 : null,
+                        loading: cubit.emailSignupLoading,
                         text: localization(context).authSignUp,
                       );
                     },
@@ -314,7 +322,11 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                   const SizedBox(height: 32),
                   BlocBuilder<AuthCubit, AuthState>(
                     buildWhen:
-                        (_, state) => state is AuthPrivacyPolicyToggledState,
+                        (_, state) =>
+                            state is AuthPrivacyPolicyToggledState ||
+                            state is AuthGoogleSignupLoadingState ||
+                            state is AuthGoogleSignupSuccessState ||
+                            state is AuthGoogleSignupErrorState,
                     builder: (context, state) {
                       final cubit = context.read<AuthCubit>();
 
@@ -324,6 +336,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                                 ? () => cubit.signupWithGoogle(context)
                                 : null,
                         text: localization(context).authSignupWithGoogle,
+                        loading: cubit.googleSignupLoading,
                         lightTheme: true,
                         prefixIcon: SvgPicture.asset(AppIcons.google),
                       );

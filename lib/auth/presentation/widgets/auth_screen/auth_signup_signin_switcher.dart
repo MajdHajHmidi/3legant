@@ -15,53 +15,58 @@ class AuthSignupSigninSwitcher extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<AuthCubit>();
 
-        return AnimatedSwitcher(
-          duration: 300.ms,
-          switchInCurve: Curves.fastOutSlowIn,
-          switchOutCurve: Curves.fastOutSlowIn,
-          layoutBuilder: (currentChild, previousChildren) {
-            return Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                ...previousChildren,
-                if (currentChild != null) currentChild,
-              ],
-            );
-          },
-          transitionBuilder: (child, animation) {
-            final currentChildKey = ValueKey(cubit.authViewMode);
-            final isNewChild = child.key == currentChildKey;
+        return ClipRRect(
+          // Prevent animation from interceding with other widgets with the same elevation
+          clipBehavior: Clip.hardEdge,
+          child: AnimatedSwitcher(
+            duration: 300.ms,
+            switchInCurve: Curves.fastOutSlowIn,
+            switchOutCurve: Curves.fastOutSlowIn,
+            layoutBuilder: (currentChild, previousChildren) {
+              return Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              );
+            },
+            transitionBuilder: (child, animation) {
+              final currentChildKey = ValueKey(cubit.authViewMode);
+              final isNewChild = child.key == currentChildKey;
 
-            // Determine the direction of the slide based on the transition.
-            Offset beginOffset;
-            if (cubit.authViewMode == AuthViewMode.signin) {
-              // Going to Signin: Slide new child in from the right, old child out to the left
-              beginOffset =
-                  isNewChild ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0);
-            } else {
-              // Going to Signup: Slide new child in from the left, old child out to the right
-              beginOffset =
-                  isNewChild ? const Offset(-1.0, 0.0) : const Offset(1.0, 0.0);
-            }
-            final Offset endOffset = Offset.zero;
+              final rightPosition = Offset(1.0, 0.0);
+              final leftPosition = Offset(-1.0, 0.0);
 
-            final tween = Tween<Offset>(begin: beginOffset, end: endOffset);
-            final offsetAnimation = animation.drive(tween);
+              // Determine the direction of the slide based on the transition.
+              Offset beginOffset;
+              if (cubit.authViewMode == AuthViewMode.signin) {
+                // Going to Signin: Slide new child in from the right, old child out to the left
+                beginOffset = isNewChild ? rightPosition : leftPosition;
+              } else {
+                // Going to Signup: Slide new child in from the left, old child out to the right
+                beginOffset = isNewChild ? leftPosition : rightPosition;
+              }
+              final Offset endOffset = Offset.zero;
 
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
-          child:
-              cubit.authViewMode == AuthViewMode.signup
-                  ? BlocProvider.value(
-                    value: cubit,
-                    key: ValueKey(AuthViewMode.signup),
-                    child: const AuthSignupScreen(),
-                  )
-                  : BlocProvider.value(
-                    value: cubit,
-                    key: ValueKey(AuthViewMode.signin),
-                    child: const AuthSigninScreen(),
-                  ),
+              final tween = Tween<Offset>(begin: beginOffset, end: endOffset);
+              final offsetAnimation = animation.drive(tween);
+
+              return SlideTransition(position: offsetAnimation, child: child);
+            },
+            child:
+                cubit.authViewMode == AuthViewMode.signup
+                    ? BlocProvider.value(
+                      value: cubit,
+                      key: ValueKey(AuthViewMode.signup),
+                      child: const AuthSignupScreen(),
+                    )
+                    : BlocProvider.value(
+                      value: cubit,
+                      key: ValueKey(AuthViewMode.signin),
+                      child: const AuthSigninScreen(),
+                    ),
+          ),
         );
       },
     );

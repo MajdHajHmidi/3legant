@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'package:app_links/app_links.dart';
+import 'package:e_commerce/auth/data/auth_repo.dart';
 import 'package:e_commerce/core/util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,11 +9,19 @@ part 'auth_state.dart';
 enum AuthViewMode { signup, signin }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+  final AuthRepo authRepo;
+  AuthCubit({required this.authRepo}) : super(AuthInitial());
+
+  late final StreamSubscription deepLinkStreamSub;
+  void initDeepLinking(BuildContext context) {
+    deepLinkStreamSub = AppLinks().uriLinkStream.listen((link) {
+      // No extra configuration needed for email verification deep linking,
+      // Supabase SDK will take care of verifying exchanging the code for the session
+    });
+  }
 
   // Default page is signup
   AuthViewMode authViewMode = AuthViewMode.signup;
-
   void changeViewMode(AuthViewMode mode) {
     authViewMode = mode;
 
@@ -18,6 +29,9 @@ class AuthCubit extends Cubit<AuthState> {
     signupPasswordFieldController.clear();
     signupConfirmPasswordFieldController.clear();
     signinPasswordFieldController.clear();
+
+    isPrivacyPolicyAccepted = false;
+    emit(AuthPrivacyPolicyToggledState());
 
     emit(AuthViewModeChangedState());
   }
@@ -83,7 +97,12 @@ class AuthCubit extends Cubit<AuthState> {
     return null;
   }
 
-  void signupWithEmailAndPassword(BuildContext context) {
+  bool emailSignupLoading = false;
+  void signupWithEmailAndPassword(BuildContext context) async {
+    if (emailSignupLoading) {
+      return;
+    }
+
     if (validateName(context) != null ||
         validateEmail(context) != null ||
         validateSignupPassword(context) != null ||
@@ -93,41 +112,95 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(title: Text('Not Implemented Yet...')),
+    emit(AuthEmailSignupLoadingState());
+    emailSignupLoading = true;
+    final statusCode = await authRepo.signupWithEmailAndPassword(
+      email: emailFieldController.text.trim(),
+      password: signupPasswordFieldController.text.trim(),
+      name: nameFieldController.text.trim(),
     );
+
+    emailSignupLoading = false;
+    if (statusCode == 200) {
+      emit(AuthEmailSignupSuccessState());
+    } else {
+      emit(AuthEmailSignupErrorState(statusCode: statusCode));
+    }
   }
 
-  void signupWithGoogle(BuildContext context) {
+  bool googleSignupLoading = false;
+  void signupWithGoogle(BuildContext context) async {
     if (!isPrivacyPolicyAccepted) {
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(title: Text('Not Implemented Yet...')),
+    if (googleSignupLoading) {
+      return;
+    }
+
+    googleSignupLoading = true;
+    emit(AuthGoogleSignupLoadingState());
+
+    final statusCode = await authRepo.signupWithGoogle(
+      Theme.of(context).platform,
     );
+
+    googleSignupLoading = false;
+
+    if (statusCode == 200) {
+      emit(AuthGoogleSignupSuccessState());
+    } else {
+      emit(AuthGoogleSignupErrorState(statusCode: statusCode));
+    }
   }
 
-  void signinWithEmailAndPassword(BuildContext context) {
+  bool emailSignInLoading = false;
+  void signinWithEmailAndPassword(BuildContext context) async {
+    if (emailSignInLoading) {
+      return;
+    }
+
     if (validateEmail(context) != null ||
         validateSigninPassword(context) != null) {
       signinFormKey.currentState?.validate();
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(title: Text('Not Implemented Yet...')),
+    emit(AuthEmailSigninLoadingState());
+    emailSignInLoading = true;
+    final statusCode = await authRepo.signinWithEmailAndPassword(
+      email: emailFieldController.text.trim(),
+      password: signinPasswordFieldController.text.trim(),
     );
+
+    emailSignInLoading = false;
+    if (statusCode == 200) {
+      emit(AuthEmailSigninSuccessState());
+    } else {
+      emit(AuthEmailSigninErrorState(statusCode: statusCode));
+    }
   }
 
-  void signinWithGoogle(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(title: Text('Not Implemented Yet...')),
+  bool googleSignInLoading = false;
+  void signinWithGoogle(BuildContext context) async {
+    if (googleSignInLoading) {
+      return;
+    }
+
+    googleSignInLoading = true;
+    emit(AuthGoogleSigninLoadingState());
+
+    final statusCode = await authRepo.signinWithGoogle(
+      Theme.of(context).platform,
     );
+
+    googleSignInLoading = false;
+
+    if (statusCode == 200) {
+      emit(AuthGoogleSigninSuccessState());
+    } else {
+      emit(AuthGoogleSigninErrorState(statusCode: statusCode));
+    }
   }
 
   bool isSignupPasswordHidden = true;
@@ -170,6 +243,8 @@ class AuthCubit extends Cubit<AuthState> {
     signupPasswordFieldController.dispose();
     signupConfirmPasswordFieldController.dispose();
     signinPasswordFieldController.dispose();
+
+    deepLinkStreamSub.cancel();
 
     return super.close();
   }

@@ -1,4 +1,4 @@
-package com.example.e_commerce
+package com.majdhajhmidi.elegant
 
 import io.flutter.embedding.android.FlutterActivity
 

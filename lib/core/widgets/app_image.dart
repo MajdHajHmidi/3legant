@@ -76,3 +76,45 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
     );
   }
 }
+
+class AppAssetImage extends StatelessWidget {
+  const AppAssetImage({
+    super.key,
+    required this.assetPath,
+    this.width,
+    this.height,
+    this.fit = BoxFit.cover,
+    this.alignment = Alignment.center,
+    this.borderRadius,
+    this.clipBehavior = Clip.hardEdge,
+  });
+
+  final String assetPath;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
+  final AlignmentGeometry alignment;
+  final BorderRadius? borderRadius;
+  final Clip clipBehavior;
+
+  @override
+  Widget build(BuildContext context) {
+    final image = Image.asset(
+      assetPath,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+    );
+
+    if (borderRadius != null) {
+      return ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        clipBehavior: clipBehavior,
+        child: image,
+      );
+    }
+
+    return image;
+  }
+}
