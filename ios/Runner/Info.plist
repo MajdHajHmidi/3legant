@@ -21,6 +21,18 @@
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	    <string>googlegmail</string>
+	    <string>x-dispatch</string>
+	    <string>readdle-spark</string>
+	    <string>airmail</string>
+	    <string>ms-outlook</string>
+	    <string>ymail</string>
+	    <string>fastmail</string>
+	    <string>superhuman</string>
+	    <string>protonmail</string>
+	</array>
 	<key>CFBundleDisplayName</key>
 	<string>Elegant</string>
 	<key>CFBundleExecutable</key>

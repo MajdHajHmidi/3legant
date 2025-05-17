@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/core/constants/assets.dart';
+import 'package:e_commerce/core/constants/app_assets.dart';
 import 'package:e_commerce/core/styles/colors.dart';
 import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:e_commerce/core/util/duration_extension.dart';
@@ -240,10 +240,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                                 recognizer:
                                     TapGestureRecognizer()
                                       ..onTap =
-                                          () =>
-                                              cubit.launchPrivacyPolicyWebpage(
-                                                context,
-                                              ),
+                                          cubit.launchPrivacyPolicyWebpage,
                               ),
                               TextSpan(
                                 text: ' ${localization(context).authAnd} ',
@@ -258,10 +255,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                                 ),
                                 recognizer:
                                     TapGestureRecognizer()
-                                      ..onTap =
-                                          () => cubit.launchTermsOfUseWebpage(
-                                            context,
-                                          ),
+                                      ..onTap = cubit.launchTermsOfUseWebpage,
                               ),
                             ],
                           ),

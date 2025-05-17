@@ -1,10 +1,15 @@
 import 'package:e_commerce/auth/cubit/auth_cubit.dart';
+import 'package:e_commerce/auth/cubit/reset_password_cubit.dart';
 import 'package:e_commerce/auth/data/auth_repo.dart';
 import 'package:e_commerce/auth/presentation/screens/auth_forgot_password.dart';
 import 'package:e_commerce/auth/presentation/screens/auth_screen.dart';
+import 'package:e_commerce/auth/presentation/screens/reset_password_screen.dart';
 import 'package:e_commerce/blogs/temp_blogs.dart';
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/widgets/bottom_navbar.dart';
 import 'package:e_commerce/home/temp_home.dart';
+import 'package:e_commerce/login-callback/cubit/login_callback_cubit.dart';
+import 'package:e_commerce/login-callback/presentation/screens/login_callback_screen.dart';
 import 'package:e_commerce/profile/temp_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +21,9 @@ enum AppRoutes {
   profile(name: 'profile', path: '/profile'),
   blogs(name: 'blogs', path: '/blogs'),
   auth(name: 'auth', path: '/auth'),
-  forgotPassword(name: 'forgotPassword', path: '/auth/forgotPassword');
+  forgotPassword(name: 'forgotPassword', path: '/auth/forgotPassword'),
+  resetPassword(name: 'resetPassword', path: '/resetPassword'),
+  loginCallback(name: 'loginCallback', path: '/loginCallback');
 
   const AppRoutes({required this.name, required this.path});
   final String name;
@@ -33,12 +40,21 @@ final router = GoRouter(
     final session = Supabase.instance.client.auth.currentSession;
     final isLoggedIn = session != null;
 
+    // Handle deeplink redirection
+    if (state.uri.host == AppConstants.emailPasswordResetSupabaseRedirectHost) {
+      return AppRoutes.resetPassword.path;
+    } else if (state.uri.host ==
+        AppConstants.emailVerificationSupabaseRedirectHost) {
+      return AppRoutes.loginCallback.path;
+    }
+
     // List of auth-related screens
     final isAuthRoute = [
       AppRoutes.auth.path,
       AppRoutes.forgotPassword.path,
-      '/login-callback',
-    ].any((path) => state.uri.toString().contains(path));
+      AppRoutes.resetPassword.path,
+      AppRoutes.loginCallback.path,
+    ].any((path) => state.uri.path == path);
 
     // While not authenticated:
     // redirect to auth screen unless currently in an auth-related screen
@@ -47,7 +63,7 @@ final router = GoRouter(
     }
 
     // If tried to access auth screen while already authenticated, redirect to home
-    if (isLoggedIn && state.uri.path == AppRoutes.auth.path) {
+    if (isLoggedIn && isAuthRoute) {
       return AppRoutes.home.path;
     }
 
@@ -89,7 +105,7 @@ final router = GoRouter(
       path: AppRoutes.auth.path,
       builder:
           (context, state) => BlocProvider(
-            create: (context) => AuthCubit(authRepo: SupabaseAuthRepo()),
+            create: (_) => AuthCubit(authRepo: SupabaseAuthRepo()),
             child: const AuthScreen(),
           ),
     ),
@@ -102,33 +118,25 @@ final router = GoRouter(
             child: const AuthForgotPassword(),
           ),
     ),
+    GoRoute(
+      name: AppRoutes.resetPassword.name,
+      path: AppRoutes.resetPassword.path,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (_) => ResetPasswordCubit(authRepo: SupabaseAuthRepo()),
+          child: const ResetPasswordScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      name: AppRoutes.loginCallback.name,
+      path: AppRoutes.loginCallback.path,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (_) => LoginCallbackCubit()..initSupabaseAuthStateChanges(),
+          child: const LoginCallbackScreen(),
+        );
+      },
+    ),
   ],
 );
-
-
-
-
-/*
-* The following is an example of using parameters in GoRouter:
-
-enum AppRoute {
-  userDetails(name: 'userDetails', path: '/user/:id');
-
-  const AppRoute({required this.name, required this.path});
-  final String name;
-  final String path;
-}
-
-GoRoute(
-  name: AppRoute.userDetails.name,
-  path: AppRoute.userDetails.path,
-  builder: (context, state) {
-    final userId = state.params['id']!;
-    return UserDetailsPage(userId: userId);
-  },
-);
-
-
-* And navigate to it like so:
-context.goNamed(AppRoute.userDetails.name, params: {'id': '123'});
-*/

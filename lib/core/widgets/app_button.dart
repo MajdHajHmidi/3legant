@@ -1,6 +1,7 @@
 import 'package:e_commerce/core/styles/colors.dart';
 import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:e_commerce/core/util/duration_extension.dart';
+import 'package:e_commerce/core/widgets/app_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
@@ -9,6 +10,9 @@ class AppButton extends StatelessWidget {
   final bool lightTheme;
   final Widget? prefixIcon;
   final bool loading;
+  final double width;
+  final double height;
+
   const AppButton({
     super.key,
     required this.text,
@@ -16,6 +20,8 @@ class AppButton extends StatelessWidget {
     this.lightTheme = false,
     this.prefixIcon,
     this.loading = false,
+    this.width = double.infinity,
+    this.height = 52,
   });
 
   @override
@@ -37,7 +43,8 @@ class AppButton extends StatelessWidget {
     );
 
     return SizedBox(
-      width: double.infinity,
+      width: width,
+      height: height,
       child: ElevatedButton(
         onPressed: loading ? () {} : onPressed,
         style: ButtonStyle(
@@ -47,7 +54,9 @@ class AppButton extends StatelessWidget {
           ),
           overlayColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.pressed)) {
-              return lightTheme ? AppColors.neutral_07.withAlpha(30) : AppColors.neutral_02.withAlpha(30);
+              return lightTheme
+                  ? AppColors.neutral_07.withAlpha(30)
+                  : AppColors.neutral_02.withAlpha(30);
             }
 
             return null;
@@ -63,7 +72,7 @@ class AppButton extends StatelessWidget {
             loading
                 ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: CircularProgressIndicator(
+                  child: AppCircularProgressIndicator(
                     color:
                         lightTheme
                             ? AppColors.neutral_06

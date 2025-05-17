@@ -42,17 +42,42 @@ dependencies:
   flutter_svg: ^2.1.0
   device_preview: ^1.2.0
   shimmer: ^3.0.0
-  flutter_async_value: ^1.0.0
+  flutter_async_value: ^1.1.0
   flutter_localizations:
     sdk: flutter
   intl: any
-  app_links: ^6.4.0
   google_sign_in: ^6.3.0
+  keyboard_avoider: ^0.2.0
+  flutter_web_browser: ^0.17.3
+  url_launcher: ^6.3.1
+  android_intent_plus: ^5.3.0
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+#   flutter_launcher_icons: "^0.14.3"
+
+# flutter_launcher_icons:
+#   android: "launcher_icon"
+#   adaptive_icon_background: "#121312"
+#   ios: true
+#   image_path: "assets/images/logo.png"
+#   background_color_ios: "#121312"
+#   min_sdk_android: 21 # android min sdk min:16, default 21
+#   web:
+#     generate: true
+#     image_path: "assets/images/logo.png"
+#     background_color: "#121312"
+#     theme_color: "#121312"
+#   windows:
+#     generate: true
+#     image_path: "assets/images/logo.png"
+#     icon_size: 48 # min:48, max:256, default: 48
+#   macos:
+#     generate: true
+#     image_path: "assets/images/logo.png"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

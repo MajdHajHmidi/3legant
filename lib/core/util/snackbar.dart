@@ -7,6 +7,9 @@ void showErrorSnackBar(
 }) {
   final theme = Theme.of(context);
 
+  // Hide any previous snackbars
+  ScaffoldMessenger.of(context).clearSnackBars();
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,

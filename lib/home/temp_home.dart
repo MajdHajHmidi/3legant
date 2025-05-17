@@ -1,5 +1,6 @@
 import 'package:e_commerce/core/navigation/router.dart';
 import 'package:e_commerce/core/styles/text_styles.dart';
+import 'package:e_commerce/core/widgets/app_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return SliverToBoxAdapter(
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: AppCircularProgressIndicator()),
                 );
               }
 

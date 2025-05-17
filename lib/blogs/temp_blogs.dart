@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/styles/text_styles.dart';
+import 'package:e_commerce/core/widgets/app_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,7 +18,7 @@ class BlogsScreen extends StatelessWidget {
         ),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: AppCircularProgressIndicator());
           }
 
           final blogs = snapshot.data!['blogs'] as List<dynamic>;

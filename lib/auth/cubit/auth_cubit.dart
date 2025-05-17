@@ -1,24 +1,27 @@
 import 'dart:async';
-import 'package:app_links/app_links.dart';
 import 'package:e_commerce/auth/data/auth_repo.dart';
+import 'package:e_commerce/core/constants/app_constants.dart';
+import 'package:e_commerce/core/util/app_failure.dart';
+import 'package:e_commerce/core/util/duration_extension.dart';
 import 'package:e_commerce/core/util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 part 'auth_state.dart';
 
 enum AuthViewMode { signup, signin }
 
+enum ForgotPasswordViewMode {
+  enterEmail(pageIndex: 0),
+  checkInbox(pageIndex: 1);
+
+  const ForgotPasswordViewMode({required this.pageIndex});
+  final int pageIndex;
+}
+
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepo authRepo;
   AuthCubit({required this.authRepo}) : super(AuthInitial());
-
-  late final StreamSubscription deepLinkStreamSub;
-  void initDeepLinking(BuildContext context) {
-    deepLinkStreamSub = AppLinks().uriLinkStream.listen((link) {
-      // No extra configuration needed for email verification deep linking,
-      // Supabase SDK will take care of verifying exchanging the code for the session
-    });
-  }
 
   // Default page is signup
   AuthViewMode authViewMode = AuthViewMode.signup;
@@ -114,17 +117,17 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthEmailSignupLoadingState());
     emailSignupLoading = true;
-    final statusCode = await authRepo.signupWithEmailAndPassword(
+    final response = await authRepo.signupWithEmailAndPassword(
       email: emailFieldController.text.trim(),
       password: signupPasswordFieldController.text.trim(),
       name: nameFieldController.text.trim(),
     );
 
     emailSignupLoading = false;
-    if (statusCode == 200) {
+    if (response.isData) {
       emit(AuthEmailSignupSuccessState());
     } else {
-      emit(AuthEmailSignupErrorState(statusCode: statusCode));
+      emit(AuthEmailSignupErrorState(failure: response.error!));
     }
   }
 
@@ -141,16 +144,16 @@ class AuthCubit extends Cubit<AuthState> {
     googleSignupLoading = true;
     emit(AuthGoogleSignupLoadingState());
 
-    final statusCode = await authRepo.signupWithGoogle(
+    final response = await authRepo.signupWithGoogle(
       Theme.of(context).platform,
     );
 
     googleSignupLoading = false;
 
-    if (statusCode == 200) {
+    if (response.isData) {
       emit(AuthGoogleSignupSuccessState());
     } else {
-      emit(AuthGoogleSignupErrorState(statusCode: statusCode));
+      emit(AuthGoogleSignupErrorState(failure: response.error!));
     }
   }
 
@@ -168,16 +171,16 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthEmailSigninLoadingState());
     emailSignInLoading = true;
-    final statusCode = await authRepo.signinWithEmailAndPassword(
+    final response = await authRepo.signinWithEmailAndPassword(
       email: emailFieldController.text.trim(),
       password: signinPasswordFieldController.text.trim(),
     );
 
     emailSignInLoading = false;
-    if (statusCode == 200) {
+    if (response.isData) {
       emit(AuthEmailSigninSuccessState());
     } else {
-      emit(AuthEmailSigninErrorState(statusCode: statusCode));
+      emit(AuthEmailSigninErrorState(failure: response.error!));
     }
   }
 
@@ -190,16 +193,16 @@ class AuthCubit extends Cubit<AuthState> {
     googleSignInLoading = true;
     emit(AuthGoogleSigninLoadingState());
 
-    final statusCode = await authRepo.signinWithGoogle(
+    final response = await authRepo.signinWithGoogle(
       Theme.of(context).platform,
     );
 
     googleSignInLoading = false;
 
-    if (statusCode == 200) {
+    if (response.isData) {
       emit(AuthGoogleSigninSuccessState());
     } else {
-      emit(AuthGoogleSigninErrorState(statusCode: statusCode));
+      emit(AuthGoogleSigninErrorState(failure: response.error!));
     }
   }
 
@@ -222,18 +225,80 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthPrivacyPolicyToggledState());
   }
 
-  void launchPrivacyPolicyWebpage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(title: Text('Not Implemented Yet...')),
+  void launchPrivacyPolicyWebpage() {
+    FlutterWebBrowser.openWebPage(
+      url: AppConstants.appPrivacyPolicyWebsiteUrl,
+      customTabsOptions: const CustomTabsOptions(
+        showTitle: true,
+        urlBarHidingEnabled: true,
+        instantAppsEnabled: true,
+      ),
+      safariVCOptions: const SafariViewControllerOptions(
+        dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+        // barCollapsingEnabled: true,
+        // modalPresentationCapturesStatusBarAppearance: true,
+      ),
     );
   }
 
-  void launchTermsOfUseWebpage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(title: Text('Not Implemented Yet...')),
+  void launchTermsOfUseWebpage() {
+    FlutterWebBrowser.openWebPage(
+      url: AppConstants.appTermsOfUseWebsiteUrl,
+      customTabsOptions: const CustomTabsOptions(
+        showTitle: true,
+        urlBarHidingEnabled: true,
+        instantAppsEnabled: true,
+      ),
+      safariVCOptions: const SafariViewControllerOptions(
+        dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+        // barCollapsingEnabled: true,
+        // modalPresentationCapturesStatusBarAppearance: true,
+      ),
     );
+  }
+
+  // ----------------------- Forget Password Screen -----------------------
+  final forgotPasswordScreenPageController = PageController(initialPage: 0);
+  final forgotPasswordEmailFormKey = GlobalKey<FormState>();
+  ForgotPasswordViewMode forgotPasswordViewMode =
+      ForgotPasswordViewMode.enterEmail;
+
+  void changeForgotPasswordPage(ForgotPasswordViewMode viewMode) {
+    forgotPasswordViewMode = viewMode;
+    emit(AuthPasswordResetViewModeChangedState());
+
+    forgotPasswordScreenPageController.animateToPage(
+      viewMode.pageIndex,
+      duration: 300.ms,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  bool requestPasswordResetEmailLoading = false;
+  void requestPasswordResetEmail(BuildContext context) async {
+    if (requestPasswordResetEmailLoading) {
+      return;
+    }
+
+    if (validateEmail(context) != null) {
+      forgotPasswordEmailFormKey.currentState?.validate();
+      return;
+    }
+
+    requestPasswordResetEmailLoading = true;
+    emit(AuthPasswordResetEmailRequestLoadingState());
+
+    final response = await authRepo.requestPasswordReset(
+      emailFieldController.text.trim(),
+    );
+
+    requestPasswordResetEmailLoading = false;
+
+    if (response.isData) {
+      emit(AuthPasswordResetEmailRequestSuccessState());
+    } else {
+      emit(AuthPasswordResetEmailRequestFailureState(failure: response.error!));
+    }
   }
 
   @override
@@ -244,7 +309,7 @@ class AuthCubit extends Cubit<AuthState> {
     signupConfirmPasswordFieldController.dispose();
     signinPasswordFieldController.dispose();
 
-    deepLinkStreamSub.cancel();
+    forgotPasswordScreenPageController.dispose();
 
     return super.close();
   }

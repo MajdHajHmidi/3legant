@@ -23,6 +23,9 @@ class AppIcons {
   static const strikedEye = '${_directory}striked-eye$_fileType';
   static const ticket = '${_directory}ticket$_fileType';
   static const youtube = '${_directory}youtube$_fileType';
+  static const backLtr = '${_directory}back_ltr$_fileType';
+  static const backRtl = '${_directory}back_rtl$_fileType';
+  static const inbox = '${_directory}inbox$_fileType';
 }
 
 class AppImages {
@@ -30,4 +33,7 @@ class AppImages {
   static const _pngFileType = '.png';
 
   static const authScreenChair = '${_directory}auth_screen_chair$_pngFileType';
+  static const appLogo = '${_directory}logo$_pngFileType';
+  static const appLogoWithDescription =
+      '${_directory}logo_with_description$_pngFileType';
 }
