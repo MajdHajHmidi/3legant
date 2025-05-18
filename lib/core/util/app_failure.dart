@@ -1,4 +1,4 @@
-class AppFailure {
+abstract class AppFailure {
   final String code;
 
   AppFailure({required this.code});

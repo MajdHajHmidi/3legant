@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/constants/app_assets.dart';
+import 'package:e_commerce/core/constants/app_constants.dart';
 import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:e_commerce/core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class AuthHeader extends StatelessWidget {
           flex: 1,
           child: Center(
             child: Text(
-              '3legant.',
+              AppConstants.appName,
               style: AppTextStyles.headline6,
               textScaler: TextScaler.noScaling,
             ),

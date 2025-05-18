@@ -1,4 +1,5 @@
 class AppConstants {
+  static const appName = '3legant';
   static const appDeepLinkScheme = 'elegant';
   static const emailVerificationSupabaseRedirectHost = 'login-callback';
   static const googleSigninSupabaseRedirectHost = 'google-signin';

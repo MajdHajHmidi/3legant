@@ -52,7 +52,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }
@@ -78,7 +78,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }
@@ -96,7 +96,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }
@@ -119,7 +119,7 @@ class SupabaseAuthRepo extends AuthRepo {
 
       if (googleUser == null) {
         return AsyncResult.error(
-          error: AppFailure(code: AuthFailureCodes.other.name),
+          error: NetworkFailure(code: AuthFailureCodes.other.name),
         ); // User canceled sign-in
       }
 
@@ -128,7 +128,7 @@ class SupabaseAuthRepo extends AuthRepo {
       if (!userExists) {
         await signOut();
         return AsyncResult.error(
-          error: AppFailure(code: AuthFailureCodes.userDoesntExist.name),
+          error: NetworkFailure(code: AuthFailureCodes.userDoesntExist.name),
         );
       }
 
@@ -138,7 +138,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }
@@ -161,7 +161,7 @@ class SupabaseAuthRepo extends AuthRepo {
 
       if (googleUser == null) {
         return AsyncResult.error(
-          error: AppFailure(code: AuthFailureCodes.other.name),
+          error: NetworkFailure(code: AuthFailureCodes.other.name),
         );
       } // User canceled sign-in
 
@@ -170,7 +170,7 @@ class SupabaseAuthRepo extends AuthRepo {
       if (userExists) {
         await signOut(); // Sign out from Google to prevent staying logged in
         return AsyncResult.error(
-          error: AppFailure(code: AuthFailureCodes.userAlreadyExists.name),
+          error: NetworkFailure(code: AuthFailureCodes.userAlreadyExists.name),
         );
       }
 
@@ -180,7 +180,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }
@@ -259,7 +259,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }
@@ -276,7 +276,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
     } catch (exception) {
       return AsyncResult.error(
-        error: AppFailure(code: AuthFailureCodes.other.name),
+        error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
   }

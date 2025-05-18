@@ -17,8 +17,6 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusBarColor(context);
-
     return BlocListener<AuthCubit, AuthState>(
       listener: (_, state) {
         if (state is AuthEmailSigninSuccessState) {
@@ -55,15 +53,12 @@ class AuthScreen extends StatelessWidget {
           showAuthErrorSnackbar(context, state.failure.code);
         }
       },
-      child: Scaffold(
-        body: OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.portrait) {
-              return SingleChildScrollView(
-                child: SafeArea(
-                  bottom: false,
-                  right: false,
-                  left: false,
+      child: SafeArea(
+        child: Scaffold(
+          body: OrientationBuilder(
+            builder: (context, orientation) {
+              if (orientation == Orientation.portrait) {
+                return SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -78,43 +73,38 @@ class AuthScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              );
-            }
+                );
+              }
 
-            return Row(
-              children: [
-                Expanded(child: AuthHeader()),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: BlocProvider.value(
-                      value: context.read<AuthCubit>(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: AuthSignupSigninSwitcher(),
+              return Row(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: SizedBox(
+                        height: MediaQuery.sizeOf(context).height,
+                        child: AuthHeader(),
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: SingleChildScrollView(
+                        child: BlocProvider.value(
+                          value: context.read<AuthCubit>(),
+                          child: AuthSignupSigninSwitcher(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
-}
-
-void changeStatusBarColor(BuildContext context) {
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarBrightness: Theme.of(context).brightness,
-      statusBarIconBrightness:
-          Theme.of(context).brightness == Brightness.dark
-              ? Brightness.light
-              : Brightness.dark,
-    ),
-  );
 }
 
 void showSuccessfulSignupDialog(BuildContext context) {

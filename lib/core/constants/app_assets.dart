@@ -34,6 +34,4 @@ class AppImages {
 
   static const authScreenChair = '${_directory}auth_screen_chair$_pngFileType';
   static const appLogo = '${_directory}logo$_pngFileType';
-  static const appLogoWithDescription =
-      '${_directory}logo_with_description$_pngFileType';
 }

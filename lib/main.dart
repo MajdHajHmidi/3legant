@@ -6,18 +6,21 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
   // * Initialize services here...
+  launchNativeSplashScreen(binding);
   attachBlocObserver();
   await loadEnvFile();
   await initSupabase();
 
   // runApp(const MyApp());
   runApp(DevicePreview(builder: (context) => const MyApp()));
+  removeNativeSplashScreen();
 }
 
 class MyApp extends StatelessWidget {
@@ -56,4 +59,12 @@ Future<void> initSupabase() async {
 
 void attachBlocObserver() {
   Bloc.observer = AppBlocObserver();
+}
+
+void launchNativeSplashScreen(WidgetsBinding binding) {
+  FlutterNativeSplash.preserve(widgetsBinding: binding);
+}
+
+void removeNativeSplashScreen() {
+  FlutterNativeSplash.remove();
 }
