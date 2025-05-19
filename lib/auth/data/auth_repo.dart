@@ -1,11 +1,13 @@
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/util/app_failure.dart';
-import 'package:e_commerce/core/util/supabase_error_handling.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_async_value/async_value.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'package:e_commerce/core/constants/app_constants.dart';
+import 'package:e_commerce/core/models/user.dart' as app_user;
+import 'package:e_commerce/core/util/app_failure.dart';
+import 'package:e_commerce/core/util/supabase_error_handling.dart';
 
 abstract class AuthRepo {
   /// Returns status code
@@ -34,6 +36,8 @@ abstract class AuthRepo {
   Future<AsyncResult<void, AppFailure>> updatePassword(String newPassword);
 
   Future<AsyncResult<void, AppFailure>> signOut();
+
+  app_user.User? getCurrentUser();
 }
 
 class SupabaseAuthRepo extends AuthRepo {
@@ -50,7 +54,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } on AuthException catch (exception) {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
@@ -76,7 +80,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } on AuthException catch (exception) {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
@@ -94,7 +98,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } on AuthException catch (exception) {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
@@ -136,7 +140,7 @@ class SupabaseAuthRepo extends AuthRepo {
       await _preformSupabaseGoogleAuthentication(googleUser);
 
       return AsyncResult.data(data: null);
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
@@ -178,7 +182,7 @@ class SupabaseAuthRepo extends AuthRepo {
       await _preformSupabaseGoogleAuthentication(googleUser);
 
       return AsyncResult.data(data: null);
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
@@ -257,7 +261,7 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } on AuthException catch (exception) {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
@@ -274,10 +278,37 @@ class SupabaseAuthRepo extends AuthRepo {
       return AsyncResult.data(data: null);
     } on AuthException catch (exception) {
       return AsyncResult.error(error: getSupabaseAuthErrorType(exception.code));
-    } catch (exception) {
+    } catch (_) {
       return AsyncResult.error(
         error: NetworkFailure(code: AuthFailureCodes.other.name),
       );
     }
+  }
+
+  @override
+  app_user.User? getCurrentUser() {
+    final currentSession = Supabase.instance.client.auth.currentSession;
+
+    if (currentSession == null) {
+      return null;
+    }
+
+    final supabaseUser = currentSession.user;
+    final name =
+        supabaseUser.userMetadata?['display_name'] as String? ??
+        supabaseUser.userMetadata?['name'] as String? ??
+        supabaseUser.userMetadata?['full_name'] as String? ??
+        'No Name';
+
+    final profileUrl =
+        supabaseUser.userMetadata?['picture'] as String? ??
+        supabaseUser.userMetadata?['avatar_url'] as String?;
+
+    return app_user.User(
+      id: supabaseUser.id,
+      name: name,
+      email: supabaseUser.email,
+      profileUrl: profileUrl,
+    );
   }
 }

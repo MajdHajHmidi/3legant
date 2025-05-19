@@ -25,7 +25,7 @@
     "authPasswordsDontMatchError": "Passwords do not match",
     "authForgotPasswordTitle": "Forgot password",
     "authVerifyEmailDialogTitle": "Verify your Email",
-    "authError": "{code, select, userAlreadyExists{User already registered} userDoesntExist{User doesn't exist, please sign up first} invalidLoginCredentials{Invalid login credentials} cantUseOldPassword{Can't use old password} tooManyRequests{Too many requests} emailNotConfirmed{Email not confirmed} other{An error occurred}}",
+    "authError": "{code, select, userAlreadyExists{User already registered} userDoesntExist{User doesn't exist, please sign up first} invalidLoginCredentials{Invalid login credentials} cantUseOldPassword{Can't use old password} tooManyRequests{Too many requests} emailNotConfirmed{Email not confirmed} noInternetConnection{No internet connection} other{An error occurred}}",
     "authVerifyEmailDialogContent": "A confirmation link has been sent to your email. Please check your inbox",
     "authForgotPasswordRequestButton": "Request Email",
     "authForgotPasswordEnterEmailTitle": "Enter your Email",
@@ -36,5 +36,6 @@
     "authForgotPasswordCheckInboxOpenInboxCaption": "Click here to access your inbox directly",
     "authForgotPasswordSetPasswordTitle": "Set a new Password",
     "authForgotPasswordSetPasswordSubtitle": "You can set a new password for your account now.",
-    "authForgotPasswordSetPasswordButton": "Set Password"
+    "authForgotPasswordSetPasswordButton": "Set Password",
+    "rpcError": "{code, select, noInternetConnection{No internet connection} tooManyRequests{Too many requests} other{An error occurred}}"
 }

@@ -19,5 +19,8 @@ enum AuthFailureCodes {
   cantUseOldPassword,
   tooManyRequests,
   emailNotConfirmed,
+  noInternetConnection,
   other,
 }
+
+enum RpcFailureCodes { noInternetConnection, other }

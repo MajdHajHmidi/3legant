@@ -1,12 +1,13 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:e_commerce/core/navigation/router.dart';
 import 'package:e_commerce/core/styles/themes.dart';
 import 'package:e_commerce/core/util/bloc_observer.dart';
+import 'package:e_commerce/core/util/dependency_injection.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +16,7 @@ void main() async {
   // * Initialize services here...
   launchNativeSplashScreen(binding);
   attachBlocObserver();
+  setupDependencyInjection();
   await loadEnvFile();
   await initSupabase();
 
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: serviceLocator<GoRouter>(),
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [

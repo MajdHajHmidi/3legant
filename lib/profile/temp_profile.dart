@@ -1,5 +1,6 @@
 import 'package:e_commerce/auth/data/auth_repo.dart';
 import 'package:e_commerce/core/styles/text_styles.dart';
+import 'package:e_commerce/core/util/dependency_injection.dart';
 import 'package:e_commerce/core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   Future<void> _signOut(BuildContext context) async {
-    await SupabaseAuthRepo().signOut();
+    await serviceLocator<AuthRepo>().signOut();
     context.go('/login'); // Redirect to login screen
   }
 

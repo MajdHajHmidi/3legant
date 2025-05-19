@@ -2,7 +2,7 @@ import 'package:e_commerce/auth/cubit/auth_cubit.dart';
 import 'package:e_commerce/auth/presentation/widgets/forgot_password_screen/check_inbox_view.dart';
 import 'package:e_commerce/auth/presentation/widgets/forgot_password_screen/enter_email_view.dart';
 import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/util/snackbar.dart';
+import 'package:e_commerce/core/util/app_snackbar.dart';
 import 'package:e_commerce/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

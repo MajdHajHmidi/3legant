@@ -6,8 +6,11 @@ import 'package:e_commerce/auth/presentation/screens/auth_screen.dart';
 import 'package:e_commerce/auth/presentation/screens/reset_password_screen.dart';
 import 'package:e_commerce/blogs/temp_blogs.dart';
 import 'package:e_commerce/core/constants/app_constants.dart';
+import 'package:e_commerce/core/util/dependency_injection.dart';
 import 'package:e_commerce/core/widgets/bottom_navbar.dart';
-import 'package:e_commerce/home/temp_home.dart';
+import 'package:e_commerce/home/cubit/home_cubit.dart';
+import 'package:e_commerce/home/data/home_repo.dart';
+import 'package:e_commerce/home/presentation/screens/home_screen.dart';
 import 'package:e_commerce/login-callback/cubit/login_callback_cubit.dart';
 import 'package:e_commerce/login-callback/presentation/screens/login_callback_screen.dart';
 import 'package:e_commerce/profile/temp_profile.dart';
@@ -32,7 +35,7 @@ enum AppRoutes {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-final router = GoRouter(
+GoRouter getAppRouter() => GoRouter(
   debugLogDiagnostics: true,
   navigatorKey: _rootNavigatorKey,
   initialLocation: AppRoutes.home.path,
@@ -80,7 +83,13 @@ final router = GoRouter(
             GoRoute(
               path: AppRoutes.home.path,
               name: AppRoutes.home.name,
-              builder: (context, state) => const HomeScreen(),
+              builder:
+                  (context, state) => BlocProvider(
+                    create:
+                        (context) =>
+                            HomeCubit(homeRepo: serviceLocator<HomeRepo>()),
+                    child: const HomeScreen(),
+                  ),
             ),
           ],
         ),
@@ -105,7 +114,7 @@ final router = GoRouter(
       path: AppRoutes.auth.path,
       builder:
           (context, state) => BlocProvider(
-            create: (_) => AuthCubit(authRepo: SupabaseAuthRepo()),
+            create: (_) => AuthCubit(authRepo: serviceLocator<AuthRepo>()),
             child: const AuthScreen(),
           ),
     ),
@@ -123,7 +132,8 @@ final router = GoRouter(
       path: AppRoutes.resetPassword.path,
       builder: (context, state) {
         return BlocProvider(
-          create: (_) => ResetPasswordCubit(authRepo: SupabaseAuthRepo()),
+          create:
+              (_) => ResetPasswordCubit(authRepo: serviceLocator<AuthRepo>()),
           child: const ResetPasswordScreen(),
         );
       },

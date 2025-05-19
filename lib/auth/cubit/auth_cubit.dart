@@ -20,8 +20,10 @@ enum ForgotPasswordViewMode {
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  final AuthRepo authRepo;
-  AuthCubit({required this.authRepo}) : super(AuthInitial());
+  final AuthRepo _authRepo;
+  AuthCubit({required AuthRepo authRepo})
+    : _authRepo = authRepo,
+      super(AuthInitial());
 
   // Default page is signup
   AuthViewMode authViewMode = AuthViewMode.signup;
@@ -117,7 +119,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthEmailSignupLoadingState());
     emailSignupLoading = true;
-    final response = await authRepo.signupWithEmailAndPassword(
+    final response = await _authRepo.signupWithEmailAndPassword(
       email: emailFieldController.text.trim(),
       password: signupPasswordFieldController.text.trim(),
       name: nameFieldController.text.trim(),
@@ -144,7 +146,7 @@ class AuthCubit extends Cubit<AuthState> {
     googleSignupLoading = true;
     emit(AuthGoogleSignupLoadingState());
 
-    final response = await authRepo.signupWithGoogle(
+    final response = await _authRepo.signupWithGoogle(
       Theme.of(context).platform,
     );
 
@@ -171,7 +173,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthEmailSigninLoadingState());
     emailSignInLoading = true;
-    final response = await authRepo.signinWithEmailAndPassword(
+    final response = await _authRepo.signinWithEmailAndPassword(
       email: emailFieldController.text.trim(),
       password: signinPasswordFieldController.text.trim(),
     );
@@ -193,7 +195,7 @@ class AuthCubit extends Cubit<AuthState> {
     googleSignInLoading = true;
     emit(AuthGoogleSigninLoadingState());
 
-    final response = await authRepo.signinWithGoogle(
+    final response = await _authRepo.signinWithGoogle(
       Theme.of(context).platform,
     );
 
@@ -288,7 +290,7 @@ class AuthCubit extends Cubit<AuthState> {
     requestPasswordResetEmailLoading = true;
     emit(AuthPasswordResetEmailRequestLoadingState());
 
-    final response = await authRepo.requestPasswordReset(
+    final response = await _authRepo.requestPasswordReset(
       emailFieldController.text.trim(),
     );
 

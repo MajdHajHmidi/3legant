@@ -4,7 +4,7 @@ import 'package:e_commerce/core/navigation/router.dart';
 import 'package:e_commerce/core/styles/colors.dart';
 import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/util/snackbar.dart';
+import 'package:e_commerce/core/util/app_snackbar.dart';
 import 'package:e_commerce/core/widgets/app_button.dart';
 import 'package:e_commerce/core/widgets/app_textfield.dart';
 import 'package:e_commerce/core/widgets/custom_app_bar.dart';
