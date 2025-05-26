@@ -1,17 +1,19 @@
-import 'package:e_commerce/auth/data/auth_repo.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/dependency_injection.dart';
-import 'package:e_commerce/core/widgets/app_image.dart';
+import '../core/navigation/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../auth/data/auth_repo.dart';
+import '../core/styles/text_styles.dart';
+import '../core/util/dependency_injection.dart';
+import '../core/widgets/app_image.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   Future<void> _signOut(BuildContext context) async {
     await serviceLocator<AuthRepo>().signOut();
-    context.go('/login'); // Redirect to login screen
+    context.goNamed(AppRoutes.auth.name); // Redirect to auth screen
   }
 
   @override

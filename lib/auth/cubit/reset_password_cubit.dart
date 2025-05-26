@@ -1,6 +1,7 @@
-import 'package:e_commerce/auth/data/auth_repo.dart';
-import 'package:e_commerce/core/util/app_failure.dart';
-import 'package:e_commerce/core/util/localization.dart';
+import 'package:flutter_async_value/async_value.dart';
+
+import '../data/auth_repo.dart';
+import '../../core/util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,9 +32,9 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     return null;
   }
 
-  bool resetPasswordLoading = false;
+  AsyncValue resetPasswordModel = AsyncValue.initial();
   void resetPassword(BuildContext context) async {
-    if (resetPasswordLoading) {
+    if (resetPasswordModel.isLoading) {
       return;
     }
 
@@ -42,20 +43,20 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
       return;
     }
 
-    resetPasswordLoading = true;
-    emit(ResetPasswordRequestLoadingState());
+    resetPasswordModel = AsyncValue.loading();
+    emit(ResetPasswordRequestDataChangedState());
 
     final response = await authRepo.updatePassword(
       newPasswordController.text.trim(),
     );
 
-    resetPasswordLoading = false;
-
     if (response.isData) {
-      emit(ResetPasswordRequestSuccessState());
+      resetPasswordModel = AsyncValue.data(data: null);
     } else {
-      emit(ResetPasswordRequestFailureState(failure: response.error!));
+      resetPasswordModel = AsyncValue.error(error: response.error!);
     }
+
+    emit(ResetPasswordRequestDataChangedState());
   }
 
   @override

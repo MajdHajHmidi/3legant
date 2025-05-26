@@ -1,5 +1,5 @@
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/util/duration_extension.dart';
+import '../styles/colors.dart';
+import '../util/duration_extension.dart';
 import 'package:flutter/material.dart';
 
 class AppCircularProgressIndicator extends StatefulWidget {

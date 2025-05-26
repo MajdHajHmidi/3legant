@@ -1,6 +1,7 @@
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../styles/colors.dart';
+import '../styles/text_styles.dart';
 
 class AsyncRetryWidget extends StatelessWidget {
   final String message;

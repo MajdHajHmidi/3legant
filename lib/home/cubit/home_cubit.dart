@@ -1,10 +1,11 @@
-import 'package:e_commerce/auth/data/auth_repo.dart';
-import 'package:e_commerce/core/util/app_failure.dart';
-import 'package:e_commerce/core/util/dependency_injection.dart';
-import 'package:e_commerce/home/data/home_repo.dart';
-import 'package:e_commerce/home/models/home_data_model.dart';
 import 'package:flutter_async_value/async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../auth/data/auth_repo.dart';
+import '../../core/util/app_failure.dart';
+import '../../core/util/dependency_injection.dart';
+import '../data/home_repo.dart';
+import '../models/home_data_model.dart';
 
 part 'home_state.dart';
 
@@ -34,5 +35,25 @@ class HomeCubit extends Cubit<HomeState> {
       homeDataModel = AsyncValue.error(error: result.error!);
       emit(HomeDataChangedState());
     }
+  }
+
+  void toggleProductFavorite(int index) {
+    if (!homeDataModel.isData) return;
+
+    final products = homeDataModel.data!.newProducts.products;
+    products[index] = products[index].copyWith(
+      favorite: !products[index].favorite,
+    );
+
+    homeDataModel = AsyncValue.data(
+      data: HomeDataModel(
+        metadata: homeDataModel.data!.metadata,
+        popularCategories: homeDataModel.data!.popularCategories,
+        newProducts: NewProducts(products: products),
+        popularBlogs: homeDataModel.data!.popularBlogs,
+      ),
+    );
+
+    emit(HomeFavoriteProductToggleState());
   }
 }

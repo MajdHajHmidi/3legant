@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/core/constants/app_assets.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/duration_extension.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/widgets/app_button.dart';
-import 'package:e_commerce/core/widgets/app_checkbox.dart';
-import 'package:e_commerce/core/widgets/app_textfield.dart';
+import '../../cubit/auth_cubit.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/styles/colors.dart';
+import '../../../core/styles/text_styles.dart';
+import '../../../core/util/duration_extension.dart';
+import '../../../core/util/localization.dart';
+import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_checkbox.dart';
+import '../../../core/widgets/app_textfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -268,9 +268,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                     buildWhen:
                         (_, state) =>
                             state is AuthPrivacyPolicyToggledState ||
-                            state is AuthEmailSignupLoadingState ||
-                            state is AuthEmailSignupSuccessState ||
-                            state is AuthEmailSignupErrorState,
+                            state is AuthEmailSignupDataChangedState,
                     builder: (context, state) {
                       final cubit = context.read<AuthCubit>();
 
@@ -280,7 +278,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                                 ? () =>
                                     cubit.signupWithEmailAndPassword(context)
                                 : null,
-                        loading: cubit.emailSignupLoading,
+                        loading: cubit.emailSignupModel.isLoading,
                         text: localization(context).authSignUp,
                       );
                     },
@@ -318,9 +316,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                     buildWhen:
                         (_, state) =>
                             state is AuthPrivacyPolicyToggledState ||
-                            state is AuthGoogleSignupLoadingState ||
-                            state is AuthGoogleSignupSuccessState ||
-                            state is AuthGoogleSignupErrorState,
+                            state is AuthGoogleSignupDataChangedState,
                     builder: (context, state) {
                       final cubit = context.read<AuthCubit>();
 
@@ -330,7 +326,7 @@ class _AuthSignupScreenState extends State<AuthSignupScreen>
                                 ? () => cubit.signupWithGoogle(context)
                                 : null,
                         text: localization(context).authSignupWithGoogle,
-                        loading: cubit.googleSignupLoading,
+                        loading: cubit.googleSignupModel.isLoading,
                         lightTheme: true,
                         prefixIcon: SvgPicture.asset(AppIcons.google),
                       );

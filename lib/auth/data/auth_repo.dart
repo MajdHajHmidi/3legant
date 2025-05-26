@@ -4,10 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/models/user.dart' as app_user;
-import 'package:e_commerce/core/util/app_failure.dart';
-import 'package:e_commerce/core/util/supabase_error_handling.dart';
+import '../../core/constants/app_constants.dart';
+import '../../core/models/user.dart' as app_user;
+import '../../core/util/app_failure.dart';
+import '../../core/util/supabase_error_handling.dart';
 
 abstract class AuthRepo {
   /// Returns status code

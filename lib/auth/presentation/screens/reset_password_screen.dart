@@ -1,13 +1,13 @@
-import 'package:e_commerce/auth/cubit/reset_password_cubit.dart';
-import 'package:e_commerce/core/constants/app_assets.dart';
-import 'package:e_commerce/core/navigation/router.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/util/app_snackbar.dart';
-import 'package:e_commerce/core/widgets/app_button.dart';
-import 'package:e_commerce/core/widgets/app_textfield.dart';
-import 'package:e_commerce/core/widgets/custom_app_bar.dart';
+import '../../cubit/reset_password_cubit.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/navigation/router.dart';
+import '../../../core/styles/colors.dart';
+import '../../../core/styles/text_styles.dart';
+import '../../../core/util/localization.dart';
+import '../../../core/util/app_snackbar.dart';
+import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_textfield.dart';
+import '../../../core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,12 +22,18 @@ class ResetPasswordScreen extends StatelessWidget {
 
     return BlocListener<ResetPasswordCubit, ResetPasswordState>(
       listener: (context, state) {
-        if (state is ResetPasswordRequestFailureState) {
-          // ! On Password Reset Failure
-          showErrorSnackBar(
-            context,
-            localization(context).authError(state.failure.code),
-          );
+        if (state is ResetPasswordRequestDataChangedState) {
+          final cubit = context.read<ResetPasswordCubit>();
+
+          if (cubit.resetPasswordModel.isError) {
+            // ! On Password Reset Failure
+            showErrorSnackBar(
+              context,
+              localization(
+                context,
+              ).authError(cubit.resetPasswordModel.error!.code),
+            );
+          }
         }
       },
       child: PopScope(
@@ -100,17 +106,18 @@ class ResetPasswordScreen extends StatelessWidget {
                 const Spacer(),
                 BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
                   listenWhen:
-                      (_, state) => state is ResetPasswordRequestSuccessState,
+                      (_, state) =>
+                          state is ResetPasswordRequestDataChangedState,
                   listener: (context, state) {
-                    if (state is ResetPasswordRequestSuccessState) {
+                    final cubit = context.read<ResetPasswordCubit>();
+
+                    if (cubit.resetPasswordModel.isData) {
                       context.goNamed(AppRoutes.home.name);
                     }
                   },
                   buildWhen:
                       (_, state) =>
-                          state is ResetPasswordRequestLoadingState ||
-                          state is ResetPasswordRequestSuccessState ||
-                          state is ResetPasswordRequestFailureState,
+                          state is ResetPasswordRequestDataChangedState,
                   builder: (context, state) {
                     final cubit = context.read<ResetPasswordCubit>();
 
@@ -119,7 +126,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           localization(
                             context,
                           ).authForgotPasswordSetPasswordButton,
-                      loading: cubit.resetPasswordLoading,
+                      loading: cubit.resetPasswordModel.isLoading,
                       onPressed: () => cubit.resetPassword(context),
                     );
                   },

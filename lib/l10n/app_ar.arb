@@ -37,5 +37,14 @@
     "authForgotPasswordSetPasswordTitle": "Set a new Password",
     "authForgotPasswordSetPasswordSubtitle": "You can set a new password for your account now.",
     "authForgotPasswordSetPasswordButton": "Set Password",
-    "rpcError": "{code, select, noInternetConnection{No internet connection} tooManyRequests{Too many requests} other{An error occurred}}"
+    "rpcError": "{code, select, noInternetConnection{No internet connection} tooManyRequests{Too many requests} other{An error occurred}}",
+    "hello": "Hello",
+    "homeShopNow": "Shop now",
+    "homeNewArrivals": "New Arrivals",
+    "newCapitalized": "NEW",
+    "addToCart": "Add to cart",
+    "moreProducts": "More Products",
+    "blogs": "Blogs",
+    "moreBlogs": "More Blogs",
+    "readMore": "Read More"
 }

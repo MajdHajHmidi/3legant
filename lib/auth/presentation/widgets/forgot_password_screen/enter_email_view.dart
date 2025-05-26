@@ -1,11 +1,12 @@
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/widgets/app_button.dart';
-import 'package:e_commerce/core/widgets/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/styles/colors.dart';
+import '../../../../core/styles/text_styles.dart';
+import '../../../../core/util/localization.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_textfield.dart';
+import '../../../cubit/auth_cubit.dart';
 
 class EnterEmailView extends StatelessWidget {
   const EnterEmailView({super.key});
@@ -46,27 +47,25 @@ class EnterEmailView extends StatelessWidget {
         BlocConsumer<AuthCubit, AuthState>(
           listenWhen:
               (_, state) =>
-                  state is AuthPasswordResetEmailRequestLoadingState ||
-                  state is AuthPasswordResetEmailRequestSuccessState ||
-                  state is AuthPasswordResetEmailRequestFailureState,
+                  state is AuthPasswordResetEmailRequestDataChangedState,
           listener: (context, state) {
-            if (state is AuthPasswordResetEmailRequestSuccessState) {
-              context.read<AuthCubit>().changeForgotPasswordPage(
-                ForgotPasswordViewMode.checkInbox,
-              );
+            if (state is AuthPasswordResetEmailRequestDataChangedState) {
+              if (cubit.passwordResetRequestModel.isData) {
+                context.read<AuthCubit>().changeForgotPasswordPage(
+                  ForgotPasswordViewMode.checkInbox,
+                );
+              }
             }
           },
           buildWhen:
               (_, state) =>
-                  state is AuthPasswordResetEmailRequestLoadingState ||
-                  state is AuthPasswordResetEmailRequestSuccessState ||
-                  state is AuthPasswordResetEmailRequestFailureState,
+                  state is AuthPasswordResetEmailRequestDataChangedState,
           builder: (context, state) {
             final cubit = context.read<AuthCubit>();
 
             return AppButton(
               text: localization(context).authForgotPasswordRequestButton,
-              loading: cubit.requestPasswordResetEmailLoading,
+              loading: cubit.passwordResetRequestModel.isLoading,
               onPressed: () => cubit.requestPasswordResetEmail(context),
             );
           },

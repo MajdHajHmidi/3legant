@@ -1,23 +1,24 @@
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/auth/cubit/reset_password_cubit.dart';
-import 'package:e_commerce/auth/data/auth_repo.dart';
-import 'package:e_commerce/auth/presentation/screens/auth_forgot_password.dart';
-import 'package:e_commerce/auth/presentation/screens/auth_screen.dart';
-import 'package:e_commerce/auth/presentation/screens/reset_password_screen.dart';
-import 'package:e_commerce/blogs/temp_blogs.dart';
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/util/dependency_injection.dart';
-import 'package:e_commerce/core/widgets/bottom_navbar.dart';
-import 'package:e_commerce/home/cubit/home_cubit.dart';
-import 'package:e_commerce/home/data/home_repo.dart';
-import 'package:e_commerce/home/presentation/screens/home_screen.dart';
-import 'package:e_commerce/login-callback/cubit/login_callback_cubit.dart';
-import 'package:e_commerce/login-callback/presentation/screens/login_callback_screen.dart';
-import 'package:e_commerce/profile/temp_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../auth/cubit/auth_cubit.dart';
+import '../../auth/cubit/reset_password_cubit.dart';
+import '../../auth/data/auth_repo.dart';
+import '../../auth/presentation/screens/auth_forgot_password.dart';
+import '../../auth/presentation/screens/auth_screen.dart';
+import '../../auth/presentation/screens/reset_password_screen.dart';
+import '../../blogs/temp_blogs.dart';
+import '../../home/cubit/home_cubit.dart';
+import '../../home/data/home_repo.dart';
+import '../../home/presentation/screens/home_screen.dart';
+import '../../login-callback/cubit/login_callback_cubit.dart';
+import '../../login-callback/presentation/screens/login_callback_screen.dart';
+import '../../profile/temp_profile.dart';
+import '../constants/app_constants.dart';
+import '../util/dependency_injection.dart';
+import '../widgets/bottom_navbar.dart';
 
 enum AppRoutes {
   home(name: 'home', path: '/'),

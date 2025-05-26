@@ -1,8 +1,8 @@
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/auth/presentation/widgets/inbox_launcher_tile.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/localization.dart';
+import '../../../cubit/auth_cubit.dart';
+import '../inbox_launcher_tile.dart';
+import '../../../../core/styles/colors.dart';
+import '../../../../core/styles/text_styles.dart';
+import '../../../../core/util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

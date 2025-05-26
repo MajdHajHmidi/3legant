@@ -184,6 +184,56 @@ class Product {
       _$ProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
+
+  Product copyWith({
+    String? id,
+    bool? productNew,
+    String? name,
+    double? price,
+    List<String>? colors,
+    double? rating,
+    String? details,
+    String? category,
+    int? discount,
+    bool? favorite,
+    DateTime? createdAt,
+    List<String>? imagesUrl,
+    String? description,
+    String? measurements,
+    CurrencyCode? currencyCode,
+    int? packagingCount,
+    int? packagingWidth,
+    double? packagingHeight,
+    double? packagingLength,
+    String? packagingWeight,
+    DateTime? discountEndDate,
+    String? productCategoryId,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      productNew: productNew ?? this.productNew,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      colors: colors ?? this.colors,
+      rating: rating ?? this.rating,
+      details: details ?? this.details,
+      category: category ?? this.category,
+      discount: discount ?? this.discount,
+      favorite: favorite ?? this.favorite,
+      createdAt: createdAt ?? this.createdAt,
+      imagesUrl: imagesUrl ?? this.imagesUrl,
+      description: description ?? this.description,
+      measurements: measurements ?? this.measurements,
+      currencyCode: currencyCode ?? this.currencyCode,
+      packagingCount: packagingCount ?? this.packagingCount,
+      packagingWidth: packagingWidth ?? this.packagingWidth,
+      packagingHeight: packagingHeight ?? this.packagingHeight,
+      packagingLength: packagingLength ?? this.packagingLength,
+      packagingWeight: packagingWeight ?? this.packagingWeight,
+      discountEndDate: discountEndDate ?? this.discountEndDate,
+      productCategoryId: productCategoryId ?? this.productCategoryId,
+    );
+  }
 }
 
 enum CurrencyCode {

@@ -1,7 +1,7 @@
-import 'package:e_commerce/core/constants/app_assets.dart';
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/widgets/app_image.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/styles/text_styles.dart';
+import '../../../../core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
 
 class AuthHeader extends StatelessWidget {

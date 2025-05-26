@@ -1,12 +1,16 @@
 import 'dart:async';
-import 'package:e_commerce/auth/data/auth_repo.dart';
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/util/app_failure.dart';
-import 'package:e_commerce/core/util/duration_extension.dart';
-import 'package:e_commerce/core/util/localization.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_async_value/async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+
+import '../../core/constants/app_constants.dart';
+import '../../core/util/app_failure.dart';
+import '../../core/util/duration_extension.dart';
+import '../../core/util/localization.dart';
+import '../data/auth_repo.dart';
+
 part 'auth_state.dart';
 
 enum AuthViewMode { signup, signin }
@@ -37,7 +41,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     isPrivacyPolicyAccepted = false;
     emit(AuthPrivacyPolicyToggledState());
-
     emit(AuthViewModeChangedState());
   }
 
@@ -102,9 +105,9 @@ class AuthCubit extends Cubit<AuthState> {
     return null;
   }
 
-  bool emailSignupLoading = false;
+  AsyncValue<void, AppFailure> emailSignupModel = AsyncValue.initial();
   void signupWithEmailAndPassword(BuildContext context) async {
-    if (emailSignupLoading) {
+    if (emailSignupModel.isLoading) {
       return;
     }
 
@@ -117,51 +120,52 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    emit(AuthEmailSignupLoadingState());
-    emailSignupLoading = true;
+    emailSignupModel = AsyncValue.loading();
+    emit(AuthEmailSignupDataChangedState());
     final response = await _authRepo.signupWithEmailAndPassword(
       email: emailFieldController.text.trim(),
       password: signupPasswordFieldController.text.trim(),
       name: nameFieldController.text.trim(),
     );
 
-    emailSignupLoading = false;
     if (response.isData) {
-      emit(AuthEmailSignupSuccessState());
+      emailSignupModel = AsyncValue.data(data: null);
     } else {
-      emit(AuthEmailSignupErrorState(failure: response.error!));
+      emailSignupModel = AsyncValue.error(error: response.error!);
     }
+
+    emit(AuthEmailSignupDataChangedState());
   }
 
-  bool googleSignupLoading = false;
+  AsyncValue<void, AppFailure> googleSignupModel = AsyncValue.initial();
   void signupWithGoogle(BuildContext context) async {
     if (!isPrivacyPolicyAccepted) {
       return;
     }
 
-    if (googleSignupLoading) {
+    if (googleSignupModel.isLoading) {
       return;
     }
 
-    googleSignupLoading = true;
-    emit(AuthGoogleSignupLoadingState());
+    googleSignupModel = AsyncValue.loading();
+    emit(AuthGoogleSignupDataChangedState());
 
     final response = await _authRepo.signupWithGoogle(
       Theme.of(context).platform,
     );
 
-    googleSignupLoading = false;
-
     if (response.isData) {
-      emit(AuthGoogleSignupSuccessState());
+      googleSignupModel = AsyncValue.data(data: null);
     } else {
-      emit(AuthGoogleSignupErrorState(failure: response.error!));
+      googleSignupModel = AsyncValue.error(error: response.error!);
     }
+
+    emit(AuthGoogleSignupDataChangedState());
   }
 
-  bool emailSignInLoading = false;
+  AsyncValue<void, AppFailure> emailSigninModel = AsyncValue.initial();
   void signinWithEmailAndPassword(BuildContext context) async {
-    if (emailSignInLoading) {
+    if (emailSigninModel.isLoading) {
       return;
     }
 
@@ -171,41 +175,42 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    emit(AuthEmailSigninLoadingState());
-    emailSignInLoading = true;
+    emailSigninModel = AsyncValue.loading();
+    emit(AuthEmailSigninDataChangedState());
+
     final response = await _authRepo.signinWithEmailAndPassword(
       email: emailFieldController.text.trim(),
       password: signinPasswordFieldController.text.trim(),
     );
 
-    emailSignInLoading = false;
     if (response.isData) {
-      emit(AuthEmailSigninSuccessState());
+      emailSigninModel = AsyncValue.data(data: null);
     } else {
-      emit(AuthEmailSigninErrorState(failure: response.error!));
+      emailSigninModel = AsyncValue.error(error: response.error!);
     }
+
+    emit(AuthEmailSigninDataChangedState());
   }
 
-  bool googleSignInLoading = false;
+  AsyncValue<void, AppFailure> googleSigninModel = AsyncValue.initial();
   void signinWithGoogle(BuildContext context) async {
-    if (googleSignInLoading) {
+    if (googleSigninModel.isLoading) {
       return;
     }
 
-    googleSignInLoading = true;
-    emit(AuthGoogleSigninLoadingState());
+    googleSigninModel = AsyncValue.loading();
+    emit(AuthGoogleSigninDataChangedState());
 
     final response = await _authRepo.signinWithGoogle(
       Theme.of(context).platform,
     );
 
-    googleSignInLoading = false;
-
     if (response.isData) {
-      emit(AuthGoogleSigninSuccessState());
+      googleSigninModel = AsyncValue.data(data: null);
     } else {
-      emit(AuthGoogleSigninErrorState(failure: response.error!));
+      googleSigninModel = AsyncValue.error(error: response.error!);
     }
+    emit(AuthGoogleSigninDataChangedState());
   }
 
   bool isSignupPasswordHidden = true;
@@ -276,9 +281,9 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  bool requestPasswordResetEmailLoading = false;
+  AsyncValue<void, AppFailure> passwordResetRequestModel = AsyncValue.initial();
   void requestPasswordResetEmail(BuildContext context) async {
-    if (requestPasswordResetEmailLoading) {
+    if (passwordResetRequestModel.isLoading) {
       return;
     }
 
@@ -287,20 +292,19 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    requestPasswordResetEmailLoading = true;
-    emit(AuthPasswordResetEmailRequestLoadingState());
+    passwordResetRequestModel = AsyncValue.loading();
+    emit(AuthPasswordResetEmailRequestDataChangedState());
 
     final response = await _authRepo.requestPasswordReset(
       emailFieldController.text.trim(),
     );
 
-    requestPasswordResetEmailLoading = false;
-
     if (response.isData) {
-      emit(AuthPasswordResetEmailRequestSuccessState());
+      passwordResetRequestModel = AsyncValue.data(data: null);
     } else {
-      emit(AuthPasswordResetEmailRequestFailureState(failure: response.error!));
+      passwordResetRequestModel = AsyncValue.error(error: response.error!);
     }
+    emit(AuthPasswordResetEmailRequestDataChangedState());
   }
 
   @override

@@ -1,7 +1,7 @@
-import 'package:e_commerce/core/constants/app_assets.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/localization.dart';
+import '../constants/app_assets.dart';
+import '../styles/colors.dart';
+import '../styles/text_styles.dart';
+import '../util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';

@@ -1,7 +1,7 @@
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/auth/presentation/screens/auth_signin_screen.dart';
-import 'package:e_commerce/auth/presentation/screens/auth_signup_screen.dart';
-import 'package:e_commerce/core/util/duration_extension.dart';
+import '../../../cubit/auth_cubit.dart';
+import '../../screens/auth_signin_screen.dart';
+import '../../screens/auth_signup_screen.dart';
+import '../../../../core/util/duration_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

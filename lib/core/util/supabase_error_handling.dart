@@ -1,4 +1,4 @@
-import 'package:e_commerce/core/util/app_failure.dart';
+import 'app_failure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_value/async_value.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

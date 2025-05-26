@@ -1,6 +1,7 @@
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+
+import 'colors.dart';
+import 'text_styles.dart';
 
 class AppTheme {
   static ThemeData get lightTheme {

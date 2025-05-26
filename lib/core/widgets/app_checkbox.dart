@@ -1,5 +1,6 @@
-import 'package:e_commerce/core/styles/colors.dart';
 import 'package:flutter/material.dart';
+
+import '../styles/colors.dart';
 
 class AppCheckbox extends StatelessWidget {
   final bool value;

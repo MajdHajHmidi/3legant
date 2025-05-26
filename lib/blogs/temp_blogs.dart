@@ -1,7 +1,8 @@
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/widgets/app_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../core/styles/text_styles.dart';
+import '../core/widgets/app_circular_progress_indicator.dart';
 
 class BlogsScreen extends StatelessWidget {
   const BlogsScreen({super.key});

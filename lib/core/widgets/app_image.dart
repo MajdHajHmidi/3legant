@@ -8,6 +8,8 @@ class AppNetworkImage extends StatefulWidget {
   final double? height;
   final BoxFit fit;
   final BorderRadius? borderRadius;
+  final bool _shimmer;
+  final Alignment alignment;
 
   const AppNetworkImage({
     super.key,
@@ -16,7 +18,18 @@ class AppNetworkImage extends StatefulWidget {
     this.height,
     this.fit = BoxFit.cover,
     this.borderRadius,
-  });
+    this.alignment = Alignment.center,
+  }) : _shimmer = true;
+
+  const AppNetworkImage.noShimmer({
+    super.key,
+    required this.imageUrl,
+    this.width,
+    this.height,
+    this.fit = BoxFit.cover,
+    this.borderRadius,
+    this.alignment = Alignment.center,
+  }) : _shimmer = false;
 
   @override
   State<AppNetworkImage> createState() => _AppNetworkImageState();
@@ -53,8 +66,9 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
         imageUrl: widget.imageUrl,
         width: widget.width,
         height: widget.height,
+        alignment: widget.alignment,
         fit: widget.fit,
-        placeholder: (context, url) => placeholder,
+        placeholder: widget._shimmer ? ((context, url) => placeholder) : null,
         errorWidget:
             (context, url, error) => InkWell(
               borderRadius: widget.borderRadius,

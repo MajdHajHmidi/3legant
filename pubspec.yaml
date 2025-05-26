@@ -47,13 +47,16 @@ dependencies:
     sdk: flutter
   intl: any
   google_sign_in: ^6.3.0
-  keyboard_avoider: ^0.2.0
   flutter_web_browser: ^0.17.3
   url_launcher: ^6.3.1
   android_intent_plus: ^5.3.0
   flutter_native_splash: ^2.4.6
   json_annotation: ^4.9.0
   get_it: ^8.0.3
+  smooth_page_indicator: ^1.2.1
+  currency_code_to_currency_symbol: ^0.0.4
+  flutter_rating_bar: ^4.0.1
+  like_button: ^2.1.0
 
 dev_dependencies:
   flutter_test:

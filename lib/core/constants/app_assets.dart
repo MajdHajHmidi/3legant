@@ -25,7 +25,12 @@ class AppIcons {
   static const youtube = '${_directory}youtube$_fileType';
   static const backLtr = '${_directory}back_ltr$_fileType';
   static const backRtl = '${_directory}back_rtl$_fileType';
+  static const arrowLeft = '${_directory}arrow-left$_fileType';
+  static const arrowRight = '${_directory}arrow-right$_fileType';
   static const inbox = '${_directory}inbox$_fileType';
+  static const rating = '${_directory}rating$_fileType';
+  static const heart = '${_directory}heart$_fileType';
+  static const outlinedHeart = '${_directory}heart_outlined$_fileType';
 }
 
 class AppImages {

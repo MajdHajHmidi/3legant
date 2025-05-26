@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/core/constants/app_assets.dart';
-import 'package:e_commerce/core/navigation/router.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/duration_extension.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/widgets/app_button.dart';
-import 'package:e_commerce/core/widgets/app_textfield.dart';
+import '../../cubit/auth_cubit.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/navigation/router.dart';
+import '../../../core/styles/colors.dart';
+import '../../../core/styles/text_styles.dart';
+import '../../../core/util/duration_extension.dart';
+import '../../../core/util/localization.dart';
+import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_textfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -212,17 +212,14 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                   const SizedBox(height: 32),
                   BlocBuilder<AuthCubit, AuthState>(
                     buildWhen:
-                        (_, state) =>
-                            state is AuthEmailSigninLoadingState ||
-                            state is AuthEmailSigninSuccessState ||
-                            state is AuthEmailSigninErrorState,
+                        (_, state) => state is AuthEmailSigninDataChangedState,
                     builder: (context, state) {
                       final cubit = context.read<AuthCubit>();
 
                       return AppButton(
                         onPressed:
                             () => cubit.signinWithEmailAndPassword(context),
-                        loading: cubit.emailSignInLoading,
+                        loading: cubit.emailSigninModel.isLoading,
                         text: localization(context).authSignIn,
                       );
                     },
@@ -258,17 +255,14 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                   const SizedBox(height: 32),
                   BlocBuilder<AuthCubit, AuthState>(
                     buildWhen:
-                        (_, state) =>
-                            state is AuthGoogleSigninLoadingState ||
-                            state is AuthGoogleSigninSuccessState ||
-                            state is AuthGoogleSigninErrorState,
+                        (_, state) => state is AuthGoogleSigninDataChangedState,
                     builder: (context, state) {
                       final cubit = context.read<AuthCubit>();
 
                       return AppButton(
                         onPressed: () => cubit.signinWithGoogle(context),
                         text: localization(context).authSigninWithGoogle,
-                        loading: cubit.googleSignInLoading,
+                        loading: cubit.googleSigninModel.isLoading,
                         lightTheme: true,
                         prefixIcon: SvgPicture.asset(AppIcons.google),
                       );

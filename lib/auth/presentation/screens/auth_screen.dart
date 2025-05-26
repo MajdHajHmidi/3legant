@@ -1,15 +1,16 @@
-import 'package:e_commerce/auth/cubit/auth_cubit.dart';
-import 'package:e_commerce/auth/presentation/widgets/auth_screen/auth_header.dart';
-import 'package:e_commerce/auth/presentation/widgets/auth_screen/auth_signup_signin_switcher.dart';
-import 'package:e_commerce/auth/presentation/widgets/inbox_launcher_tile.dart';
-import 'package:e_commerce/core/navigation/router.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/util/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../core/navigation/router.dart';
+import '../../../core/styles/colors.dart';
+import '../../../core/styles/text_styles.dart';
+import '../../../core/util/app_snackbar.dart';
+import '../../../core/util/localization.dart';
+import '../../cubit/auth_cubit.dart';
+import '../widgets/auth_screen/auth_header.dart';
+import '../widgets/auth_screen/auth_signup_signin_switcher.dart';
+import '../widgets/inbox_launcher_tile.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -18,46 +19,49 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (_, state) {
-        if (state is AuthEmailSigninSuccessState) {
-          // * On Email Signin Success - Go home
+        final cubit = context.read<AuthCubit>();
 
-          context.goNamed(AppRoutes.home.name);
-        } else if (state is AuthEmailSigninErrorState) {
-          // * On Email Signin Failure - Show error snackbar
+        if (state is AuthEmailSigninDataChangedState) {
+          if (cubit.emailSigninModel.isData) {
+            // * On Email Signin Success - Go home
+            context.goNamed(AppRoutes.home.name);
+          } else if (cubit.emailSigninModel.isError) {
+            // * On Email Signin Failure - Show error snackbar
+            showAuthErrorSnackbar(context, cubit.emailSigninModel.error!.code);
+          }
+        } else if (state is AuthEmailSignupDataChangedState) {
+          if (cubit.emailSignupModel.isData) {
+            // * On Email Signup Success - Show dialog
+            showSuccessfulSignupDialog(context);
+          } else if (cubit.emailSignupModel.isError) {
+            // * On Email Signup Failure - Show error snackbar
+            showAuthErrorSnackbar(context, cubit.emailSignupModel.error!.code);
+          }
+        } else if (state is AuthGoogleSigninDataChangedState) {
+          if (cubit.googleSigninModel.isData) {
+            // * On Google Signin Success - Go home
+            context.goNamed(AppRoutes.home.name);
+          } else if (cubit.googleSigninModel.isError) {
+            // * On Google Signin Failure - Show error snackbar
+            showAuthErrorSnackbar(context, cubit.googleSigninModel.error!.code);
+          }
+        } else if (state is AuthGoogleSignupDataChangedState) {
+          if (cubit.googleSignupModel.isData) {
+            // * On Google Signup Success - Go home
+            context.goNamed(AppRoutes.home.name);
+          } else if (cubit.googleSignupModel.isError) {
+            // * On Google Signup Failure - Show error snackbar
 
-          showAuthErrorSnackbar(context, state.failure.code);
-        } else if (state is AuthEmailSignupSuccessState) {
-          // * On Email Signup Success - Show dialog
-
-          showSuccessfulSignupDialog(context);
-        } else if (state is AuthEmailSignupErrorState) {
-          // * On Email Signin Failure - Show error snackbar
-
-          showAuthErrorSnackbar(context, state.failure.code);
-        } else if (state is AuthGoogleSigninSuccessState) {
-          // * On Google Signin Success - Go home
-
-          context.goNamed(AppRoutes.home.name);
-        } else if (state is AuthGoogleSigninErrorState) {
-          // * On Google Signin Failure - Show error snackbar
-
-          showAuthErrorSnackbar(context, state.failure.code);
-        } else if (state is AuthGoogleSignupSuccessState) {
-          // * On Google Signup Success - Go home
-
-          context.goNamed(AppRoutes.home.name);
-        } else if (state is AuthGoogleSignupErrorState) {
-          // * On Google Signup Failure - Show error snackbar
-
-          showAuthErrorSnackbar(context, state.failure.code);
+            showAuthErrorSnackbar(context, cubit.googleSignupModel.error!.code);
+          }
         }
       },
-      child: SafeArea(
-        child: Scaffold(
-          body: OrientationBuilder(
-            builder: (context, orientation) {
-              if (orientation == Orientation.portrait) {
-                return SingleChildScrollView(
+      child: Scaffold(
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              return SingleChildScrollView(
+                child: SafeArea(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -72,34 +76,34 @@ class AuthScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-              }
-
-              return Row(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: SizedBox(
-                        height: MediaQuery.sizeOf(context).height,
-                        child: AuthHeader(),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: SingleChildScrollView(
-                        child: BlocProvider.value(
-                          value: context.read<AuthCubit>(),
-                          child: AuthSignupSigninSwitcher(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               );
-            },
-          ),
+            }
+
+            return Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      height: MediaQuery.sizeOf(context).height,
+                      child: AuthHeader(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: SingleChildScrollView(
+                      child: BlocProvider.value(
+                        value: context.read<AuthCubit>(),
+                        child: AuthSignupSigninSwitcher(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
