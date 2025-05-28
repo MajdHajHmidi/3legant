@@ -1,4 +1,5 @@
 name: Rotate "New" Products on Supabase Ecommerce Project
+
 on:
   schedule:
     - cron: '0 9 * * 1' # Every Monday at 09:00 UTC
@@ -7,6 +8,7 @@ on:
 jobs:
   rotate-new-products:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -17,7 +19,7 @@ jobs:
           node-version: '18'
 
       - name: Install Supabase Client
-        run: npm install @supabase/supabase-js
+        run: npm install @supabase/supabase-js --force
 
       - name: Rotate New Products
         env:
@@ -26,51 +28,40 @@ jobs:
         run: |
           node -e "
           (async () => {
-            try {
-              const { createClient } = require('@supabase/supabase-js');
-              const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+            const { createClient } = require('@supabase/supabase-js');
+            const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-              // Step 1: Get current 'new' product IDs
-              const { data: currentNew, error: fetchError } = await supabase
+            try {
+              // Step 1: Get 10 random products that are not currently marked as new
+              const { data: randomProducts, error: randomError } = await supabase
                 .from('products')
                 .select('id')
-                .eq('new', true);
-              if (fetchError) throw fetchError;
+                .eq('new', false)
+                .order('RANDOM()')
+                .limit(10);
 
-              const currentNewIds = currentNew.map(p => p.id);
+              if (randomError) throw randomError;
 
-              // Step 2: Get 10 products not currently marked as new
-              let query = supabase
-                .from('products')
-                .select('id');
+              const newProductIds = randomProducts.map(p => p.id);
+              console.log('Selected new product IDs:', newProductIds);
 
-              if (currentNewIds.length > 0) {
-                // Pass the JavaScript array directly to 'not.in'
-                query = query.not('id', 'in', currentNewIds);
-              }
-
-              const { data: candidates, error: selectError } = await query.limit(10);
-              if (selectError) throw selectError;
-
-              const newNewIds = candidates.map(p => p.id);
-
-              // Step 3: Clear all current new flags
-              const { error: clearError } = await supabase
+              // Step 2: Set `new` to false for all currently new products
+              const { error: resetError } = await supabase
                 .from('products')
                 .update({ new: false })
                 .eq('new', true);
-              if (clearError) throw clearError;
 
-              // Step 4: Mark 10 new products as new
-              if (newNewIds.length > 0) {
-                const { error: setError } = await supabase
-                  .from('products')
-                  .update({ new: true })
-                  .in('id', newNewIds);
-                if (setError) throw setError;
-              }
+              if (resetError) throw resetError;
 
-              console.log(\`Updated \${newNewIds.length} new products: [\${newNewIds.join(', ')}]\`);
+              // Step 3: Set `new` to true for the 10 selected products
+              const { error: setError } = await supabase
+                .from('products')
+                .update({ new: true })
+                .in('id', newProductIds);
+
+              if (setError) throw setError;
+
+              console.log('Successfully rotated new products.');
             } catch (err) {
               console.error('Error rotating new products:', err);
               process.exit(1);
