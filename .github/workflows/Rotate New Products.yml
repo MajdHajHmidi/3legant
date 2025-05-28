@@ -47,7 +47,8 @@ jobs:
                 .select('id');
 
               if (currentNewIds.length > 0) {
-                query = query.not('id', 'in', currentNewIds);
+                const inClause = `(${currentNewIds.map(id => \`\"\${id}\"\`).join(',')})`;
+                query = query.not('id', 'in', inClause);
               }
 
               const { data: candidates, error: selectError } = await query.limit(10);
