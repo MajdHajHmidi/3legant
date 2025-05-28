@@ -32,36 +32,35 @@ jobs:
             const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
             try {
-              // Step 1: Get 10 random products that are not currently marked as new
-              const { data: randomProducts, error: randomError } = await supabase
-                .from('products')
+              // Step 1: Select 10 products that are not currently new
+              const { data: newCandidates, error: fetchError } = await supabase
+                .from('random_products')
                 .select('id')
                 .eq('new', false)
-                .order('RANDOM()')
                 .limit(10);
 
-              if (randomError) throw randomError;
+              if (fetchError) throw fetchError;
 
-              const newProductIds = randomProducts.map(p => p.id);
-              console.log('Selected new product IDs:', newProductIds);
+              const newProductIds = newCandidates.map(p => p.id);
+              console.log('New product IDs to be marked as new:', newProductIds);
 
-              // Step 2: Set `new` to false for all currently new products
-              const { error: resetError } = await supabase
+              // Step 2: Set `new = false` for all currently new products
+              const { error: clearError } = await supabase
                 .from('products')
                 .update({ new: false })
                 .eq('new', true);
+              if (clearError) throw clearError;
 
-              if (resetError) throw resetError;
+              // Step 3: Set `new = true` for the selected products
+              if (newProductIds.length > 0) {
+                const { error: updateError } = await supabase
+                  .from('products')
+                  .update({ new: true })
+                  .in('id', newProductIds);
+                if (updateError) throw updateError;
+              }
 
-              // Step 3: Set `new` to true for the 10 selected products
-              const { error: setError } = await supabase
-                .from('products')
-                .update({ new: true })
-                .in('id', newProductIds);
-
-              if (setError) throw setError;
-
-              console.log('Successfully rotated new products.');
+              console.log('Successfully updated 10 products as new.');
             } catch (err) {
               console.error('Error rotating new products:', err);
               process.exit(1);
