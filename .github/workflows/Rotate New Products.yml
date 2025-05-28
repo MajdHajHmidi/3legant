@@ -1,5 +1,4 @@
 name: Rotate "New" Products on Supabase Ecommerce Project
-
 on:
   schedule:
     - cron: '0 9 * * 1' # Every Monday at 09:00 UTC
@@ -8,7 +7,6 @@ on:
 jobs:
   rotate-new-products:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,7 +17,7 @@ jobs:
           node-version: '18'
 
       - name: Install Supabase Client
-        run: npm install @supabase/supabase-js --force
+        run: npm install @supabase/supabase-js
 
       - name: Rotate New Products
         env:
@@ -47,8 +45,8 @@ jobs:
                 .select('id');
 
               if (currentNewIds.length > 0) {
-                const inClause = `(${currentNewIds.map(id => \`\"\${id}\"\`).join(',')})`;
-                query = query.not('id', 'in', inClause);
+                // Pass the JavaScript array directly to 'not.in'
+                query = query.not('id', 'in', currentNewIds);
               }
 
               const { data: candidates, error: selectError } = await query.limit(10);
