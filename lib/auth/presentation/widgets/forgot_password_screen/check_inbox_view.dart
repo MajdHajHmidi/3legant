@@ -1,4 +1,4 @@
-import '../../../cubit/auth_cubit.dart';
+import '../../cubit/auth_cubit.dart';
 import '../inbox_launcher_tile.dart';
 import '../../../../core/styles/colors.dart';
 import '../../../../core/styles/text_styles.dart';

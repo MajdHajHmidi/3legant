@@ -56,7 +56,6 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   currency_code_to_currency_symbol: ^0.0.4
   flutter_rating_bar: ^4.0.1
-  like_button: ^2.1.0
 
 dev_dependencies:
   flutter_test:

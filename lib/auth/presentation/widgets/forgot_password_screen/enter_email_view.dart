@@ -6,7 +6,7 @@ import '../../../../core/styles/text_styles.dart';
 import '../../../../core/util/localization.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_textfield.dart';
-import '../../../cubit/auth_cubit.dart';
+import '../../cubit/auth_cubit.dart';
 
 class EnterEmailView extends StatelessWidget {
   const EnterEmailView({super.key});

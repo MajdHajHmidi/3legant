@@ -7,7 +7,7 @@ import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_image.dart';
 import '../../../favorite/presentation/widgets/favorite_button.dart';
-import '../../cubit/home_cubit.dart';
+import '../cubit/home_cubit.dart';
 import '../../models/home_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

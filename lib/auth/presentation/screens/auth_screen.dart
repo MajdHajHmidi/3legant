@@ -7,7 +7,7 @@ import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/app_snackbar.dart';
 import '../../../core/util/localization.dart';
-import '../../cubit/auth_cubit.dart';
+import '../cubit/auth_cubit.dart';
 import '../widgets/auth_screen/auth_header.dart';
 import '../widgets/auth_screen/auth_signup_signin_switcher.dart';
 import '../widgets/inbox_launcher_tile.dart';

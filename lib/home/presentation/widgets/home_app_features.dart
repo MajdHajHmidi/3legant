@@ -23,7 +23,7 @@ class HomeAppFeatures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _appFeatures = [
+    final appFeatures = [
       _AppFeautreData(
         title: metadata.appFeature1Title,
         subtitle: metadata.appFeature1Message,
@@ -47,17 +47,17 @@ class HomeAppFeatures extends StatelessWidget {
     ];
 
     return SliverGrid.builder(
-      itemCount: _appFeatures.length,
+      itemCount: appFeatures.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
         childAspectRatio: 3 / 4,
-        mainAxisExtent: 120 + (80 * MediaQuery.textScalerOf(context).scale(1)),
+        mainAxisExtent: 120 + (90 * MediaQuery.textScalerOf(context).scale(1)),
       ),
 
       itemBuilder: (context, index) {
-        return _AppFeatureTile(data: _appFeatures[index]);
+        return _AppFeatureTile(data: appFeatures[index]);
       },
     );
   }
@@ -77,7 +77,8 @@ class _AppFeatureTile extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SvgPicture.asset(
             data.iconPath,
@@ -89,6 +90,7 @@ class _AppFeatureTile extends StatelessWidget {
           Text(
             data.title,
             maxLines: 2,
+            textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.caption1Semi.copyWith(
               color: AppColors.neutral_07,
@@ -97,8 +99,9 @@ class _AppFeatureTile extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             data.subtitle,
+            textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+            maxLines: 2,
             style: AppTextStyles.caption2.copyWith(color: AppColors.neutral_04),
           ),
         ],

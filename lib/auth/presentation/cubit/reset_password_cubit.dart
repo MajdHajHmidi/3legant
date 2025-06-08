@@ -1,7 +1,7 @@
 import 'package:flutter_async_value/async_value.dart';
 
-import '../data/auth_repo.dart';
-import '../../core/util/localization.dart';
+import '../../data/auth_repo.dart';
+import '../../../core/util/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

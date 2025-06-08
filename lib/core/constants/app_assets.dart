@@ -31,6 +31,9 @@ class AppIcons {
   static const rating = '${_directory}rating$_fileType';
   static const heart = '${_directory}heart$_fileType';
   static const outlinedHeart = '${_directory}heart_outlined$_fileType';
+  static const home = '${_directory}home$_fileType';
+  static const cart = '${_directory}cart$_fileType';
+  static const dropdown = '${_directory}dropdown$_fileType';
 }
 
 class AppImages {

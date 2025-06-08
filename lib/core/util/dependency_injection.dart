@@ -1,3 +1,7 @@
+import 'package:e_commerce/blogs/data/blogs_repo.dart';
+import 'package:e_commerce/cart/data/cart_repo.dart';
+import 'package:e_commerce/shop/data/shop_repo.dart';
+
 import '../../favorite/data/favorite_repo.dart';
 
 import '../../auth/data/auth_repo.dart';
@@ -15,7 +19,11 @@ void setupDependencyInjection() {
   serviceLocator.registerLazySingleton<FavoriteRepo>(
     () => SupabaseFavoriteRepo(),
   );
-
+  serviceLocator.registerLazySingleton<CartRepo>(
+    () => SupabaseSqliteCartRepo(),
+  );
+  serviceLocator.registerLazySingleton<ShopRepo>(() => SupabaseShopRepo());
+  serviceLocator.registerLazySingleton<BlogsRepo>(() => SupabaseBlogsRepo());
   // Register app router
   serviceLocator.registerSingleton<GoRouter>(getAppRouter());
 }

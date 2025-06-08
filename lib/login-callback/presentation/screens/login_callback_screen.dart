@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/navigation/router.dart';
 import '../../../core/widgets/app_circular_progress_indicator.dart';
-import '../../cubit/login_callback_cubit.dart';
+import '../cubit/login_callback_cubit.dart';
 
 class LoginCallbackScreen extends StatelessWidget {
   const LoginCallbackScreen({super.key});

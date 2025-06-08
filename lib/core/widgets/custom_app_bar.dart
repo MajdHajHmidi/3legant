@@ -32,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: AppTextStyles.body1Semi.copyWith(color: AppColors.neutral_06),
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
         centerTitle: true,
         leading:
             showBackButton

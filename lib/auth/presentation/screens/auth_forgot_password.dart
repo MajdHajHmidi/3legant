@@ -1,4 +1,4 @@
-import '../../cubit/auth_cubit.dart';
+import '../cubit/auth_cubit.dart';
 import '../widgets/forgot_password_screen/check_inbox_view.dart';
 import '../widgets/forgot_password_screen/enter_email_view.dart';
 import '../../../core/util/localization.dart';

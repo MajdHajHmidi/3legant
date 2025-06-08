@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../cubit/auth_cubit.dart';
+import '../cubit/auth_cubit.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';

@@ -42,6 +42,7 @@ class HomeBlogTile extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     blog.title,
+                    maxLines: 2,
                     style: AppTextStyles.body2Semi.copyWith(
                       color: AppColors.neutral_07,
                     ),

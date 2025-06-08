@@ -1,4 +1,4 @@
-import '../../../cubit/auth_cubit.dart';
+import '../../cubit/auth_cubit.dart';
 import '../../screens/auth_signin_screen.dart';
 import '../../screens/auth_signup_screen.dart';
 import '../../../../core/util/duration_extension.dart';

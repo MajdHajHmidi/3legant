@@ -46,5 +46,11 @@
     "moreProducts": "More Products",
     "blogs": "Blogs",
     "moreBlogs": "More Blogs",
-    "readMore": "Read More"
+    "readMore": "Read More",
+    "navHome": "Home",
+    "navShop": "Shop",
+    "navProfile": "Profile",
+    "navCart": "Cart",
+    "showMore": "Show more",
+    "allCategories": "All categories"
 }

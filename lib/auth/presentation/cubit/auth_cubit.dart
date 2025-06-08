@@ -5,11 +5,11 @@ import 'package:flutter_async_value/async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
-import '../../core/constants/app_constants.dart';
-import '../../core/util/app_failure.dart';
-import '../../core/util/duration_extension.dart';
-import '../../core/util/localization.dart';
-import '../data/auth_repo.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../core/util/app_failure.dart';
+import '../../../core/util/duration_extension.dart';
+import '../../../core/util/localization.dart';
+import '../../data/auth_repo.dart';
 
 part 'auth_state.dart';
 

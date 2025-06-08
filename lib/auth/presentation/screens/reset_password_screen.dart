@@ -1,4 +1,4 @@
-import '../../cubit/reset_password_cubit.dart';
+import '../cubit/reset_password_cubit.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/navigation/router.dart';
 import '../../../core/styles/colors.dart';

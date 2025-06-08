@@ -211,3 +211,62 @@ class AppTextButton extends StatelessWidget {
     );
   }
 }
+
+class AppRoundedButton extends StatelessWidget {
+  final String text;
+  final void Function() onPressed;
+  final bool _outlined;
+  final double? width;
+  final bool loading;
+  const AppRoundedButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.width,
+    this.loading = false,
+  }) : _outlined = false;
+
+  const AppRoundedButton.outlined({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.width,
+    this.loading = false,
+  }) : _outlined = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(360),
+      child: Container(
+        width: width,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(360),
+          color: _outlined ? null : AppColors.neutral_07,
+          border:
+              _outlined
+                  ? Border.all(color: AppColors.neutral_07, width: 1)
+                  : null,
+        ),
+        child: SizedBox(
+          height: 28 * MediaQuery.textScalerOf(context).scale(1),
+          child:
+              loading
+                  ? Align(child: AppCircularProgressIndicator())
+                  : Text(
+                    text,
+                    style: AppTextStyles.buttonS.copyWith(
+                      color:
+                          _outlined
+                              ? AppColors.neutral_07
+                              : AppColors.neutral_01,
+                    ),
+                  ),
+        ),
+      ),
+    );
+  }
+}

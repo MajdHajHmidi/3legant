@@ -1,15 +1,13 @@
-import '../../../core/widgets/app_circular_progress_indicator.dart';
+import 'package:e_commerce/home/presentation/widgets/states/home_error_view.dart';
+import 'package:e_commerce/home/presentation/widgets/states/home_loading_view.dart';
+
 import '../widgets/home_header.dart';
-import '../widgets/home_widget.dart';
+import '../widgets/states/home_data_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_async_value/async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../auth/data/auth_repo.dart';
-import '../../../core/util/dependency_injection.dart';
-import '../../../core/util/localization.dart';
-import '../../../core/widgets/async_retry.dart';
-import '../../cubit/home_cubit.dart';
+import '../cubit/home_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,37 +21,25 @@ class HomeScreen extends StatelessWidget {
             HomeHeader(),
             Expanded(
               child: BlocBuilder<HomeCubit, HomeState>(
+                buildWhen: (_, state) => state is HomeDataChangedState,
                 builder: (context, state) {
                   final cubit = context.read<HomeCubit>();
 
                   return AsyncValueBuilder(
                     value: cubit.homeDataModel,
-                    loading:
-                        (context) =>
-                            Center(child: AppCircularProgressIndicator()),
+                    loading: (context) => HomeLoadingView(),
                     data:
                         (context, data) => BlocProvider.value(
                           value: cubit,
-                          child: HomeWidget(
+                          child: HomeDataView(
                             homeDataModel: cubit.homeDataModel.data!,
                           ),
                         ),
                     error:
-                        (context, error) => Center(
-                          child: AsyncRetryWidget(
-                            message: localization(
-                              context,
-                            ).rpcError(cubit.homeDataModel.error!.code),
-                            onPressed: () {
-                              final user =
-                                  serviceLocator<AuthRepo>()
-                                      .getCurrentUser()
-                                      ?.id;
-
-                              if (user != null) {
-                                context.read<HomeCubit>().getHomeData(user);
-                              }
-                            },
+                        (context, error) => BlocProvider.value(
+                          value: cubit,
+                          child: HomeErrorView(
+                            failure: cubit.homeDataModel.error!,
                           ),
                         ),
                   );
