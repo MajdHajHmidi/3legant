@@ -1,0 +1,28 @@
+name: Update Home View Images Daily
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # every day at 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  update-home-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Supabase Client
+        run: npm install @supabase/supabase-js --force
+
+      - name: Update Home View Images
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_PROJECT_SERVICE_ROLE_KEY }}
+        run: node .github_scripts/rotate_home_image_gallery.mjs

@@ -1,0 +1,69 @@
+name: Rotate "New" Products on Supabase Ecommerce Project
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Every day at 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  rotate-new-products:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Supabase Client
+        run: npm install @supabase/supabase-js --force
+
+      - name: Rotate New Products
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_PROJECT_SERVICE_ROLE_KEY }}
+        run: |
+          node -e "
+          (async () => {
+            const { createClient } = require('@supabase/supabase-js');
+            const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+
+            try {
+              // Step 1: Select 10 products that are not currently new
+              const { data: newCandidates, error: fetchError } = await supabase
+                .from('random_products')
+                .select('id')
+                .eq('new', false)
+                .limit(10);
+
+              if (fetchError) throw fetchError;
+
+              const newProductIds = newCandidates.map(p => p.id);
+              console.log('New product IDs to be marked as new:', newProductIds);
+
+              // Step 2: Set `new = false` for all currently new products
+              const { error: clearError } = await supabase
+                .from('products')
+                .update({ new: false })
+                .eq('new', true);
+              if (clearError) throw clearError;
+
+              // Step 3: Set `new = true` for the selected products
+              if (newProductIds.length > 0) {
+                const { error: updateError } = await supabase
+                  .from('products')
+                  .update({ new: true })
+                  .in('id', newProductIds);
+                if (updateError) throw updateError;
+              }
+
+              console.log('Successfully updated 10 products as new.');
+            } catch (err) {
+              console.error('Error rotating new products:', err);
+              process.exit(1);
+            }
+          })();
+          "
