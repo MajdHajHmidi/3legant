@@ -1,6 +1,6 @@
-import 'package:e_commerce/blogs/presentation/cubit/blogs_cubit.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/widgets/app_button.dart';
+import '../cubit/blogs_cubit.dart';
+import '../../../core/util/localization.dart';
+import '../../../core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

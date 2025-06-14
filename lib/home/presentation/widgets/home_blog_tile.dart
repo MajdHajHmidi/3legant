@@ -1,7 +1,9 @@
+import '../../../core/navigation/router.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/localization.dart';
-import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_image.dart';
 import '../../models/home_data_model.dart';
@@ -17,7 +19,11 @@ class HomeBlogTile extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => showNotImplementedDialog(context),
+        onTap:
+            () => context.pushNamed(
+              AppRoutes.blogDetails.name,
+              pathParameters: {'blog_id': blog.id},
+            ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

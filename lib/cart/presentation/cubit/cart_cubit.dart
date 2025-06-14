@@ -1,4 +1,4 @@
-import 'package:e_commerce/cart/data/cart_repo.dart';
+import '../../data/cart_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'cart_state.dart';

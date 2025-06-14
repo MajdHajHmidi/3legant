@@ -1,4 +1,4 @@
-import 'package:e_commerce/core/styles/text_styles.dart';
+import '../../../core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class CartScreen extends StatelessWidget {

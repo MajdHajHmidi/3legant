@@ -1,5 +1,5 @@
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/widgets/shimmer.dart';
+import '../../../../core/util/localization.dart';
+import '../../../../core/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 
 class HomeLoadingView extends StatelessWidget {

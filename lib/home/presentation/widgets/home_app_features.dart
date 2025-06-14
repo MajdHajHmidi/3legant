@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../core/constants/app_assets.dart';
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../models/home_data_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class _AppFeautreData {
   final String title;

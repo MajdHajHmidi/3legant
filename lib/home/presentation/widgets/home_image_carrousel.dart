@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import '../../../core/styles/colors.dart';
 import '../../../core/util/duration_extension.dart';
 import '../../../core/widgets/app_image.dart';
-import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeImageCarousel extends StatefulWidget {
   final List<String> images;

@@ -1,8 +1,8 @@
-import 'package:e_commerce/auth/data/auth_repo.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/util/dependency_injection.dart';
-import 'package:e_commerce/core/util/localization.dart';
-import 'package:e_commerce/core/widgets/app_adaptive_grid.dart';
+import '../../../../auth/data/auth_repo.dart';
+import '../../../../core/styles/text_styles.dart';
+import '../../../../core/util/dependency_injection.dart';
+import '../../../../core/util/localization.dart';
+import '../../../../core/widgets/app_adaptive_grid.dart';
 
 import '../../cubit/home_cubit.dart';
 import '../../../models/home_data_model.dart';
@@ -88,7 +88,7 @@ class HomeDataView extends StatelessWidget {
           SliverPadding(
             padding: horizontalPadding,
             sliver: AppAdaptiveSliverGrid(
-              builder:
+              itembuilder:
                   (context, index) => HomeBlogTile(
                     blog: homeDataModel.popularBlogs.blogs[index],
                   ),

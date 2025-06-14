@@ -1,11 +1,9 @@
-import 'package:e_commerce/blogs/presentation/cubit/blogs_cubit.dart';
-import 'package:e_commerce/blogs/presentation/widgets/blog_tile.dart';
-import 'package:e_commerce/blogs/presentation/widgets/blogs_category_dropdown.dart';
-import 'package:e_commerce/blogs/presentation/widgets/blogs_header.dart';
-import 'package:e_commerce/blogs/presentation/widgets/blogs_show_more.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/widgets/app_adaptive_grid.dart';
-import 'package:e_commerce/core/widgets/app_circular_progress_indicator.dart';
+import '../../cubit/blogs_cubit.dart';
+import '../blogs_category_dropdown.dart';
+import '../blogs_grid.dart';
+import '../blogs_header.dart';
+import '../blogs_show_more.dart';
+import '../../../../core/widgets/app_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,34 +42,9 @@ class BlogsDataView extends StatelessWidget {
 
               return SliverMainAxisGroup(
                 slivers: [
-                  AppAdaptiveSliverGrid(
-                    builder:
-                        (context, index) => BlogTile(blog: model.blogs[index]),
-                    itemCount: model.blogs.length,
-                    minimumTileWidth: 300.0,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    staticChildHeight: 320,
-                    textPlaceholders: [
-                      TextPlaceholderParams(
-                        context: context,
-                        texts: model.blogs.map((blog) => blog.title).toList(),
-                        horizontalPadding: 8,
-                        style: AppTextStyles.body2Semi,
-                        maxLines: 2,
-                      ),
-                      TextPlaceholderParams(
-                        context: context,
-                        text:
-                            'September 30, 2025', // Sample that applies to all other cases
-                        style: AppTextStyles.caption2,
-                        maxLines: 1,
-                        horizontalPadding: 8,
-                      ),
-                    ],
-                  ),
-                  if (cubit.blogsDataModel.data!.paginationInfo.currentPage <
-                      cubit.blogsDataModel.data!.paginationInfo.totalPages)
+                  BlogsGrid(blogs: model.blogs),
+                  if (model.paginationInfo.currentPage <
+                      model.paginationInfo.totalPages)
                     SliverPadding(
                       padding: const EdgeInsets.only(top: 40),
                       sliver: SliverToBoxAdapter(

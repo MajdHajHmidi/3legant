@@ -1,6 +1,6 @@
-import 'package:e_commerce/blogs/models/blogs_data_model.dart';
-import 'package:e_commerce/core/util/app_failure.dart';
-import 'package:e_commerce/core/util/supabase_error_handling.dart';
+import '../models/blogs_data_model.dart';
+import '../../core/util/app_failure.dart';
+import '../../core/util/supabase_error_handling.dart';
 import 'package:flutter_async_value/async_value.dart';
 
 abstract class BlogsRepo {

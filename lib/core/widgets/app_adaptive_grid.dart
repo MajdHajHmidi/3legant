@@ -1,8 +1,8 @@
-import 'package:e_commerce/core/util/text.dart';
+import '../util/text.dart';
 import 'package:flutter/material.dart';
 
 class AppAdaptiveSliverGrid extends StatelessWidget {
-  final Widget Function(BuildContext context, int index) builder;
+  final Widget Function(BuildContext context, int index) itembuilder;
   final int itemCount;
   final double minimumTileWidth;
   final double mainAxisSpacing;
@@ -17,12 +17,12 @@ class AppAdaptiveSliverGrid extends StatelessWidget {
   final List<TextPlaceholderParams>? textPlaceholders;
   const AppAdaptiveSliverGrid({
     super.key,
-    required this.builder,
     required this.itemCount,
     required this.minimumTileWidth,
     required this.mainAxisSpacing,
     required this.crossAxisSpacing,
     required this.staticChildHeight,
+    required this.itembuilder,
     this.textPlaceholders,
   });
 
@@ -33,7 +33,7 @@ class AppAdaptiveSliverGrid extends StatelessWidget {
         final width = constraints.crossAxisExtent;
         final crossAxisCount = (width / minimumTileWidth).floor().clamp(1, 3);
         return SliverGrid(
-          delegate: SliverChildBuilderDelegate(builder, childCount: itemCount),
+          delegate: SliverChildBuilderDelegate(itembuilder, childCount: itemCount),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             mainAxisSpacing: mainAxisSpacing,
             crossAxisSpacing: crossAxisSpacing,

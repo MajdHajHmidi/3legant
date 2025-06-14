@@ -1,7 +1,7 @@
-import 'package:e_commerce/blogs/models/blogs_data_model.dart';
-import 'package:e_commerce/core/styles/colors.dart';
-import 'package:e_commerce/core/styles/text_styles.dart';
-import 'package:e_commerce/core/widgets/app_image.dart';
+import '../../models/blogs_data_model.dart';
+import '../../../core/styles/colors.dart';
+import '../../../core/styles/text_styles.dart';
+import '../../../core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
 
 class BlogsHeader extends StatelessWidget {

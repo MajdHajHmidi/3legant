@@ -1,17 +1,18 @@
-import '../cubit/reset_password_cubit.dart';
-import '../../../core/constants/app_assets.dart';
-import '../../../core/navigation/router.dart';
-import '../../../core/styles/colors.dart';
-import '../../../core/styles/text_styles.dart';
-import '../../../core/util/localization.dart';
-import '../../../core/util/app_snackbar.dart';
-import '../../../core/widgets/app_button.dart';
-import '../../../core/widgets/app_textfield.dart';
-import '../../../core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../core/constants/app_assets.dart';
+import '../../../core/navigation/router.dart';
+import '../../../core/styles/colors.dart';
+import '../../../core/styles/text_styles.dart';
+import '../../../core/util/app_snackbar.dart';
+import '../../../core/util/localization.dart';
+import '../../../core/widgets/app_button.dart';
+import '../../../core/widgets/app_textfield.dart';
+import '../../../core/widgets/custom_app_bar.dart';
+import '../cubit/reset_password_cubit.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});

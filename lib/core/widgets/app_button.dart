@@ -1,12 +1,12 @@
-import '../constants/app_assets.dart';
-import '../util/localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../constants/app_assets.dart';
 import '../styles/colors.dart';
 import '../styles/text_styles.dart';
 import '../util/duration_extension.dart';
+import '../util/localization.dart';
 import 'app_circular_progress_indicator.dart';
-import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
@@ -14,7 +14,7 @@ class AppButton extends StatelessWidget {
   final bool lightTheme;
   final Widget? prefixIcon;
   final bool loading;
-  final double width;
+  final double? width;
   final double height;
   final bool disableTextScaling;
 
@@ -111,7 +111,8 @@ class AppButton extends StatelessWidget {
                     ),
                   ),
                 )
-                : Center(
+                : Align(
+                  alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     child: textWidget,
@@ -122,17 +123,19 @@ class AppButton extends StatelessWidget {
   }
 }
 
-class SecondayAppButton extends StatelessWidget {
+class SecondaryAppButton extends StatelessWidget {
   final String text;
   final void Function()? onPressed;
   final bool lightTheme;
   final Widget? prefixIcon;
   final bool loading;
-  final double width;
+  final double? width;
   final double height;
   final bool disableTextScaling;
+  final bool smallText;
+  final bool _outlined;
 
-  const SecondayAppButton({
+  const SecondaryAppButton({
     super.key,
     required this.text,
     required this.onPressed,
@@ -142,29 +145,70 @@ class SecondayAppButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 52,
     this.disableTextScaling = false,
-  });
+    this.smallText = false,
+  }) : _outlined = false;
+
+  const SecondaryAppButton.outlined({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.lightTheme = false,
+    this.prefixIcon,
+    this.loading = false,
+    this.width = double.infinity,
+    this.height = 52,
+    this.disableTextScaling = false,
+    this.smallText = false,
+  }) : _outlined = true;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return Material(
       borderRadius: BorderRadius.circular(8),
-      onTap: onPressed,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: lightTheme ? AppColors.neutral_02 : AppColors.neutral_07,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        width: double.infinity,
-        height: height,
-        child: Center(
-          child: Text(
-            text,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: AppTextStyles.buttonS.copyWith(
-              color: lightTheme ? AppColors.neutral_06 : AppColors.neutral_01,
+      color:
+          _outlined
+              ? Theme.of(context).scaffoldBackgroundColor
+              : lightTheme
+              ? AppColors.neutral_02
+              : AppColors.neutral_07,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onPressed,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border:
+                _outlined
+                    ? Border.all(
+                      color: AppColors.neutral_06,
+                      width: smallText ? 1 : 2,
+                    )
+                    : null,
+          ),
+          width: width,
+          height: height,
+          child: Center(
+            child: Builder(
+              builder: (context) {
+                final textColor =
+                    _outlined
+                        ? AppColors.neutral_06
+                        : lightTheme
+                        ? AppColors.neutral_06
+                        : AppColors.neutral_01;
+                return Text(
+                  text,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style:
+                      smallText
+                          ? AppTextStyles.caption1.copyWith(color: textColor)
+                          : AppTextStyles.buttonS.copyWith(color: textColor),
+                  textScaler: disableTextScaling ? TextScaler.linear(1) : null,
+                );
+              },
             ),
-            textScaler: disableTextScaling ? TextScaler.linear(1) : null,
           ),
         ),
       ),

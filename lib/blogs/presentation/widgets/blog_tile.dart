@@ -1,9 +1,10 @@
-import 'package:e_commerce/blogs/models/blogs_data_model.dart';
-import 'package:intl/intl.dart';
+import '../../models/blogs_data_model.dart';
+import '../../../core/navigation/router.dart';
+import '../../../core/util/date.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
-import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,11 @@ class BlogTile extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => showNotImplementedDialog(context),
+        onTap:
+            () => context.pushNamed(
+              AppRoutes.blogDetails.name,
+              pathParameters: {'blog_id': blog.id},
+            ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +55,7 @@ class BlogTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    DateFormat('MMMM d, y').format(blog.createdAt),
+                    formatDate(blog.createdAt),
                     maxLines: 1,
                     style: AppTextStyles.caption2.copyWith(
                       color: AppColors.neutral_04,

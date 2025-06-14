@@ -1,6 +1,7 @@
-import 'package:e_commerce/blogs/data/blogs_repo.dart';
-import 'package:e_commerce/blogs/models/blogs_data_model.dart';
-import 'package:e_commerce/core/util/app_failure.dart';
+import '../../data/blogs_repo.dart';
+import '../../models/blogs_data_model.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../core/util/app_failure.dart';
 import 'package:flutter_async_value/async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +16,7 @@ class BlogsCubit extends Cubit<BlogsState> {
   }
 
   AsyncValue<BlogsDataModel, AppFailure> blogsDataModel = AsyncValue.initial();
-  int _paginationIndex = 1;
+  int _paginationIndex = AppConstants.supabaseStartingPaginationIndex;
   String categoryId = '';
 
   void changeCategoryId(String categoryId) {
@@ -23,7 +24,7 @@ class BlogsCubit extends Cubit<BlogsState> {
     this.categoryId = categoryId;
     emit(BlogsCategoryChangedState());
 
-    _paginationIndex = 1;
+    _paginationIndex = AppConstants.supabaseStartingPaginationIndex;
     getData(changedCategory: true);
   }
 
@@ -48,7 +49,7 @@ class BlogsCubit extends Cubit<BlogsState> {
     emit(BlogsDataChangedState());
 
     final result = await _blogsRepo.getBlogs(
-      page: 1,
+      page: AppConstants.supabaseStartingPaginationIndex,
       blogCategoryId: categoryId,
     );
 
@@ -59,39 +60,6 @@ class BlogsCubit extends Cubit<BlogsState> {
     } else {
       blogsDataModel = AsyncValue.error(error: result.error!);
       emit(BlogsDataChangedState());
-    }
-  }
-
-  bool _newCategoryLoading = false;
-  Future<void> _getNewCategoryData() async {
-    if (_newCategoryLoading) {
-      return;
-    }
-
-    _newCategoryLoading = true;
-    emit(BlogsChangedCategoryLoadingState());
-
-    final result = await _blogsRepo.getBlogs(
-      page: _paginationIndex,
-      blogCategoryId: categoryId,
-    );
-
-    _newCategoryLoading = false;
-
-    if (result.isData && blogsDataModel.data != null
-    // Why? Prevents NullPointerException if user changed category (thus
-    // requested new products), before the pagination data was recieved
-    ) {
-      blogsDataModel = AsyncValue.data(data: result.data!);
-      emit(BlogsDataChangedState());
-    } else {
-      // The error may be null in case the result has data but blogsDataModel.data is null
-      emit(
-        BlogsChangedCategoryErrorState(
-          failure:
-              result.error ?? NetworkFailure(code: RpcFailureCodes.other.name),
-        ),
-      );
     }
   }
 
@@ -111,22 +79,43 @@ class BlogsCubit extends Cubit<BlogsState> {
 
     _paginationLoading = false;
 
-    if (result.isData && blogsDataModel.data != null
-    // Why? Prevents NullPointerException if user changed category (thus
-    // requested new products), before the pagination data was recieved
-    ) {
+    // Cancel operation if new filters applied before new page recieved
+    if (blogsDataModel.data == null) {
+      return;
+    }
+
+    if (result.isData) {
       final newModel = _mergeBlogPages(blogsDataModel.data!, result.data!);
       blogsDataModel = AsyncValue.data(data: newModel);
       ++_paginationIndex;
       emit(BlogsDataChangedState());
     } else {
-      // The error may be null in case the result has data but blogsDataModel.data is null
-      emit(
-        BlogsPaginationErrorState(
-          failure:
-              result.error ?? NetworkFailure(code: RpcFailureCodes.other.name),
-        ),
-      );
+      emit(BlogsPaginationErrorState(failure: result.error!));
+    }
+  }
+
+  bool _newCategoryLoading = false;
+  Future<void> _getNewCategoryData() async {
+    if (_newCategoryLoading) {
+      return;
+    }
+
+    _newCategoryLoading = true;
+    emit(BlogsChangedCategoryLoadingState());
+
+    final result = await _blogsRepo.getBlogs(
+      page: _paginationIndex,
+      blogCategoryId: categoryId,
+    );
+
+    _newCategoryLoading = false;
+
+    if (result.isData) {
+      blogsDataModel = AsyncValue.data(data: result.data!);
+      ++_paginationIndex;
+      emit(BlogsDataChangedState());
+    } else {
+      emit(BlogsChangedCategoryErrorState(failure: result.error!));
     }
   }
 

@@ -34,6 +34,9 @@ class AppIcons {
   static const home = '${_directory}home$_fileType';
   static const cart = '${_directory}cart$_fileType';
   static const dropdown = '${_directory}dropdown$_fileType';
+  static const filter = '${_directory}filter$_fileType';
+  static const grid = '${_directory}grid$_fileType';
+  static const list = '${_directory}list$_fileType';
 }
 
 class AppImages {

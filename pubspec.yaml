@@ -56,6 +56,11 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   currency_code_to_currency_symbol: ^0.0.4
   flutter_rating_bar: ^4.0.1
+  sliver_center: ^1.1.2
+  dropdown_button2: ^2.3.9
+  flex_dropdown: ^0.2.0
+  sliver_tools: ^0.2.12
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

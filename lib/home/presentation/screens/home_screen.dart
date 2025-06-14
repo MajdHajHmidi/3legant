@@ -1,5 +1,5 @@
-import 'package:e_commerce/home/presentation/widgets/states/home_error_view.dart';
-import 'package:e_commerce/home/presentation/widgets/states/home_loading_view.dart';
+import '../widgets/states/home_error_view.dart';
+import '../widgets/states/home_loading_view.dart';
 
 import '../widgets/home_header.dart';
 import '../widgets/states/home_data_view.dart';

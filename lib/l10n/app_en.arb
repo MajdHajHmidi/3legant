@@ -52,5 +52,14 @@
     "navProfile": "Profile",
     "navCart": "Cart",
     "showMore": "Show more",
-    "allCategories": "All categories"
+    "allCategories": "All categories",
+    "youMightAlsoLike": "You might also like",
+    "filters": "Filters",
+    "categories": "Categories",
+    "price": "Price",
+    "allPrices": "All prices",
+    "reset": "Reset",
+    "applyFilter": "Apply filter",
+    "noProductsFound": "No products found",
+    "productQueryHint": "What are you looking for?"
 }

@@ -1,10 +1,11 @@
+import '../../../core/cubit/app_cubit.dart';
+
 import '../../../auth/data/auth_repo.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/dependency_injection.dart';
 import '../../../core/util/localization.dart';
-import '../../../core/util/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -44,7 +45,11 @@ class HomeHeader extends StatelessWidget {
           ),
           const Spacer(),
           InkWell(
-            onTap: () => showNotImplementedDialog(context),
+            onTap:
+                () => serviceLocator<AppCubit>().launchShopScreen(
+                  context: context,
+                  autoFocus: true,
+                ),
             borderRadius: BorderRadius.circular(360),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),

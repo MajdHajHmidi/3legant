@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/localization.dart';
 import '../../models/home_data_model.dart';
-import 'package:flutter/material.dart';
 
 class HomeStoreInfo extends StatelessWidget {
   final Metadata metadata;

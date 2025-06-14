@@ -10,6 +10,8 @@ class AppConstants {
     return '$appDeepLinkScheme://$host';
   }
 
+  static const supabaseStartingPaginationIndex = 1;
+
   static const appPrivacyPolicyWebsiteUrl =
       'https://3legant-app.netlify.app/privacy-policy.html';
   static const appTermsOfUseWebsiteUrl =

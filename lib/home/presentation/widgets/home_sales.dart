@@ -1,7 +1,9 @@
+import '../../../core/navigation/router.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/localization.dart';
-import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_image.dart';
 import '../../models/home_data_model.dart';
@@ -52,7 +54,7 @@ class HomeSales extends StatelessWidget {
               const SizedBox(height: 24),
               AppTextButton(
                 text: localization(context).homeShopNow,
-                onPressed: () => showNotImplementedDialog(context),
+                onPressed: () => context.goNamed(AppRoutes.shop.name),
               ),
             ],
           ),

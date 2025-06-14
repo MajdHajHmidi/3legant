@@ -13,6 +13,7 @@ class AppTextFormField extends StatelessWidget {
   final void Function(String value)? onChanged;
   final void Function(String value)? onFieldSubmitted;
   final TextInputType? keyboardType;
+  final FocusNode? focusNode;
   const AppTextFormField({
     super.key,
     required this.controller,
@@ -25,6 +26,7 @@ class AppTextFormField extends StatelessWidget {
     this.onSuffixIconPressed,
     this.onFieldSubmitted,
     this.keyboardType,
+    this.focusNode,
   });
 
   @override
@@ -34,6 +36,7 @@ class AppTextFormField extends StatelessWidget {
       validator: validator,
       onChanged: onChanged,
       style: AppTextStyles.caption1,
+      focusNode: focusNode,
       obscureText: obscure,
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,

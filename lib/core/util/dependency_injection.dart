@@ -1,6 +1,9 @@
-import 'package:e_commerce/blogs/data/blogs_repo.dart';
-import 'package:e_commerce/cart/data/cart_repo.dart';
-import 'package:e_commerce/shop/data/shop_repo.dart';
+import '../../blog_details/data/blog_details_repo.dart';
+import '../../blogs/data/blogs_repo.dart';
+import '../../cart/data/cart_repo.dart';
+import '../cubit/app_cubit.dart';
+import '../../shop/data/shop_repo.dart';
+import '../../shop/presentation/cubit/shop_cubit.dart';
 
 import '../../favorite/data/favorite_repo.dart';
 
@@ -24,6 +27,20 @@ void setupDependencyInjection() {
   );
   serviceLocator.registerLazySingleton<ShopRepo>(() => SupabaseShopRepo());
   serviceLocator.registerLazySingleton<BlogsRepo>(() => SupabaseBlogsRepo());
+  serviceLocator.registerLazySingleton<BlogDetailsRepo>(
+    () => SupabaseBlogDetailsRepo(),
+  );
+
   // Register app router
   serviceLocator.registerSingleton<GoRouter>(getAppRouter());
+
+  // Register app cubits
+  serviceLocator.registerLazySingleton<ShopCubit>(
+    () => ShopCubit(shopRepo: serviceLocator<ShopRepo>()),
+    dispose: (cubit) => cubit.close(),
+  );
+  serviceLocator.registerLazySingleton<AppCubit>(
+    () => AppCubit(),
+    dispose: (cubit) => cubit.close(),
+  );
 }

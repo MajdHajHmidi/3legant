@@ -313,6 +313,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.9"
   fake_async:
     dependency: transitive
     description:
@@ -345,6 +353,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  flex_dropdown:
+    dependency: "direct main"
+    description:
+      name: flex_dropdown
+      sha256: "35209a5780d121ded6b4736f89066e05178093e44e6fd5da1867d553ea3456db"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -994,6 +1010,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  sliver_center:
+    dependency: "direct main"
+    description:
+      name: sliver_center
+      sha256: "2a443e58166fac449d308945b5ea2e7c4ff79f652bef762f450da2c1b07c2ff3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
+  sliver_tools:
+    dependency: "direct main"
+    description:
+      name: sliver_tools
+      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.12"
   smooth_page_indicator:
     dependency: "direct main"
     description:
@@ -1282,6 +1314,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  visibility_detector:
+    dependency: "direct main"
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:

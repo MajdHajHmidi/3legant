@@ -1,7 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../auth/data/auth_repo.dart';
 import '../../core/util/dependency_injection.dart';
 import '../data/favorite_repo.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'favorite_state.dart';
 

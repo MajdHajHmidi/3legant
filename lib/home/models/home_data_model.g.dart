@@ -99,7 +99,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       (json['images_url'] as List<dynamic>).map((e) => e as String).toList(),
   description: json['description'] as String,
   measurements: json['measurements'] as String,
-  currencyCode: $enumDecode(_$CurrencyCodeEnumMap, json['currency_code']),
+  currencyCode: json['currency_code'] as String,
   packagingCount: (json['packaging_count'] as num).toInt(),
   packagingWidth: (json['packaging_width'] as num).toInt(),
   packagingHeight: (json['packaging_height'] as num).toDouble(),
@@ -127,7 +127,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
   'images_url': instance.imagesUrl,
   'description': instance.description,
   'measurements': instance.measurements,
-  'currency_code': _$CurrencyCodeEnumMap[instance.currencyCode]!,
+  'currency_code': instance.currencyCode,
   'packaging_count': instance.packagingCount,
   'packaging_width': instance.packagingWidth,
   'packaging_height': instance.packagingHeight,
@@ -136,8 +136,6 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
   'discount_end_date': instance.discountEndDate?.toIso8601String(),
   'product_category_id': instance.productCategoryId,
 };
-
-const _$CurrencyCodeEnumMap = {CurrencyCode.USD: 'USD'};
 
 PopularBlogs _$PopularBlogsFromJson(Map<String, dynamic> json) => PopularBlogs(
   blogs:

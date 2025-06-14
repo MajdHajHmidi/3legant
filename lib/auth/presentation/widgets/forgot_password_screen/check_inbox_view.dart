@@ -1,10 +1,11 @@
-import '../../cubit/auth_cubit.dart';
-import '../inbox_launcher_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../core/styles/colors.dart';
 import '../../../../core/styles/text_styles.dart';
 import '../../../../core/util/localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../cubit/auth_cubit.dart';
+import '../inbox_launcher_tile.dart';
 
 class CheckInboxView extends StatelessWidget {
   const CheckInboxView({super.key});

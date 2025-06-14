@@ -33,10 +33,7 @@ class ShimmerBox extends StatelessWidget {
 class ShimmerCircle extends StatelessWidget {
   final double radius;
 
-  const ShimmerCircle({
-    super.key,
-    required this.radius,
-  });
+  const ShimmerCircle({super.key, required this.radius});
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +47,30 @@ class ShimmerCircle extends StatelessWidget {
           color: Colors.grey.shade300,
           shape: BoxShape.circle,
         ),
+      ),
+    );
+  }
+}
+
+class SliverShimmerBox extends StatelessWidget {
+  final double width;
+  final double height;
+  final double borderRadius;
+  final Alignment alignment;
+  const SliverShimmerBox({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.borderRadius,
+    this.alignment = Alignment.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Align(
+        alignment: alignment,
+        child: ShimmerBox(width: width, height: height),
       ),
     );
   }

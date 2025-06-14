@@ -1,7 +1,13 @@
+import 'package:e_commerce/core/navigation/router.dart';
+import 'package:e_commerce/shop/presentation/cubit/shop_cubit.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/util/dependency_injection.dart';
+import '../../../shop/models/product_filters.dart';
+
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/localization.dart';
-import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +36,8 @@ class HomeCategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (_big) {
       return GestureDetector(
-        onTap: () => showNotImplementedDialog(context),
+        onTap:
+            () => _launchShopScreen(context: context, categoryId: categoryId),
         child: Container(
           height: 350,
           clipBehavior: Clip.antiAlias,
@@ -87,7 +94,7 @@ class HomeCategoryTile extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => showNotImplementedDialog(context),
+      onTap: () => _launchShopScreen(context: context, categoryId: categoryId),
       child: Container(
         height: 180,
         clipBehavior: Clip.antiAlias,
@@ -142,4 +149,18 @@ class HomeCategoryTile extends StatelessWidget {
       ),
     );
   }
+}
+
+void _launchShopScreen({
+  required BuildContext context,
+  required String categoryId,
+}) {
+  serviceLocator<ShopCubit>()
+    // Since the query is reset, the text editing controller should be cleared
+    ..queryTextController.text = ('')
+    ..applyFilters(
+      ProductFilters(categoryId: categoryId, minPrice: null, maxPrice: null),
+    )
+    ..getFilteredProducts();
+  context.goNamed(AppRoutes.shop.name);
 }

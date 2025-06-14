@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../core/navigation/router.dart';
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/localization.dart';
 import '../../../core/widgets/app_button.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeBlogsTitle extends StatelessWidget {
   const HomeBlogsTitle({super.key});

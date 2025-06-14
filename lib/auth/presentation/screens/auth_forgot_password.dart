@@ -1,12 +1,13 @@
-import '../cubit/auth_cubit.dart';
-import '../widgets/forgot_password_screen/check_inbox_view.dart';
-import '../widgets/forgot_password_screen/enter_email_view.dart';
-import '../../../core/util/localization.dart';
-import '../../../core/util/app_snackbar.dart';
-import '../../../core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../core/util/app_snackbar.dart';
+import '../../../core/util/localization.dart';
+import '../../../core/widgets/custom_app_bar.dart';
+import '../cubit/auth_cubit.dart';
+import '../widgets/forgot_password_screen/check_inbox_view.dart';
+import '../widgets/forgot_password_screen/enter_email_view.dart';
 
 class AuthForgotPassword extends StatelessWidget {
   const AuthForgotPassword({super.key});

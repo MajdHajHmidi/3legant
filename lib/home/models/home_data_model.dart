@@ -139,7 +139,7 @@ class Product {
   @JsonKey(name: "measurements")
   final String measurements;
   @JsonKey(name: "currency_code")
-  final CurrencyCode currencyCode;
+  final String currencyCode;
   @JsonKey(name: "packaging_count")
   final int packagingCount;
   @JsonKey(name: "packaging_width")
@@ -200,7 +200,7 @@ class Product {
     List<String>? imagesUrl,
     String? description,
     String? measurements,
-    CurrencyCode? currencyCode,
+    String? currencyCode,
     int? packagingCount,
     int? packagingWidth,
     double? packagingHeight,
@@ -234,12 +234,6 @@ class Product {
       productCategoryId: productCategoryId ?? this.productCategoryId,
     );
   }
-}
-
-enum CurrencyCode {
-  @JsonValue("USD")
-  // ignore: constant_identifier_names
-  USD,
 }
 
 @JsonSerializable()

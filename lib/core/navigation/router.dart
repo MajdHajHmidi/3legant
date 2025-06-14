@@ -1,12 +1,13 @@
-import 'package:e_commerce/blogs/data/blogs_repo.dart';
-import 'package:e_commerce/blogs/presentation/cubit/blogs_cubit.dart';
-import 'package:e_commerce/blogs/presentation/screens/blogs_screen.dart';
-import 'package:e_commerce/cart/data/cart_repo.dart';
-import 'package:e_commerce/cart/presentation/cubit/cart_cubit.dart';
-import 'package:e_commerce/cart/presentation/screens/cart_screen.dart';
-import 'package:e_commerce/shop/data/shop_repo.dart';
-import 'package:e_commerce/shop/presentation/cubit/shop_cubit.dart';
-import 'package:e_commerce/shop/presentation/screens/shop_screen.dart';
+import '../../blog_details/data/blog_details_repo.dart';
+import '../../blog_details/presentation/cubit/blog_details_cubit.dart';
+import '../../blog_details/presentation/screens/blog_details_screen.dart';
+import '../../blogs/data/blogs_repo.dart';
+import '../../blogs/presentation/cubit/blogs_cubit.dart';
+import '../../blogs/presentation/screens/blogs_screen.dart';
+import '../../cart/data/cart_repo.dart';
+import '../../cart/presentation/cubit/cart_cubit.dart';
+import '../../cart/presentation/screens/cart_screen.dart';
+import '../../shop/presentation/screens/shop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +33,7 @@ enum AppRoutes {
   home(name: 'home', path: '/'),
   profile(name: 'profile', path: '/profile'),
   blogs(name: 'blogs', path: '/blogs'),
+  blogDetails(name: 'blogDetails', path: '/blogDetails/:blog_id'),
   auth(name: 'auth', path: '/auth'),
   forgotPassword(name: 'forgotPassword', path: '/auth/forgotPassword'),
   resetPassword(name: 'resetPassword', path: '/resetPassword'),
@@ -109,12 +111,7 @@ GoRouter getAppRouter() => GoRouter(
             GoRoute(
               path: AppRoutes.shop.path,
               name: AppRoutes.shop.name,
-              builder:
-                  (context, state) => BlocProvider(
-                    create:
-                        (_) => ShopCubit(shopRepo: serviceLocator<ShopRepo>()),
-                    child: const ShopScreen(),
-                  ),
+              builder: (context, state) => ShopScreen(),
             ),
           ],
         ),
@@ -150,6 +147,19 @@ GoRouter getAppRouter() => GoRouter(
           (context, state) => BlocProvider(
             create: (_) => BlogsCubit(blogsRepo: serviceLocator<BlogsRepo>()),
             child: const BlogsScreen(),
+          ),
+    ),
+    GoRoute(
+      name: AppRoutes.blogDetails.name,
+      path: AppRoutes.blogDetails.path,
+      builder:
+          (context, state) => BlocProvider(
+            create:
+                (_) => BlogDetailsCubit(
+                  blogDetailsRepo: serviceLocator<BlogDetailsRepo>(),
+                  blogId: state.pathParameters['blog_id'] as String,
+                ),
+            child: const BlogDetailsScreen(),
           ),
     ),
     GoRoute(
