@@ -1,3 +1,5 @@
+import 'package:e_commerce/core/widgets/app_expanded_tile.dart';
+
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/cubit/app_cubit.dart';
@@ -5,7 +7,6 @@ import '../../../core/navigation/router.dart';
 import '../../../core/styles/colors.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/dependency_injection.dart';
-import '../../../core/util/duration_extension.dart';
 import '../../../core/util/localization.dart';
 import '../../../core/util/text.dart';
 import '../../../core/widgets/app_dropdown.dart';
@@ -95,55 +96,48 @@ class _ProductsFiltersWidgetState extends State<ProductsFiltersWidget> {
                     cubit.toggleProductsFiltersExpansion,
               ),
             ),
-            AnimatedSize(
-              duration: 250.ms,
-              curve: Curves.easeInOut,
-              alignment: Alignment.topCenter,
-              child:
-                  cubit.isProductsFiltersExpanded
-                      ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          Text(
-                            localization(context).categories.toUpperCase(),
-                            style: AppTextStyles.body2Semi.copyWith(
-                              color: AppColors.neutral_04,
-                            ),
+            AppExpandedContent(
+              isExpanded: cubit.isProductsFiltersExpanded,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    localization(context).categories.toUpperCase(),
+                    style: AppTextStyles.body2Semi.copyWith(
+                      color: AppColors.neutral_04,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildCategoryDropdown(
+                    context: context,
+                    filters: filters,
+                    categories: cubit.shopDataModel.data!.categories,
+                    categorySelectionCallback:
+                        (value) => cubit.applyFilters(
+                          ProductFilters(
+                            query: cubit.queryTextController.text,
+                            categoryId: value ?? '',
+                            minPrice: null,
+                            maxPrice: null,
+                            page: AppConstants.appStartingPaginationIndex,
                           ),
-                          const SizedBox(height: 8),
-                          _buildCategoryDropdown(
-                            context: context,
-                            filters: filters,
-                            categories: cubit.shopDataModel.data!.categories,
-                            categorySelectionCallback:
-                                (value) => cubit.applyFilters(
-                                  ProductFilters(
-                                    query: cubit.queryTextController.text,
-                                    categoryId: value ?? '',
-                                    minPrice: null,
-                                    maxPrice: null,
-                                    page:
-                                        AppConstants
-                                            .supabaseStartingPaginationIndex,
-                                  ),
-                                ),
-                          ),
-                          const SizedBox(height: 24),
-                          Text(
-                            localization(context).price.toUpperCase(),
-                            style: AppTextStyles.body2Semi.copyWith(
-                              color: AppColors.neutral_04,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          BlocProvider.value(
-                            value: cubit,
-                            child: PriceSelectorWidget(),
-                          ),
-                        ],
-                      )
-                      : const SizedBox.shrink(),
+                        ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    localization(context).price.toUpperCase(),
+                    style: AppTextStyles.body2Semi.copyWith(
+                      color: AppColors.neutral_04,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  BlocProvider.value(
+                    value: cubit,
+                    child: PriceSelectorWidget(),
+                  ),
+                ],
+              ),
             ),
           ],
         );
@@ -288,7 +282,7 @@ Widget _buildTextField({
     onFieldSubmitted:
         (value) => cubit.applyFilters(
           cubit.filters.copyWith(
-            page: AppConstants.supabaseStartingPaginationIndex,
+            page: AppConstants.appStartingPaginationIndex,
             query: value,
           ),
         ),

@@ -4,7 +4,6 @@ import '../../../core/widgets/product_tile.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/styles/text_styles.dart';
 import '../../../core/util/localization.dart';
-import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_button.dart';
 import '../cubit/home_cubit.dart';
 import '../../models/home_data_model.dart';
@@ -67,11 +66,10 @@ class HomeNewProducts extends StatelessWidget {
                       ),
                       index: index,
                       productsLength: products.length,
-                      onTap: () => showNotImplementedDialog(context),
-                      favoriteRequestSuccessCallback:
-                          () => context.read<HomeCubit>().toggleProductFavorite(
-                            index,
-                          ),
+                      // favoriteRequestSuccessCallback:
+                      //     () => context.read<HomeCubit>().toggleProductFavorite(
+                      //       index,
+                      //     ),
                     );
                   },
                 );

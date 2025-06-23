@@ -23,4 +23,4 @@ enum AuthFailureCodes {
   other,
 }
 
-enum RpcFailureCodes { noInternetConnection, other }
+enum RpcFailureCodes { noInternetConnection, multipleProductReviews, other }

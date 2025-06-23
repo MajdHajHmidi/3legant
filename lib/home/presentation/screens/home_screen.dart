@@ -4,7 +4,7 @@ import '../widgets/states/home_loading_view.dart';
 import '../widgets/home_header.dart';
 import '../widgets/states/home_data_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/home_cubit.dart';

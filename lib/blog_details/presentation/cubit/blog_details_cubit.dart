@@ -1,7 +1,7 @@
 import '../../data/blog_details_repo.dart';
 import '../../models/blog_details_data_model.dart';
 import '../../../core/util/app_failure.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'blog_details_state.dart';

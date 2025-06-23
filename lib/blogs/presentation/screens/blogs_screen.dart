@@ -6,7 +6,7 @@ import '../../../core/util/app_snackbar.dart';
 import '../../../core/util/localization.dart';
 import '../../../core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlogsScreen extends StatelessWidget {

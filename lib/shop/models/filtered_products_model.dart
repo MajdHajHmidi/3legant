@@ -52,7 +52,7 @@ class Product {
   @JsonKey(name: "price")
   final double price;
   @JsonKey(name: "colors")
-  final List<String> colors;
+  final List<Color> colors;
   @JsonKey(name: "rating")
   final double rating;
   @JsonKey(name: "details")
@@ -60,7 +60,7 @@ class Product {
   @JsonKey(name: "category")
   final String category;
   @JsonKey(name: "discount")
-  final int? discount;
+  final double? discount;
   @JsonKey(name: "favorite")
   final bool favorite;
   @JsonKey(name: "created_at")
@@ -117,4 +117,18 @@ class Product {
       _$ProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
+}
+
+@JsonSerializable()
+class Color {
+  @JsonKey(name: "hex")
+  final String hex;
+  @JsonKey(name: "name")
+  final String name;
+
+  Color({required this.hex, required this.name});
+
+  factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ColorToJson(this);
 }

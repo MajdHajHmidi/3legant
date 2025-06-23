@@ -1,4 +1,4 @@
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../auth/data/auth_repo.dart';
@@ -21,8 +21,10 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  AsyncValue<HomeDataModel, AppFailure> homeDataModel = AsyncValue.loading();
+  AsyncValue<HomeDataModel, AppFailure> homeDataModel = AsyncValue.initial();
   Future<void> getHomeData(String userId) async {
+    if (homeDataModel.isLoading) return;
+
     homeDataModel = AsyncValue.loading();
     emit(HomeDataChangedState());
 
@@ -37,23 +39,23 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void toggleProductFavorite(int index) {
-    if (!homeDataModel.isData) return;
+  // void toggleProductFavorite(int index) {
+  //   if (!homeDataModel.isData) return;
 
-    final products = homeDataModel.data!.newProducts.products;
-    products[index] = products[index].copyWith(
-      favorite: !products[index].favorite,
-    );
+  //   final products = homeDataModel.data!.newProducts.products;
+  //   products[index] = products[index].copyWith(
+  //     favorite: !products[index].favorite,
+  //   );
 
-    homeDataModel = AsyncValue.data(
-      data: HomeDataModel(
-        metadata: homeDataModel.data!.metadata,
-        popularCategories: homeDataModel.data!.popularCategories,
-        newProducts: NewProducts(products: products),
-        popularBlogs: homeDataModel.data!.popularBlogs,
-      ),
-    );
+  //   homeDataModel = AsyncValue.data(
+  //     data: HomeDataModel(
+  //       metadata: homeDataModel.data!.metadata,
+  //       popularCategories: homeDataModel.data!.popularCategories,
+  //       newProducts: NewProducts(products: products),
+  //       popularBlogs: homeDataModel.data!.popularBlogs,
+  //     ),
+  //   );
 
-    emit(HomeFavoriteProductToggleState());
-  }
+  //   emit(HomeFavoriteProductToggleState());
+  // }
 }

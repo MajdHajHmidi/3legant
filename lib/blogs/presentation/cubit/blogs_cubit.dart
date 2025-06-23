@@ -2,7 +2,7 @@ import '../../data/blogs_repo.dart';
 import '../../models/blogs_data_model.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/util/app_failure.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'blogs_state.dart';
@@ -16,7 +16,7 @@ class BlogsCubit extends Cubit<BlogsState> {
   }
 
   AsyncValue<BlogsDataModel, AppFailure> blogsDataModel = AsyncValue.initial();
-  int _paginationIndex = AppConstants.supabaseStartingPaginationIndex;
+  int _paginationIndex = AppConstants.appStartingPaginationIndex;
   String categoryId = '';
 
   void changeCategoryId(String categoryId) {
@@ -24,7 +24,7 @@ class BlogsCubit extends Cubit<BlogsState> {
     this.categoryId = categoryId;
     emit(BlogsCategoryChangedState());
 
-    _paginationIndex = AppConstants.supabaseStartingPaginationIndex;
+    _paginationIndex = AppConstants.appStartingPaginationIndex;
     getData(changedCategory: true);
   }
 
@@ -49,7 +49,7 @@ class BlogsCubit extends Cubit<BlogsState> {
     emit(BlogsDataChangedState());
 
     final result = await _blogsRepo.getBlogs(
-      page: AppConstants.supabaseStartingPaginationIndex,
+      page: AppConstants.appStartingPaginationIndex,
       blogCategoryId: categoryId,
     );
 
@@ -120,6 +120,20 @@ class BlogsCubit extends Cubit<BlogsState> {
   }
 
   BlogsDataModel _mergeBlogPages(BlogsDataModel first, BlogsDataModel second) {
+    // Check if category IDs match
+    if (first.blogs.first.categoryId != second.blogs.first.categoryId) {
+      // Categories don't match, skip merge
+      return first;
+    }
+
+    // Check if pages are consecutive
+    if (first.paginationInfo.currentPage !=
+        second.paginationInfo.currentPage - 1) {
+      // Pages are not consecutive, skip merge
+      return first;
+    }
+
+    // Proceed with merge
     return BlogsDataModel(
       blogsMetadata: second.blogsMetadata,
       blogs: [...first.blogs, ...second.blogs],

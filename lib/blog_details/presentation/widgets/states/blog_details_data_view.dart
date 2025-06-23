@@ -1,3 +1,5 @@
+import 'package:e_commerce/core/widgets/app_divider.dart';
+
 import '../../../models/blog_details_data_model.dart';
 import '../blog_content_tile.dart';
 import '../../../../blogs/presentation/widgets/blogs_grid.dart';
@@ -81,13 +83,7 @@ class BlogDetailsDataView extends StatelessWidget {
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.only(top: 80, bottom: 24),
-                  sliver: SliverToBoxAdapter(
-                    child: Divider(
-                      color: AppColors.neutral_03,
-                      height: 1,
-                      thickness: 1,
-                    ),
-                  ),
+                  sliver: SliverToBoxAdapter(child: AppDivider()),
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),

@@ -74,7 +74,10 @@ class PriceSelectorWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 8,
+                        ),
                         child: SliderTheme(
                           data: SliderThemeData(
                             rangeThumbShape: RoundRangeSliderThumbShape(
@@ -131,7 +134,6 @@ class PriceSelectorWidget extends StatelessWidget {
                                     text: localization(context).applyFilter,
                                     width: null,
                                     disableTextScaling: true,
-                                    smallText: true,
                                     height: 40,
                                     onPressed: () {
                                       controller.hide();
@@ -142,7 +144,7 @@ class PriceSelectorWidget extends StatelessWidget {
                                           maxPrice: selectedPriceRange.end,
                                           page:
                                               AppConstants
-                                                  .supabaseStartingPaginationIndex,
+                                                  .appStartingPaginationIndex,
                                         ),
                                       );
                                     },
@@ -155,7 +157,6 @@ class PriceSelectorWidget extends StatelessWidget {
                                     text: localization(context).reset,
                                     width: null,
                                     disableTextScaling: true,
-                                    smallText: true,
                                     height: 40,
                                     onPressed: () {
                                       controller.hide();
@@ -167,7 +168,7 @@ class PriceSelectorWidget extends StatelessWidget {
                                           maxPrice: null,
                                           page:
                                               AppConstants
-                                                  .supabaseStartingPaginationIndex,
+                                                  .appStartingPaginationIndex,
                                         ),
                                       );
                                     },

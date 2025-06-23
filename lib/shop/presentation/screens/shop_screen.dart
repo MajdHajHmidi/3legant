@@ -8,7 +8,7 @@ import '../widgets/states/shop_data_view.dart';
 import '../widgets/states/shop_error_view.dart';
 import '../widgets/states/shop_loading_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 

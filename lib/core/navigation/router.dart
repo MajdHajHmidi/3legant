@@ -1,3 +1,7 @@
+import 'package:e_commerce/product_details/data/product_details_repo.dart';
+import 'package:e_commerce/product_details/presentation/cubit/product_details_cubit.dart';
+import 'package:e_commerce/product_details/presentation/screens/product_details_screen.dart';
+
 import '../../blog_details/data/blog_details_repo.dart';
 import '../../blog_details/presentation/cubit/blog_details_cubit.dart';
 import '../../blog_details/presentation/screens/blog_details_screen.dart';
@@ -39,7 +43,8 @@ enum AppRoutes {
   resetPassword(name: 'resetPassword', path: '/resetPassword'),
   loginCallback(name: 'loginCallback', path: '/loginCallback'),
   shop(name: 'shop', path: '/shop'),
-  cart(name: 'cart', path: '/cart');
+  cart(name: 'cart', path: '/cart'),
+  productDetails(name: 'productDetails', path: '/productDetails/:product_id');
 
   const AppRoutes({required this.name, required this.path});
   final String name;
@@ -161,6 +166,24 @@ GoRouter getAppRouter() => GoRouter(
                 ),
             child: const BlogDetailsScreen(),
           ),
+    ),
+    GoRoute(
+      name: AppRoutes.productDetails.name,
+      path: AppRoutes.productDetails.path,
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+
+        return BlocProvider(
+          create:
+              (_) => ProductDetailsCubit(
+                productDetailsRepo: serviceLocator<ProductDetailsRepo>(),
+                productId: state.pathParameters['product_id'] as String,
+              ),
+          child: ProductDetailsScreen(
+            productName: data['product_name'] as String,
+          ),
+        );
+      },
     ),
     GoRoute(
       name: AppRoutes.auth.name,

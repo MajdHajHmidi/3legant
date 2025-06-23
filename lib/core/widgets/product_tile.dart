@@ -1,5 +1,7 @@
 import 'package:currency_code_to_currency_symbol/currency_code_to_currency_symbol.dart';
-import '../constants/app_assets.dart';
+import 'package:e_commerce/core/navigation/router.dart';
+import 'package:e_commerce/core/widgets/app_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 import '../styles/colors.dart';
 import '../styles/text_styles.dart';
 import '../util/localization.dart';
@@ -8,18 +10,24 @@ import 'app_button.dart';
 import 'app_image.dart';
 import '../../favorite/presentation/widgets/favorite_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/svg.dart';
+
 
 import '../models/product.dart';
+
+enum _ProductTileViewMode { defaultView, detailed }
 
 class ProductTile extends StatelessWidget {
   final Product product;
   final int index;
   final int productsLength;
-  final void Function() onTap;
+
+  /// Indicates that the product tiles will be placed in a
+  /// horizontal scroll view, which adds a complexity of
+  /// calculating padding on the left and right for first and
+  /// last elements
   final bool horizontalMode;
-  final bool _detailedView;
+
+  final _ProductTileViewMode _productTileView;
 
   /// The callback that runs when the favorite is successfully toggled
   /// This runs after the data been changed on the server side
@@ -30,20 +38,18 @@ class ProductTile extends StatelessWidget {
     required this.product,
     required this.index,
     required this.productsLength,
-    required this.onTap,
     this.horizontalMode = true,
     this.favoriteRequestSuccessCallback,
-  }) : _detailedView = false;
+  }) : _productTileView = _ProductTileViewMode.defaultView;
 
   const ProductTile.detailed({
     super.key,
     required this.product,
     required this.index,
     required this.productsLength,
-    required this.onTap,
     this.horizontalMode = true,
     this.favoriteRequestSuccessCallback,
-  }) : _detailedView = true;
+  }) : _productTileView = _ProductTileViewMode.detailed;
 
   // For LTR locales, the first element has a 32px left padding, while RTL only 8, and the opposite for right padding
   // Same goes for the last element
@@ -77,7 +83,12 @@ class ProductTile extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: onTap,
+          onTap:
+              () => context.pushNamed(
+                AppRoutes.productDetails.name,
+                pathParameters: {'product_id': product.id},
+                extra: {'product_name': product.name},
+              ),
           child: SizedBox(
             width: 230,
             child: Column(
@@ -87,7 +98,10 @@ class ProductTile extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: SizedBox(
-                    height: _detailedView ? 400 : 310,
+                    height:
+                        _productTileView == _ProductTileViewMode.detailed
+                            ? 400
+                            : 310,
                     child: Stack(
                       children: [
                         Positioned.fill(
@@ -100,90 +114,17 @@ class ProductTile extends StatelessWidget {
                           top: 16.0,
                           left: 16,
                           right: 16,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (product.productNew ||
-                                  product.discount != null)
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: product.discount != null ? 8 : 5,
-                                    horizontal:
-                                        product.discount != null ? 10 : 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: HexColor('#141718').withAlpha(115),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if (product.productNew)
-                                        Container(
-                                          width: 70,
-                                          height: 24,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              4,
-                                            ),
-                                            color: Colors.white,
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              localization(
-                                                context,
-                                              ).newCapitalized,
-                                              textScaler: TextScaler.linear(1),
-                                              style: AppTextStyles.hairline1
-                                                  .copyWith(
-                                                    color: AppColors.neutral_07,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      if (product.discount != null &&
-                                          product.productNew)
-                                        const SizedBox(height: 8),
-                                      if (product.discount != null)
-                                        Container(
-                                          width: 70,
-                                          height: 24,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              4,
-                                            ),
-                                            color: AppColors.green,
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              '-${product.discount!}%',
-                                              textScaler: TextScaler.linear(1),
-                                              style: AppTextStyles.hairline1
-                                                  .copyWith(
-                                                    color: AppColors.neutral_01,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              const Spacer(),
-                              FavoriteButton(
-                                isFavorite: product.favorite,
-                                // productId: product.id,
-                                // onRequestSuccess:
-                                //     favoriteRequestSuccessCallback,
-                              ),
-                            ],
-                          ),
+                          child: ProductTileOverlay(product: product),
                         ),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                _ProductDetails(product: product, detailedView: _detailedView),
+                _ProductDetails(
+                  product: product,
+                  productTileView: _productTileView,
+                ),
               ],
             ),
           ),
@@ -193,10 +134,86 @@ class ProductTile extends StatelessWidget {
   }
 }
 
+class ProductTileOverlay extends StatelessWidget {
+  final Product product;
+  const ProductTileOverlay({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (product.productNew || product.discount != null)
+          Container(
+            padding: EdgeInsets.symmetric(
+              vertical: product.discount != null ? 8 : 5,
+              horizontal: product.discount != null ? 10 : 5,
+            ),
+            decoration: BoxDecoration(
+              color: HexColor('#141718').withAlpha(115),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (product.productNew)
+                  Container(
+                    width: 70,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                      child: Text(
+                        localization(context).newCapitalized,
+                        textScaler: TextScaler.linear(1),
+                        style: AppTextStyles.hairline1.copyWith(
+                          color: AppColors.neutral_07,
+                        ),
+                      ),
+                    ),
+                  ),
+                if (product.discount != null && product.productNew)
+                  const SizedBox(height: 8),
+                if (product.discount != null)
+                  Container(
+                    width: 70,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: AppColors.green,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '-${product.discount!.toInt()}%',
+                        textScaler: TextScaler.linear(1),
+                        style: AppTextStyles.hairline1.copyWith(
+                          color: AppColors.neutral_01,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+        const Spacer(),
+        FavoriteButton(
+          isFavorite: product.favorite,
+          // productId: product.id,
+          // onRequestSuccess:
+          //     favoriteRequestSuccessCallback,
+        ),
+      ],
+    );
+  }
+}
+
 class _ProductDetails extends StatelessWidget {
   final Product product;
-  final bool detailedView;
-  const _ProductDetails({required this.product, required this.detailedView});
+  final _ProductTileViewMode productTileView;
+  const _ProductDetails({required this.product, required this.productTileView});
 
   @override
   Widget build(BuildContext context) {
@@ -221,19 +238,7 @@ class _ProductDetails extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RatingBarIndicator(
-                // Round to closest 0.5 step
-                rating: (product.rating * 2).round() / 2,
-                itemBuilder:
-                    (context, index) => SvgPicture.asset(
-                      AppIcons.rating,
-                      theme: SvgTheme(currentColor: AppColors.neutral_05),
-                    ),
-                itemCount: 5,
-                itemSize: 16,
-                unratedColor: AppColors.neutral_03,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 1),
-              ),
+              AppRatingBar(rating: product.rating),
               const SizedBox(height: 4),
               Text(
                 product.name,
@@ -248,7 +253,7 @@ class _ProductDetails extends StatelessWidget {
                 children: [
                   Builder(
                     builder: (context) {
-                      final currencyCode = getCurrencySymbol(
+                      final currencySymbol = getCurrencySymbol(
                         product.currencyCode,
                       );
                       final productPrice =
@@ -260,7 +265,7 @@ class _ProductDetails extends StatelessWidget {
                                   (product.price * product.discount! / 100);
                       return Flexible(
                         child: Text(
-                          '$currencyCode${productPrice.toStringAsFixed(2)}',
+                          '$currencySymbol${productPrice.toStringAsFixed(2)}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.caption1Semi.copyWith(
@@ -285,7 +290,7 @@ class _ProductDetails extends StatelessWidget {
                     ),
                 ],
               ),
-              if (detailedView)
+              if (productTileView == _ProductTileViewMode.detailed)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,

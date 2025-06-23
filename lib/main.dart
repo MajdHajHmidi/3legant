@@ -15,15 +15,15 @@ import 'core/util/dependency_injection.dart';
 void main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   // * Initialize services here...
-  launchNativeSplashScreen(binding);
-  attachBlocObserver();
+  _launchNativeSplashScreen(binding);
+  _attachBlocObserver();
   setupDependencyInjection();
-  await loadEnvFile();
-  await initSupabase();
+  await _loadEnvFile();
+  await _initSupabase();
 
   // runApp(const MyApp());
   runApp(DevicePreview(builder: (context) => const MyApp()));
-  removeNativeSplashScreen();
+  _removeNativeSplashScreen();
 }
 
 class MyApp extends StatelessWidget {
@@ -49,25 +49,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future<void> loadEnvFile() async {
+Future<void> _loadEnvFile() async {
   await dotenv.load(fileName: ".env");
 }
 
-Future<void> initSupabase() async {
+Future<void> _initSupabase() async {
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 }
 
-void attachBlocObserver() {
+void _attachBlocObserver() {
   Bloc.observer = AppBlocObserver();
 }
 
-void launchNativeSplashScreen(WidgetsBinding binding) {
+void _launchNativeSplashScreen(WidgetsBinding binding) {
   FlutterNativeSplash.preserve(widgetsBinding: binding);
 }
 
-void removeNativeSplashScreen() {
+void _removeNativeSplashScreen() {
   FlutterNativeSplash.remove();
 }

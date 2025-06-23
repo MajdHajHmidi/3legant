@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/styles/colors.dart';
@@ -7,7 +7,7 @@ import '../../../../core/styles/text_styles.dart';
 import '../../../../core/util/dependency_injection.dart';
 import '../../../../core/util/localization.dart';
 import '../../../../core/widgets/async_retry.dart';
-import '../../../../core/widgets/sliver.dart';
+import '../../../../core/widgets/sliver_util.dart';
 import '../../cubit/shop_cubit.dart';
 import '../products_filters_widget.dart';
 import '../products_loading_widget.dart';
@@ -33,9 +33,9 @@ class ShopDataView extends StatelessWidget {
                   child: ShopHeader(metadata: model.metadata),
                 ),
               ),
-              const SliverSizedBox(height: 16),
+              const SliverIndent(height: 16),
               SliverToBoxAdapter(child: ProductsFiltersWidget()),
-              const SliverSizedBox(height: 24),
+              const SliverIndent(height: 24),
               BlocBuilder<ShopCubit, ShopState>(
                 bloc: serviceLocator<ShopCubit>(),
                 builder: (context, state) {

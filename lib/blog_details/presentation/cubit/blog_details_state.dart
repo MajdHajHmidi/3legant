@@ -5,3 +5,5 @@ sealed class BlogDetailsState {}
 final class BlogDetailsInitial extends BlogDetailsState {}
 
 final class BlogDetailsDataChangedState extends BlogDetailsState {}
+
+final class BlogDetailsColorChangedState extends BlogDetailsState {}

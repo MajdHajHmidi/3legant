@@ -132,7 +132,6 @@ class SecondaryAppButton extends StatelessWidget {
   final double? width;
   final double height;
   final bool disableTextScaling;
-  final bool smallText;
   final bool _outlined;
 
   const SecondaryAppButton({
@@ -145,7 +144,6 @@ class SecondaryAppButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 52,
     this.disableTextScaling = false,
-    this.smallText = false,
   }) : _outlined = false;
 
   const SecondaryAppButton.outlined({
@@ -158,7 +156,6 @@ class SecondaryAppButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 52,
     this.disableTextScaling = false,
-    this.smallText = false,
   }) : _outlined = true;
 
   @override
@@ -180,10 +177,7 @@ class SecondaryAppButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border:
                 _outlined
-                    ? Border.all(
-                      color: AppColors.neutral_06,
-                      width: smallText ? 1 : 2,
-                    )
+                    ? Border.all(color: AppColors.neutral_06, width: 2)
                     : null,
           ),
           width: width,
@@ -201,10 +195,7 @@ class SecondaryAppButton extends StatelessWidget {
                   text,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style:
-                      smallText
-                          ? AppTextStyles.caption1.copyWith(color: textColor)
-                          : AppTextStyles.buttonS.copyWith(color: textColor),
+                  style: AppTextStyles.buttonS.copyWith(color: textColor),
                   textScaler: disableTextScaling ? TextScaler.linear(1) : null,
                 );
               },

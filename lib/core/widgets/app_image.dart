@@ -76,9 +76,10 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
                 // Force reload (rebuilding CachedNetworkImage reloads it)
                 reloadImage();
               },
-              child: Ink(
+              child: Container(
                 width: widget.width,
                 height: widget.height,
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   borderRadius: widget.borderRadius,
                   color: Colors.grey.shade200,

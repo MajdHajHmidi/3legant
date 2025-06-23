@@ -55,7 +55,7 @@ Map<String, dynamic> _$BlogDetailsToJson(BlogDetails instance) =>
 
 Content _$ContentFromJson(Map<String, dynamic> json) => Content(
   id: json['id'] as String,
-  heading: json['heading'] as String,
+  heading: json['heading'] as String?,
   text: json['text'] as String,
   imageUrl: json['image_url'] as String?,
   order: (json['order'] as num).toInt(),

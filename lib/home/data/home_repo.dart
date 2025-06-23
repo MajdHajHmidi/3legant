@@ -1,4 +1,4 @@
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 
 import '../../core/util/app_failure.dart';
 import '../../core/util/supabase_error_handling.dart';
@@ -15,16 +15,11 @@ class SupabaseHomeRepo extends HomeRepo {
   Future<AsyncResult<HomeDataModel, AppFailure>> getHomeData({
     required String userId,
   }) async {
-    final response = await supabaseRpc(
+    return await supabaseRpc(
       'get_home_screen_data',
       params: {'user_id': userId},
+      fromJson: HomeDataModel.fromJson,
       get: true,
     );
-
-    if (response.isData) {
-      return AsyncResult.data(data: HomeDataModel.fromJson(response.data!));
-    } else {
-      return AsyncResult.error(error: response.error!);
-    }
   }
 }

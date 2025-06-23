@@ -46,11 +46,14 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
   productNew: json['new'] as bool,
   name: json['name'] as String,
   price: (json['price'] as num).toDouble(),
-  colors: (json['colors'] as List<dynamic>).map((e) => e as String).toList(),
+  colors:
+      (json['colors'] as List<dynamic>)
+          .map((e) => Color.fromJson(e as Map<String, dynamic>))
+          .toList(),
   rating: (json['rating'] as num).toDouble(),
   details: json['details'] as String,
   category: json['category'] as String,
-  discount: (json['discount'] as num?)?.toInt(),
+  discount: (json['discount'] as num?)?.toDouble(),
   favorite: json['favorite'] as bool,
   createdAt: DateTime.parse(json['created_at'] as String),
   imagesUrl:
@@ -93,4 +96,12 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
   'packaging_weight': instance.packagingWeight,
   'discount_end_date': instance.discountEndDate?.toIso8601String(),
   'product_category_id': instance.productCategoryId,
+};
+
+Color _$ColorFromJson(Map<String, dynamic> json) =>
+    Color(hex: json['hex'] as String, name: json['name'] as String);
+
+Map<String, dynamic> _$ColorToJson(Color instance) => <String, dynamic>{
+  'hex': instance.hex,
+  'name': instance.name,
 };

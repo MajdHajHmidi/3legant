@@ -10,7 +10,7 @@ class Product {
   final String description;
   final String measurements;
   final String currencyCode;
-  final int? discount;
+  final double? discount;
   final DateTime? discountEndDate;
 
   Product({

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:e_commerce/core/widgets/app_divider.dart';
+
 import '../cubit/auth_cubit.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/navigation/router.dart';
@@ -227,13 +229,7 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                   const SizedBox(height: 32),
                   Row(
                     children: [
-                      Flexible(
-                        child: Divider(
-                          thickness: 1,
-                          height: 0,
-                          color: AppColors.neutral_03,
-                        ),
-                      ),
+                      Flexible(child: AppDivider(height: 0)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
@@ -243,13 +239,7 @@ class _AuthSigninScreenState extends State<AuthSigninScreen>
                           ),
                         ),
                       ),
-                      Flexible(
-                        child: Divider(
-                          thickness: 1,
-                          height: 0,
-                          color: AppColors.neutral_03,
-                        ),
-                      ),
+                      Flexible(child: AppDivider(height: 0)),
                     ],
                   ),
                   const SizedBox(height: 32),

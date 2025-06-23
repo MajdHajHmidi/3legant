@@ -119,7 +119,7 @@ class Product {
   @JsonKey(name: "price")
   final double price;
   @JsonKey(name: "colors")
-  final List<String> colors;
+  final List<Color> colors;
   @JsonKey(name: "rating")
   final double rating;
   @JsonKey(name: "details")
@@ -127,7 +127,7 @@ class Product {
   @JsonKey(name: "category")
   final String category;
   @JsonKey(name: "discount")
-  final int? discount;
+  final double? discount;
   @JsonKey(name: "favorite")
   final bool favorite;
   @JsonKey(name: "created_at")
@@ -190,11 +190,11 @@ class Product {
     bool? productNew,
     String? name,
     double? price,
-    List<String>? colors,
+    List<Color>? colors,
     double? rating,
     String? details,
     String? category,
-    int? discount,
+    double? discount,
     bool? favorite,
     DateTime? createdAt,
     List<String>? imagesUrl,
@@ -234,6 +234,20 @@ class Product {
       productCategoryId: productCategoryId ?? this.productCategoryId,
     );
   }
+}
+
+@JsonSerializable()
+class Color {
+  @JsonKey(name: "hex")
+  final String hex;
+  @JsonKey(name: "name")
+  final String name;
+
+  Color({required this.hex, required this.name});
+
+  factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ColorToJson(this);
 }
 
 @JsonSerializable()
@@ -288,7 +302,7 @@ class PopularCategory {
   @JsonKey(name: "name")
   final String name;
   @JsonKey(name: "discount")
-  final int? discount;
+  final double? discount;
   @JsonKey(name: "discount_end_date")
   final DateTime? discountEndDate;
   @JsonKey(name: "image_url")

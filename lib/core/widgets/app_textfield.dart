@@ -14,6 +14,10 @@ class AppTextFormField extends StatelessWidget {
   final void Function(String value)? onFieldSubmitted;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
+  final EdgeInsetsGeometry? contentPadding;
+
+  final bool _outlineBorder;
+
   const AppTextFormField({
     super.key,
     required this.controller,
@@ -27,7 +31,24 @@ class AppTextFormField extends StatelessWidget {
     this.onFieldSubmitted,
     this.keyboardType,
     this.focusNode,
-  });
+    this.contentPadding,
+  }) : _outlineBorder = false;
+
+  const AppTextFormField.outlineBorder({
+    super.key,
+    required this.controller,
+    required this.hint,
+    this.validator,
+    this.obscure = false,
+    this.textInputAction = TextInputAction.done,
+    this.onChanged,
+    this.suffixIcon,
+    this.onSuffixIconPressed,
+    this.onFieldSubmitted,
+    this.keyboardType,
+    this.focusNode,
+    this.contentPadding,
+  }) : _outlineBorder = true;
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +64,53 @@ class AppTextFormField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        contentPadding: contentPadding,
         hintText: hint,
         hintStyle: AppTextStyles.caption1.copyWith(
           color: AppColors.neutral_04.withAlpha(191),
         ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(width: 1, color: AppColors.neutral_03),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(width: 1.5, color: AppColors.neutral_06),
-        ),
-        errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(width: 1, color: AppColors.red),
-        ),
-        focusedErrorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(width: 1.5, color: AppColors.red),
-        ),
+        enabledBorder:
+            _outlineBorder
+                ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: AppColors.neutral_03, width: 2),
+                )
+                : UnderlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: AppColors.neutral_03),
+                ),
+        focusedBorder:
+            _outlineBorder
+                ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: AppColors.neutral_07, width: 2),
+                )
+                : UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 1.5,
+                    color: AppColors.neutral_06,
+                  ),
+                ),
+        errorBorder:
+            _outlineBorder
+                ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(
+                    color: AppColors.red.withAlpha(150),
+                    width: 2,
+                  ),
+                )
+                : UnderlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: AppColors.red),
+                ),
+        focusedErrorBorder:
+            _outlineBorder
+                ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: AppColors.red, width: 2),
+                )
+                : UnderlineInputBorder(
+                  borderSide: BorderSide(width: 1.5, color: AppColors.red),
+                ),
         suffixIcon:
             suffixIcon == null
                 ? null

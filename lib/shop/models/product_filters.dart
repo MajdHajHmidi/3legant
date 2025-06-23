@@ -12,7 +12,7 @@ class ProductFilters {
     required this.minPrice,
     required this.maxPrice,
     this.query = '',
-    this.page = AppConstants.supabaseStartingPaginationIndex,
+    this.page = AppConstants.appStartingPaginationIndex,
   });
 
   ProductFilters.empty()
@@ -20,7 +20,7 @@ class ProductFilters {
       minPrice = null,
       maxPrice = null,
       query = '',
-      page = AppConstants.supabaseStartingPaginationIndex;
+      page = AppConstants.appStartingPaginationIndex;
 
   ProductFilters copyWith({
     String? categoryId,

@@ -19,10 +19,10 @@ class HomeErrorView extends StatelessWidget {
           context,
         ).rpcError(failure.code),
         onPressed: () {
-          final user = serviceLocator<AuthRepo>().getCurrentUser()?.id;
+          final userId = serviceLocator<AuthRepo>().getCurrentUser()?.id;
 
-          if (user != null) {
-            context.read<HomeCubit>().getHomeData(user);
+          if (userId != null) {
+            context.read<HomeCubit>().getHomeData(userId);
           }
         },
       ),

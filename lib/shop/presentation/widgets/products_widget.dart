@@ -2,7 +2,6 @@ import 'package:currency_code_to_currency_symbol/currency_code_to_currency_symbo
 import '../../../core/styles/text_styles.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import '../../../core/util/duration_extension.dart';
-import '../../../core/util/testing.dart';
 import '../../../core/widgets/app_adaptive_grid.dart';
 import '../../../core/widgets/product_tile.dart';
 import '../../models/filtered_products_model.dart';
@@ -50,7 +49,6 @@ class ProductsWidget extends StatelessWidget {
           index: index,
           productsLength: products.length,
           horizontalMode: false,
-          onTap: () => showNotImplementedDialog(context),
         );
       }
 
@@ -59,7 +57,6 @@ class ProductsWidget extends StatelessWidget {
         index: index,
         productsLength: products.length,
         horizontalMode: false,
-        onTap: () => showNotImplementedDialog(context),
       );
     }
 

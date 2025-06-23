@@ -1,6 +1,6 @@
 import '../../../../core/util/localization.dart';
 import '../../../../core/widgets/shimmer.dart';
-import '../../../../core/widgets/sliver.dart';
+import '../../../../core/widgets/sliver_util.dart';
 import '../products_loading_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,7 @@ class ShopLoadingView extends StatelessWidget {
                 height: 300,
                 borderRadius: 12,
               ),
-              const SliverSizedBox(height: 32),
+              const SliverIndent(height: 32),
               SliverLayoutBuilder(
                 builder: (context, constraints) {
                   final maxWidth = constraints.crossAxisExtent;
@@ -37,13 +37,13 @@ class ShopLoadingView extends StatelessWidget {
                   );
                 },
               ),
-              const SliverSizedBox(height: 8),
+              const SliverIndent(height: 8),
               const SliverShimmerBox(
                 width: double.infinity,
                 height: 60,
                 borderRadius: 12,
               ),
-              const SliverSizedBox(height: 32),
+              const SliverIndent(height: 32),
               const ProductsLoadingWidget(),
             ],
           ),

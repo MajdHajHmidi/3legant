@@ -6,7 +6,7 @@ import '../../models/filtered_products_model.dart';
 import '../../models/product_filters.dart';
 import '../../models/shop_data_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'shop_state.dart';
@@ -138,6 +138,14 @@ class ShopCubit extends Cubit<ShopState> {
     FilteredProductsModel first,
     FilteredProductsModel second,
   ) {
+    // TODO: Add "Race conditions" check
+    // Check if pages are consecutive
+    // if (first.paginationInfo.currentPage !=
+    //     second.paginationInfo.currentPage - 1) {
+    //   // Pages are not consecutive, skip merge
+    //   return first;
+    // }
+
     return FilteredProductsModel(
       products: [...first.products, ...second.products],
       paginationInfo: second.paginationInfo,

@@ -1,6 +1,6 @@
 import 'app_failure.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_async_value/async_value.dart';
+import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 AppFailure getSupabaseAuthErrorType(String? errorCode) {
@@ -22,9 +22,13 @@ AppFailure getSupabaseAuthErrorType(String? errorCode) {
   }
 }
 
-Future<AsyncResult<Map<String, dynamic>, AppFailure>> supabaseRpc(
+Future<AsyncResult<T, AppFailure>> supabaseRpc<T>(
   String name, {
+  T Function(Map<String, dynamic> json)? fromJson,
   Map<String, dynamic>? params,
+
+  /// Key: Error code in supabase, Value, the error code to return
+  Map<String, String>? customErrors,
   dynamic get = false,
 }) async {
   try {
@@ -34,9 +38,23 @@ Future<AsyncResult<Map<String, dynamic>, AppFailure>> supabaseRpc(
       get: get,
     );
 
-    return AsyncResult.data(data: response as Map<String, dynamic>);
+    return AsyncResult.data(data: fromJson == null ? null : fromJson(response));
+  } on PostgrestException catch (exception) {
+    debugPrint('Rpc Custom Exception -- ${exception.code}');
+
+    if (exception.code == null ||
+        customErrors == null ||
+        !customErrors.containsKey(exception.code)) {
+      return AsyncResult.error(
+        error: NetworkFailure(code: RpcFailureCodes.other.name),
+      );
+    }
+
+    return AsyncResult.error(
+      error: NetworkFailure(code: customErrors[exception.code!]!),
+    );
   } catch (exception) {
-    debugPrint('RPC Excpetion: $exception');
+    debugPrint('RPC Exception: $exception');
     return AsyncResult.error(
       error: NetworkFailure(code: RpcFailureCodes.other.name),
     );

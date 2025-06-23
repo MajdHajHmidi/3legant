@@ -1,3 +1,5 @@
+import '../../product_details/data/product_details_repo.dart';
+
 import '../../blog_details/data/blog_details_repo.dart';
 import '../../blogs/data/blogs_repo.dart';
 import '../../cart/data/cart_repo.dart';
@@ -29,6 +31,9 @@ void setupDependencyInjection() {
   serviceLocator.registerLazySingleton<BlogsRepo>(() => SupabaseBlogsRepo());
   serviceLocator.registerLazySingleton<BlogDetailsRepo>(
     () => SupabaseBlogDetailsRepo(),
+  );
+  serviceLocator.registerLazySingleton<ProductDetailsRepo>(
+    () => SupabaseProductDetailsRepo(),
   );
 
   // Register app router

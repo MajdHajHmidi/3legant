@@ -37,6 +37,8 @@ class AppIcons {
   static const filter = '${_directory}filter$_fileType';
   static const grid = '${_directory}grid$_fileType';
   static const list = '${_directory}list$_fileType';
+  static const check = '${_directory}check$_fileType';
+  static const arrowRightCircle = '${_directory}arrow-right-circle$_fileType';
 }
 
 class AppImages {

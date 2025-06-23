@@ -10,10 +10,13 @@ class AppConstants {
     return '$appDeepLinkScheme://$host';
   }
 
-  static const supabaseStartingPaginationIndex = 1;
+  static const appStartingPaginationIndex = 1;
 
   static const appPrivacyPolicyWebsiteUrl =
       'https://3legant-app.netlify.app/privacy-policy.html';
   static const appTermsOfUseWebsiteUrl =
       'https://3legant-app.netlify.app/terms-of-use.html';
+
+  static const userAvatarPlaceholderImageUrl =
+      'https://yzvjrxpwozrcbfdtqkbi.supabase.co/storage/v1/object/public/user-avatars//placeholder.png';
 }
