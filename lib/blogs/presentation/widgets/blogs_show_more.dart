@@ -13,17 +13,19 @@ class BlogsShowMore extends StatelessWidget {
     return Center(
       child: BlocBuilder<BlogsCubit, BlogsState>(
         bloc: cubit,
-        buildWhen:
-            (_, state) =>
-                state is BlogsPaginationLoadingState ||
-                state is BlogsPaginationErrorState ||
-                state is BlogsDataChangedState,
+        buildWhen: (_, state) => state is BlogsDataChangedState,
         builder: (context, state) {
+          final cubit = context.read<BlogsCubit>();
+
           return AppRoundedButton.outlined(
             width: 160 * MediaQuery.textScalerOf(context).scale(1),
             text: localization(context).showMore,
-            loading: state is BlogsPaginationLoadingState,
-            onPressed: () => cubit.getData(isPagination: true),
+            loading: cubit.blogsDataModel.isLoadingPage,
+            onPressed:
+                () => cubit.getBlogs(
+                  page:
+                      cubit.blogsDataModel.data!.paginationInfo.currentPage + 1,
+                ),
           );
         },
       ),

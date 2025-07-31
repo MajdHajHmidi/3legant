@@ -1,4 +1,5 @@
-import '../../../../core/widgets/app_adaptive_grid.dart';
+import 'package:adaptive_grid/adaptive_grid.dart';
+
 import '../../../../core/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 
@@ -29,18 +30,17 @@ class BlogsLoadingView extends StatelessWidget {
                 ),
               ),
               SliverPadding(padding: const EdgeInsets.only(top: 16)),
-              AppAdaptiveSliverGrid(
-                itembuilder:
+              AdaptiveGrid.sliver(
+                itemBuilder:
                     (_, _) => ShimmerBox(
                       width: double.infinity,
-                      height: double.infinity,
+                      height: 320,
                       borderRadius: 12,
                     ),
                 itemCount: 5,
-                minimumTileWidth: 300.0,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                staticChildHeight: 320,
+                minimumItemWidth: 300.0,
+                verticalSpacing: 16,
+                horizontalSpacing: 16,
               ),
             ],
           ),

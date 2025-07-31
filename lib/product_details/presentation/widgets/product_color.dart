@@ -77,8 +77,8 @@ Widget _buildColorOption({
       width: 52,
       child: Align(
         child: AnimatedContainer(
-          duration: 400.ms,
-          curve: Curves.linearToEaseOut,
+          duration: 250.ms,
+          curve: Curves.easeInCubic,
           width: isSelected ? 52 : 24,
           height: isSelected ? 52 : 24,
           clipBehavior: Clip.antiAlias,

@@ -6,14 +6,6 @@ final class BlogsInitial extends BlogsState {}
 
 final class BlogsDataChangedState extends BlogsState {}
 
-final class BlogsPaginationLoadingState extends BlogsState {}
-
-final class BlogsPaginationErrorState extends BlogsState {
-  final AppFailure failure;
-
-  BlogsPaginationErrorState({required this.failure});
-}
-
 final class BlogsChangedCategoryLoadingState extends BlogsState {}
 
 final class BlogsChangedCategoryErrorState extends BlogsState {

@@ -40,7 +40,9 @@ Future<AsyncResult<T, AppFailure>> supabaseRpc<T>(
 
     return AsyncResult.data(data: fromJson == null ? null : fromJson(response));
   } on PostgrestException catch (exception) {
-    debugPrint('Rpc Custom Exception -- ${exception.code}');
+    debugPrint(
+      'Rpc Custom Exception -- Code: ${exception.code}, Message: ${exception.message}',
+    );
 
     if (exception.code == null ||
         customErrors == null ||

@@ -69,7 +69,6 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
 
     productDetailsModel = AsyncValue.data(data: newData);
 
-    print(productDetailsModel.data!.ratingsCount ?? 0);
     emit(ProductDetailsDataChangedState());
   }
 

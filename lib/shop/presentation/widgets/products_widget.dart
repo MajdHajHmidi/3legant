@@ -1,8 +1,6 @@
-import 'package:currency_code_to_currency_symbol/currency_code_to_currency_symbol.dart';
-import '../../../core/styles/text_styles.dart';
+import 'package:adaptive_grid/adaptive_grid.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import '../../../core/util/duration_extension.dart';
-import '../../../core/widgets/app_adaptive_grid.dart';
 import '../../../core/widgets/product_tile.dart';
 import '../../models/filtered_products_model.dart';
 import '../cubit/shop_cubit.dart';
@@ -62,36 +60,14 @@ class ProductsWidget extends StatelessWidget {
 
     getProductsSliver() {
       if (layout == ProductsViewLayout.grid) {
-        return AppAdaptiveSliverGrid(
+        return AdaptiveGrid.sliver(
           key: ValueKey('Grid'),
           itemCount: products.length,
-          minimumTileWidth: 230,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          staticChildHeight: 410,
-          textPlaceholders: [
-            TextPlaceholderParams(
-              context: context,
-              style: AppTextStyles.body2Semi,
-              texts: products.map((e) => e.name).toList(),
-              horizontalPadding: 12,
-              maxLines: 1,
-            ),
-            TextPlaceholderParams(
-              context: context,
-              style: AppTextStyles.caption1Semi,
-              texts:
-                  products
-                      .map(
-                        (e) =>
-                            '${getCurrencySymbol(products.first.currencyCode)}${e.price}',
-                      )
-                      .toList(),
-              horizontalPadding: 12,
-              maxLines: 1,
-            ),
-          ],
-          itembuilder:
+          minimumItemWidth: 270,
+          disableStretch: true,
+          verticalSpacing: 16,
+          horizontalSpacing: 16,
+          itemBuilder:
               (context, index) =>
                   productTileBuilder(context: context, index: index),
         );

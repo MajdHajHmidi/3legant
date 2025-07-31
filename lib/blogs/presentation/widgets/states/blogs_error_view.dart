@@ -14,7 +14,7 @@ class BlogsErrorView extends StatelessWidget {
         message: localization(
           context,
         ).rpcError(cubit.blogsDataModel.error!.code),
-        onPressed: cubit.getData,
+        onPressed: cubit.getBlogs,
       ),
     );
   }

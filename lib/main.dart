@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,12 +8,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'core/styles/themes.dart';
 import 'core/util/bloc_observer.dart';
 import 'core/util/dependency_injection.dart';
 
-void main() async {
+Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   // * Initialize services here...
   _launchNativeSplashScreen(binding);
@@ -21,8 +23,28 @@ void main() async {
   await _loadEnvFile();
   await _initSupabase();
 
-  // runApp(const MyApp());
-  runApp(DevicePreview(builder: (context) => const MyApp()));
+  // * Sentry configuration
+  if (kDebugMode) {
+    runApp(DevicePreview(builder: (_) => const MyApp()));
+  } else {
+    await SentryFlutter.init((options) {
+      options.dsn = dotenv.env['SENTRY_DSN']!;
+      // Adds request headers and IP for users,
+      // visit: https://docs.sentry.io/platforms/dart/data-management/data-collected/ for more info
+      options.sendDefaultPii = true;
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+      // The sampling rate for profiling is relative to tracesSampleRate
+      // Setting to 1.0 will profile 100% of sampled transactions:
+      options.profilesSampleRate = 1.0;
+      // Set sessionSampleRate to 0.1 to capture 10% of sessions and onErrorSampleRate to 1.0 to capture 100% of errors.
+      options.replay.sessionSampleRate = 0.1;
+      options.replay.onErrorSampleRate = 1.0;
+    }, appRunner: () => runApp(SentryWidget(child: const MyApp())));
+  }
+
+  // * Disposes the splash screen after it's shown
   _removeNativeSplashScreen();
 }
 

@@ -15,7 +15,7 @@ import 'package:e_commerce/product_details/presentation/cubit/product_details_cu
 import 'package:flutter/material.dart';
 import 'package:flutter_async_value/flutter_async_value.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliver_tools/sliver_tools.dart';
+import 'package:sliver_expandable/sliver_expandable.dart';
 
 class ProductReviews extends StatelessWidget {
   const ProductReviews({super.key});
@@ -41,8 +41,11 @@ class ProductReviews extends StatelessWidget {
                 onTap: cubit.toggleProductReviewsExpansion,
               ),
             ),
-            if (cubit.isProductReviewsExpanded)
-              AsyncValueBuilder(
+            AnimatedSliverExpandable(
+              expanded: cubit.isProductReviewsExpanded,
+              duration: 350.ms,
+              curve: Curves.easeInOut,
+              sliver: AsyncValueBuilder(
                 value: cubit.productReviewsModel,
                 loading:
                     (context) => const SliverToBoxAdapter(
@@ -74,9 +77,9 @@ class ProductReviews extends StatelessWidget {
                           .where((review) => review.comment != null)
                           .toList();
 
-                  if (!cubit.isProductReviewsExpanded) {
-                    return SliverToBoxAdapter(child: const SizedBox.shrink());
-                  }
+                  // if (!cubit.isProductReviewsExpanded) {
+                  //   return SliverToBoxAdapter(child: const SizedBox.shrink());
+                  // }
 
                   return SliverMainAxisGroup(
                     slivers: [
@@ -145,6 +148,7 @@ class ProductReviews extends StatelessWidget {
                   );
                 },
               ),
+            ),
           ],
         );
       },

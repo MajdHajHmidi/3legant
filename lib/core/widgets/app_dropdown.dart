@@ -9,26 +9,34 @@ import 'dart:math' as math;
 
 class AppDropdownButton<T> extends StatelessWidget {
   final T value;
-  final T defaultValue;
+  final T? defaultValue;
   final double? width;
-  final String defaultText;
+  final String? defaultText;
   final Map<T, String> items;
-  final void Function(T?) onChanged;
+  final void Function(T? value) onChanged;
+  final bool enabled;
+  final Color? backgroundColor;
   const AppDropdownButton({
     super.key,
     required this.value,
     required this.items,
     this.width,
-    required this.defaultValue,
-    required this.defaultText,
+    this.defaultValue,
+    this.defaultText,
     required this.onChanged,
-  });
+    this.enabled = true,
+    this.backgroundColor,
+  }) : assert(
+         (defaultValue != null && defaultText != null) ||
+             (defaultValue == null && defaultText == null),
+       );
 
   @override
   Widget build(BuildContext context) {
     final dropdownIcon = SvgPicture.asset(
       AppIcons.dropdown,
-      theme: SvgTheme(currentColor: AppColors.neutral_04),
+      // ignore: deprecated_member_use
+      color: enabled ? AppColors.neutral_04 : AppColors.neutral_03,
     );
     return DropdownButtonHideUnderline(
       child: DropdownButton2<T>(
@@ -39,8 +47,12 @@ class AppDropdownButton<T> extends StatelessWidget {
           width: width,
           padding: const EdgeInsets.only(left: 14, right: 14),
           decoration: BoxDecoration(
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.neutral_04, width: 2),
+            border: Border.all(
+              color: enabled ? AppColors.neutral_04 : AppColors.neutral_03,
+              width: 2,
+            ),
           ),
           height: 48 * MediaQuery.textScalerOf(context).scale(1),
         ),
@@ -56,13 +68,14 @@ class AppDropdownButton<T> extends StatelessWidget {
           iconSize: 24 * MediaQuery.textScalerOf(context).scale(1),
         ),
         items: [
-          DropdownMenuItem(value: defaultValue, child: Text(defaultText)),
+          if (defaultValue != null && defaultText != null)
+            DropdownMenuItem(value: defaultValue, child: Text(defaultText!)),
           ...items.entries.map(
             (entry) =>
                 DropdownMenuItem(value: entry.key, child: Text(entry.value)),
           ),
         ],
-        onChanged: onChanged,
+        onChanged: enabled ? onChanged : null,
       ),
     );
   }

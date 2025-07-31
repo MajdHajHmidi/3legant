@@ -3,7 +3,7 @@ import '../styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class AppTextFormField extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hint;
   final bool obscure;
   final Widget? suffixIcon;
@@ -15,12 +15,14 @@ class AppTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final EdgeInsetsGeometry? contentPadding;
+  final double? borderRadius;
+  final bool readOnly;
 
   final bool _outlineBorder;
 
   const AppTextFormField({
     super.key,
-    required this.controller,
+    this.controller,
     required this.hint,
     this.validator,
     this.obscure = false,
@@ -32,11 +34,13 @@ class AppTextFormField extends StatelessWidget {
     this.keyboardType,
     this.focusNode,
     this.contentPadding,
-  }) : _outlineBorder = false;
+    this.readOnly = false,
+  }) : borderRadius = null,
+       _outlineBorder = false;
 
   const AppTextFormField.outlineBorder({
     super.key,
-    required this.controller,
+    this.controller,
     required this.hint,
     this.validator,
     this.obscure = false,
@@ -48,6 +52,8 @@ class AppTextFormField extends StatelessWidget {
     this.keyboardType,
     this.focusNode,
     this.contentPadding,
+    this.borderRadius,
+    this.readOnly = false,
   }) : _outlineBorder = true;
 
   @override
@@ -59,6 +65,7 @@ class AppTextFormField extends StatelessWidget {
       style: AppTextStyles.caption1,
       focusNode: focusNode,
       obscureText: obscure,
+      readOnly: readOnly,
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -72,7 +79,7 @@ class AppTextFormField extends StatelessWidget {
         enabledBorder:
             _outlineBorder
                 ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 16),
                   borderSide: BorderSide(color: AppColors.neutral_03, width: 2),
                 )
                 : UnderlineInputBorder(
@@ -81,7 +88,7 @@ class AppTextFormField extends StatelessWidget {
         focusedBorder:
             _outlineBorder
                 ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 16),
                   borderSide: BorderSide(color: AppColors.neutral_07, width: 2),
                 )
                 : UnderlineInputBorder(
@@ -93,7 +100,7 @@ class AppTextFormField extends StatelessWidget {
         errorBorder:
             _outlineBorder
                 ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 16),
                   borderSide: BorderSide(
                     color: AppColors.red.withAlpha(150),
                     width: 2,
@@ -105,7 +112,7 @@ class AppTextFormField extends StatelessWidget {
         focusedErrorBorder:
             _outlineBorder
                 ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(borderRadius ?? 16),
                   borderSide: BorderSide(color: AppColors.red, width: 2),
                 )
                 : UnderlineInputBorder(

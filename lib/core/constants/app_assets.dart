@@ -39,6 +39,7 @@ class AppIcons {
   static const list = '${_directory}list$_fileType';
   static const check = '${_directory}check$_fileType';
   static const arrowRightCircle = '${_directory}arrow-right-circle$_fileType';
+  static const trash = '${_directory}trash$_fileType';
 }
 
 class AppImages {

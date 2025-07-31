@@ -12,11 +12,11 @@ class BlogsCubit extends Cubit<BlogsState> {
   BlogsCubit({required BlogsRepo blogsRepo})
     : _blogsRepo = blogsRepo,
       super(BlogsInitial()) {
-    getData();
+    getBlogs();
   }
 
-  AsyncValue<BlogsDataModel, AppFailure> blogsDataModel = AsyncValue.initial();
-  int _paginationIndex = AppConstants.appStartingPaginationIndex;
+  PaginatedAsyncValue<BlogsDataModel, AppFailure> blogsDataModel =
+      PaginatedAsyncValue.initial();
   String categoryId = '';
 
   void changeCategoryId(String categoryId) {
@@ -24,95 +24,78 @@ class BlogsCubit extends Cubit<BlogsState> {
     this.categoryId = categoryId;
     emit(BlogsCategoryChangedState());
 
-    _paginationIndex = AppConstants.appStartingPaginationIndex;
-    getData(changedCategory: true);
+    getBlogs(
+      changedCategory: true,
+      page: AppConstants.appStartingPaginationIndex,
+    );
   }
 
-  Future<void> getData({
-    bool isPagination = false,
+  Future<void> getBlogs({
+    int page = AppConstants.appStartingPaginationIndex,
     bool changedCategory = false,
   }) async {
+    if (blogsDataModel.isLoading) {
+      return;
+    }
+
     if (changedCategory) {
       _getNewCategoryData();
       return;
     }
-    if (isPagination) {
-      _getPaginatedData();
+
+    if (page == AppConstants.appStartingPaginationIndex) {
+      // Reset model
+      blogsDataModel = PaginatedAsyncValue.initial();
+    }
+
+    blogsDataModel = PaginatedAsyncValue.loading(previous: blogsDataModel);
+    emit(BlogsDataChangedState());
+
+    final result = await _blogsRepo.getBlogs(
+      page: page,
+      blogCategoryId: categoryId,
+    );
+
+    if (result.isData) {
+      blogsDataModel = PaginatedAsyncValue.data(
+        data: result.data!,
+        previous: blogsDataModel,
+        combine: _mergeBlogPages,
+      );
+      emit(BlogsDataChangedState());
+    } else {
+      blogsDataModel = PaginatedAsyncValue.error(
+        error: result.error!,
+        previous: blogsDataModel,
+      );
+      emit(BlogsDataChangedState());
+    }
+  }
+
+  bool newCategoryLoading = false;
+  Future<void> _getNewCategoryData() async {
+    if (newCategoryLoading) {
       return;
     }
 
-    _getNewData();
-  }
-
-  Future<void> _getNewData() async {
-    blogsDataModel = AsyncValue.loading();
-    emit(BlogsDataChangedState());
+    newCategoryLoading = true;
+    emit(BlogsChangedCategoryLoadingState());
 
     final result = await _blogsRepo.getBlogs(
       page: AppConstants.appStartingPaginationIndex,
       blogCategoryId: categoryId,
     );
 
-    if (result.isData) {
-      blogsDataModel = AsyncValue.data(data: result.data!);
-      ++_paginationIndex;
-      emit(BlogsDataChangedState());
-    } else {
-      blogsDataModel = AsyncValue.error(error: result.error!);
-      emit(BlogsDataChangedState());
-    }
-  }
-
-  bool _paginationLoading = false;
-  Future<void> _getPaginatedData() async {
-    if (_paginationLoading) {
-      return;
-    }
-
-    _paginationLoading = true;
-    emit(BlogsPaginationLoadingState());
-
-    final result = await _blogsRepo.getBlogs(
-      page: _paginationIndex,
-      blogCategoryId: categoryId,
-    );
-
-    _paginationLoading = false;
-
-    // Cancel operation if new filters applied before new page recieved
-    if (blogsDataModel.data == null) {
-      return;
-    }
+    newCategoryLoading = false;
 
     if (result.isData) {
-      final newModel = _mergeBlogPages(blogsDataModel.data!, result.data!);
-      blogsDataModel = AsyncValue.data(data: newModel);
-      ++_paginationIndex;
-      emit(BlogsDataChangedState());
-    } else {
-      emit(BlogsPaginationErrorState(failure: result.error!));
-    }
-  }
-
-  bool _newCategoryLoading = false;
-  Future<void> _getNewCategoryData() async {
-    if (_newCategoryLoading) {
-      return;
-    }
-
-    _newCategoryLoading = true;
-    emit(BlogsChangedCategoryLoadingState());
-
-    final result = await _blogsRepo.getBlogs(
-      page: _paginationIndex,
-      blogCategoryId: categoryId,
-    );
-
-    _newCategoryLoading = false;
-
-    if (result.isData) {
-      blogsDataModel = AsyncValue.data(data: result.data!);
-      ++_paginationIndex;
+      // Reset Model so previous pages are cleared
+      blogsDataModel = PaginatedAsyncValue.initial();
+      blogsDataModel = PaginatedAsyncValue.data(
+        data: result.data!,
+        previous: blogsDataModel,
+        combine: _mergeBlogPages,
+      );
       emit(BlogsDataChangedState());
     } else {
       emit(BlogsChangedCategoryErrorState(failure: result.error!));
@@ -120,20 +103,6 @@ class BlogsCubit extends Cubit<BlogsState> {
   }
 
   BlogsDataModel _mergeBlogPages(BlogsDataModel first, BlogsDataModel second) {
-    // Check if category IDs match
-    if (first.blogs.first.categoryId != second.blogs.first.categoryId) {
-      // Categories don't match, skip merge
-      return first;
-    }
-
-    // Check if pages are consecutive
-    if (first.paginationInfo.currentPage !=
-        second.paginationInfo.currentPage - 1) {
-      // Pages are not consecutive, skip merge
-      return first;
-    }
-
-    // Proceed with merge
     return BlogsDataModel(
       blogsMetadata: second.blogsMetadata,
       blogs: [...first.blogs, ...second.blogs],

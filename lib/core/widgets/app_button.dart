@@ -133,6 +133,7 @@ class SecondaryAppButton extends StatelessWidget {
   final double height;
   final bool disableTextScaling;
   final bool _outlined;
+  final TextStyle? textStyle;
 
   const SecondaryAppButton({
     super.key,
@@ -144,6 +145,7 @@ class SecondaryAppButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 52,
     this.disableTextScaling = false,
+    this.textStyle,
   }) : _outlined = false;
 
   const SecondaryAppButton.outlined({
@@ -156,6 +158,7 @@ class SecondaryAppButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 52,
     this.disableTextScaling = false,
+    this.textStyle,
   }) : _outlined = true;
 
   @override
@@ -185,6 +188,14 @@ class SecondaryAppButton extends StatelessWidget {
           child: Center(
             child: Builder(
               builder: (context) {
+                if (loading) {
+                  return AppCircularProgressIndicator(
+                    color:
+                        lightTheme
+                            ? AppColors.neutral_06
+                            : AppColors.neutral_01,
+                  );
+                }
                 final textColor =
                     _outlined
                         ? AppColors.neutral_06
@@ -195,7 +206,9 @@ class SecondaryAppButton extends StatelessWidget {
                   text,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: AppTextStyles.buttonS.copyWith(color: textColor),
+                  style:
+                      textStyle ??
+                      AppTextStyles.buttonS.copyWith(color: textColor),
                   textScaler: disableTextScaling ? TextScaler.linear(1) : null,
                 );
               },

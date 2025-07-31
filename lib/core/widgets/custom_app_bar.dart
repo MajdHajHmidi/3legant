@@ -10,11 +10,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String text;
   final bool showBackButton;
   final Widget? leadingIcon;
+  final Widget? trailingIcon;
   final void Function()? leadingIconAction;
+  final void Function()? trailingIconAction;
   CustomAppBar({
     required this.text,
     this.leadingIcon,
     this.leadingIconAction,
+    this.trailingIcon,
+    this.trailingIconAction,
     this.showBackButton = true,
     super.key,
   }) : preferredSize = Size.fromHeight(kToolbarHeight);
@@ -34,6 +38,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
         centerTitle: true,
+        actions: [
+          if (trailingIcon != null)
+            InkWell(
+              borderRadius: BorderRadius.circular(360),
+              onTap: trailingIconAction,
+              child: Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                child: trailingIcon,
+              ),
+            ),
+        ],
         leading:
             showBackButton
                 ? InkWell(

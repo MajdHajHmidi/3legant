@@ -1,8 +1,8 @@
+import 'package:adaptive_grid/adaptive_grid.dart';
+
 import '../../../../auth/data/auth_repo.dart';
-import '../../../../core/styles/text_styles.dart';
+
 import '../../../../core/util/dependency_injection.dart';
-import '../../../../core/util/localization.dart';
-import '../../../../core/widgets/app_adaptive_grid.dart';
 
 import '../../cubit/home_cubit.dart';
 import '../../../models/home_data_model.dart';
@@ -87,37 +87,15 @@ class HomeDataView extends StatelessWidget {
           SliverPadding(padding: const EdgeInsets.only(top: 40)),
           SliverPadding(
             padding: horizontalPadding,
-            sliver: AppAdaptiveSliverGrid(
-              itembuilder:
+            sliver: AdaptiveGrid.sliver(
+              itemBuilder:
                   (context, index) => HomeBlogTile(
                     blog: homeDataModel.popularBlogs.blogs[index],
                   ),
               itemCount: homeDataModel.popularBlogs.blogs.length,
-              minimumTileWidth: 300.0,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              staticChildHeight: 320,
-              textPlaceholders: [
-                TextPlaceholderParams(
-                  context: context,
-                  texts:
-                      homeDataModel.popularBlogs.blogs
-                          .map((blog) => blog.title)
-                          .toList(),
-                  horizontalPadding: 8,
-                  style: AppTextStyles.body2Semi,
-                  maxLines: 2,
-                ),
-                TextPlaceholderParams(
-                  context: context,
-                  text: localization(context).readMore,
-                  style: AppTextStyles.buttonXS,
-                  maxWidth: 100,
-                  maxLines: 1,
-                  noScaling: true,
-                  horizontalPadding: 8,
-                ),
-              ],
+              minimumItemWidth: 300.0,
+              verticalSpacing: 16,
+              horizontalSpacing: 16,
             ),
           ),
           SliverPadding(padding: const EdgeInsets.only(top: 40)),

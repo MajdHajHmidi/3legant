@@ -17,7 +17,7 @@ class AppExpandedContent extends StatelessWidget {
     required this.isExpanded,
     this.curve = Curves.easeInOut,
     Duration? duration,
-  }) : duration = duration ?? 250.ms;
+  }) : duration = duration ?? 350.ms;
 
   @override
   Widget build(BuildContext context) {
@@ -44,31 +44,36 @@ class AppExpandedTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(6),
       onTap: onTap,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  text,
-                  style: AppTextStyles.buttonM.copyWith(
-                    color: AppColors.neutral_07,
-                    fontWeight: isExpanded ? FontWeight.w700 : FontWeight.w500,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    text,
+                    style: AppTextStyles.buttonM.copyWith(
+                      color: AppColors.neutral_07,
+                      fontWeight: isExpanded ? FontWeight.w700 : FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-              AnimatedRotation(
-                turns: isExpanded ? 0.5 : 0.0,
-                duration: 250.ms,
-                curve: Curves.easeOut,
-                child: _getDropdownIcon(),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          AppDivider(color: AppColors.neutral_07),
-        ],
+                AnimatedRotation(
+                  turns: isExpanded ? 0.5 : 0.0,
+                  duration: 250.ms,
+                  curve: Curves.easeOut,
+                  child: _getDropdownIcon(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            AppDivider(color: AppColors.neutral_07),
+          ],
+        ),
       ),
     );
   }

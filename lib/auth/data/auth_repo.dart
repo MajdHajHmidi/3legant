@@ -93,6 +93,7 @@ class SupabaseAuthRepo extends AuthRepo {
       if (await GoogleSignIn().isSignedIn()) {
         GoogleSignIn().signOut();
       }
+
       await supabase.auth.signOut();
 
       return AsyncResult.data(data: null);

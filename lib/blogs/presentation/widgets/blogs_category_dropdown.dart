@@ -13,10 +13,10 @@ class BlogsCategoryDropdown extends StatelessWidget {
     final model = cubit.blogsDataModel.data!;
     return BlocBuilder<BlogsCubit, BlogsState>(
       bloc: cubit,
-      buildWhen: (_, state) => state is BlogsCategoryChangedState,
       builder: (context, state) {
         return AppDropdownButton<String>(
           value: cubit.categoryId,
+          enabled: !cubit.blogsDataModel.isLoading && !cubit.newCategoryLoading,
           width: double.infinity,
           items:
               {}..addEntries(

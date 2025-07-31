@@ -1,7 +1,8 @@
+import 'package:adaptive_grid/adaptive_grid.dart';
+
 import '../../../../core/util/localization.dart';
 // ignore: depend_on_referenced_packages
 import 'package:sliver_center/sliver_center.dart';
-import 'package:e_commerce/core/widgets/app_adaptive_grid.dart';
 import 'package:e_commerce/core/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 
@@ -103,18 +104,17 @@ class BlogDetailsLoadingView extends StatelessWidget {
                         ),
                       ),
                       SliverPadding(padding: const EdgeInsets.only(top: 12)),
-                      AppAdaptiveSliverGrid(
-                        itembuilder:
+                      AdaptiveGrid.sliver(
+                        itemBuilder:
                             (_, _) => ShimmerBox(
                               width: double.infinity,
-                              height: double.infinity,
+                              height: 320,
                               borderRadius: 12,
                             ),
                         itemCount: 2,
-                        minimumTileWidth: 300.0,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        staticChildHeight: 320,
+                        minimumItemWidth: 300.0,
+                        verticalSpacing: 16,
+                        horizontalSpacing: 16,
                       ),
                     ],
                   );

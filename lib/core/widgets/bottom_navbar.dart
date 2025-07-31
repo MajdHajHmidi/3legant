@@ -24,53 +24,66 @@ class AppBottomNavbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: _onTap,
-        backgroundColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppIcons.home, color: AppColors.neutral_04),
-            activeIcon: SvgPicture.asset(
-              AppIcons.home,
-              color: AppColors.neutral_06,
+    return PopScope(
+      // Only pop if in `home` tab
+      canPop: navigationShell.currentIndex == 0,
+      onPopInvoked: (didPop) {
+        navigationShell.goBranch(0);
+      },
+      child: Scaffold(
+        body: navigationShell,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: navigationShell.currentIndex,
+          type: BottomNavigationBarType.fixed,
+          onTap: _onTap,
+          backgroundColor: Colors.white,
+          items: [
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                AppIcons.home,
+                color: AppColors.neutral_04,
+              ),
+              activeIcon: SvgPicture.asset(
+                AppIcons.home,
+                color: AppColors.neutral_06,
+              ),
+              label: localization(context).navHome,
             ),
-            label: localization(context).navHome,
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              AppIcons.shoppingCart,
-              color: AppColors.neutral_04,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                AppIcons.shoppingCart,
+                color: AppColors.neutral_04,
+              ),
+              activeIcon: SvgPicture.asset(
+                AppIcons.shoppingCart,
+                color: AppColors.neutral_06,
+              ),
+              label: localization(context).navShop,
             ),
-            activeIcon: SvgPicture.asset(
-              AppIcons.shoppingCart,
-              color: AppColors.neutral_06,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                AppIcons.profile,
+                color: AppColors.neutral_04,
+              ),
+              activeIcon: SvgPicture.asset(
+                AppIcons.profile,
+                color: AppColors.neutral_06,
+              ),
+              label: localization(context).navProfile,
             ),
-            label: localization(context).navShop,
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              AppIcons.profile,
-              color: AppColors.neutral_04,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                AppIcons.cart,
+                color: AppColors.neutral_04,
+              ),
+              activeIcon: SvgPicture.asset(
+                AppIcons.cart,
+                color: AppColors.neutral_06,
+              ),
+              label: localization(context).navCart,
             ),
-            activeIcon: SvgPicture.asset(
-              AppIcons.profile,
-              color: AppColors.neutral_06,
-            ),
-            label: localization(context).navProfile,
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppIcons.cart, color: AppColors.neutral_04),
-            activeIcon: SvgPicture.asset(
-              AppIcons.cart,
-              color: AppColors.neutral_06,
-            ),
-            label: localization(context).navCart,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

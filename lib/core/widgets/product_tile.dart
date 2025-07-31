@@ -90,7 +90,7 @@ class ProductTile extends StatelessWidget {
                 extra: {'product_name': product.name},
               ),
           child: SizedBox(
-            width: 230,
+            width: horizontalMode ? 230 : null,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,18 +20,24 @@ class BlogsScreen extends StatelessWidget {
         listenWhen:
             (_, state) =>
                 state is BlogsChangedCategoryErrorState ||
-                state is BlogsPaginationErrorState,
+                state is BlogsDataChangedState,
         listener: (context, state) {
+          final cubit = context.read<BlogsCubit>();
+
           if (state is BlogsChangedCategoryErrorState) {
             showErrorSnackBar(
               context,
               localization(context).rpcError(state.failure.code),
             );
-          } else if (state is BlogsPaginationErrorState) {
-            showErrorSnackBar(
-              context,
-              localization(context).rpcError(state.failure.code),
-            );
+          } else if (state is BlogsDataChangedState) {
+            if (cubit.blogsDataModel.hasPageError) {
+              showErrorSnackBar(
+                context,
+                localization(
+                  context,
+                ).rpcError(cubit.blogsDataModel.error!.code),
+              );
+            }
           }
         },
         buildWhen: (_, state) => state is BlogsDataChangedState,

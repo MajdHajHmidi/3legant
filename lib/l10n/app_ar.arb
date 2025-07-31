@@ -82,5 +82,21 @@
     "minutes": "Minutes",
     "seconds": "Seconds",
     "ratings": "Ratings",
-    "productReviewSubmitted": "Prouct review submitted"
+    "productReviewSubmitted": "Prouct review submitted",
+    "yourProfile": "Your Profile",
+    "myAccount": "My Account",
+    "accountDetails": "Account Details",
+    "orders": "Orders",
+    "favorites": "Favorites",
+    "yourName": "Your name",
+    "email": "Email",
+    "saveChanges": "Save Changes",
+    "numberID": "Number ID",
+    "date": "Date",
+    "status": "Status",
+    "ordersEmpty": "No orders have been placed. Buy items so you can see the history here.",
+    "favoritesEmpty": "There is no items on your Wishlist, shop items so you can add them to here.",
+    "shopProducts": "Shop products",
+    "signoutFailure": "Signing out Failed",
+    "accountUpdatedSuccessfully": "Account updated successfully"
 }

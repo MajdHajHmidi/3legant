@@ -1,6 +1,12 @@
 import 'package:e_commerce/product_details/data/product_details_repo.dart';
 import 'package:e_commerce/product_details/presentation/cubit/product_details_cubit.dart';
 import 'package:e_commerce/product_details/presentation/screens/product_details_screen.dart';
+import 'package:e_commerce/profile/application/profile_controller.dart';
+import 'package:e_commerce/profile/data/profile_repo.dart';
+import 'package:e_commerce/profile/presentation/cubits/profile_details_update_cubit.dart';
+import 'package:e_commerce/profile/presentation/cubits/profile_screen_data_cubit.dart';
+import 'package:e_commerce/profile/presentation/cubits/profile_signout_cubit.dart';
+import 'package:e_commerce/profile/presentation/cubits/profile_view_cubit.dart';
 
 import '../../blog_details/data/blog_details_repo.dart';
 import '../../blog_details/presentation/cubit/blog_details_cubit.dart';
@@ -28,7 +34,7 @@ import '../../home/data/home_repo.dart';
 import '../../home/presentation/screens/home_screen.dart';
 import '../../login-callback/presentation/cubit/login_callback_cubit.dart';
 import '../../login-callback/presentation/screens/login_callback_screen.dart';
-import '../../profile/temp_profile.dart';
+import '../../profile/presentation/screens/profile_screen.dart';
 import '../constants/app_constants.dart';
 import '../util/dependency_injection.dart';
 import '../widgets/bottom_navbar.dart';
@@ -110,7 +116,6 @@ GoRouter getAppRouter() => GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -125,7 +130,42 @@ GoRouter getAppRouter() => GoRouter(
             GoRoute(
               path: AppRoutes.profile.path,
               name: AppRoutes.profile.name,
-              builder: (context, state) => const ProfileScreen(),
+              builder: (context, state) {
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create:
+                          (_) => ProfileScreenDataCubit(
+                            profileRepo: serviceLocator<ProfileRepo>(),
+                          ),
+                    ),
+                    BlocProvider(create: (_) => ProfileViewCubit()),
+                    BlocProvider(
+                      create:
+                          (_) => ProfileDetailsUpdateCubit(
+                            profileRepo: serviceLocator<ProfileRepo>(),
+                          ),
+                    ),
+                    BlocProvider(
+                      create:
+                          (_) => ProfileSignoutCubit(
+                            authRepo: serviceLocator<AuthRepo>(),
+                          ),
+                    ),
+                    RepositoryProvider(
+                      create:
+                          (context) => ProfileController(
+                            profileScreenDataCubit:
+                                context.read<ProfileScreenDataCubit>(),
+                            profileDetailsUpdateCubit:
+                                context.read<ProfileDetailsUpdateCubit>(),
+                          ),
+                      dispose: (controller) => controller.dispose(),
+                    ),
+                  ],
+                  child: ProfileScreen(),
+                );
+              },
             ),
           ],
         ),
