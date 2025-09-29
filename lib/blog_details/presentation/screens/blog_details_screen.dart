@@ -15,17 +15,19 @@ class BlogDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(text: localization(context).blogs),
-      body: BlocBuilder<BlogDetailsCubit, BlogDetailsState>(
-        buildWhen: (_, state) => state is BlogDetailsDataChangedState,
-        builder: (context, state) {
-          final cubit = context.read<BlogDetailsCubit>();
-          return AsyncValueBuilder(
-            value: cubit.blogDetailsModel,
-            loading: (context) => BlogDetailsLoadingView(),
-            data: (context, data) => BlogDetailsDataView(model: data),
-            error: (context, error) => BlogDetailsErrorView(cubit: cubit),
-          );
-        },
+      body: SafeArea(
+        child: BlocBuilder<BlogDetailsCubit, BlogDetailsState>(
+          buildWhen: (_, state) => state is BlogDetailsDataChangedState,
+          builder: (context, state) {
+            final cubit = context.read<BlogDetailsCubit>();
+            return AsyncValueBuilder(
+              value: cubit.blogDetailsModel,
+              loading: (context) => BlogDetailsLoadingView(),
+              data: (context, data) => BlogDetailsDataView(model: data),
+              error: (context, error) => BlogDetailsErrorView(cubit: cubit),
+            );
+          },
+        ),
       ),
     );
   }

@@ -25,37 +25,43 @@ class ShopScreen extends StatelessWidget {
       cubit.getFilteredProducts();
     }
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        text: localization(context).navShop,
-        leadingIconAction: () {
-          // Close the keybaord if already opened
-          FocusScope.of(context).unfocus();
-          context.goNamed(AppRoutes.home.name);
-        },
-      ),
-      body: BlocConsumer<ShopCubit, ShopState>(
-        bloc: cubit,
-        listenWhen:
-            (_, state) => state is ShopFilteredProductsPaginationFailureState,
-        listener: (context, state) {
-          if (state is ShopFilteredProductsPaginationFailureState) {
-            showErrorSnackBar(
-              context,
-              localization(context).rpcError(state.failure.code),
-            );
-          }
-        },
-        builder: (context, state) {
-          final cubit = serviceLocator<ShopCubit>();
+    return PopScope(
+      onPopInvokedWithResult: (_, _) {
+        // Close the keybaord if already opened
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(
+          text: localization(context).navShop,
+          leadingIconAction: () {
+            // Close the keybaord if already opened
+            FocusScope.of(context).unfocus();
+            context.goNamed(AppRoutes.home.name);
+          },
+        ),
+        body: BlocConsumer<ShopCubit, ShopState>(
+          bloc: cubit,
+          listenWhen:
+              (_, state) => state is ShopFilteredProductsPaginationFailureState,
+          listener: (context, state) {
+            if (state is ShopFilteredProductsPaginationFailureState) {
+              showErrorSnackBar(
+                context,
+                localization(context).rpcError(state.failure.code),
+              );
+            }
+          },
+          builder: (context, state) {
+            final cubit = serviceLocator<ShopCubit>();
 
-          return AsyncValueBuilder(
-            value: cubit.shopDataModel,
-            loading: (context) => ShopLoadingView(),
-            data: (context, data) => ShopDataView(),
-            error: (context, error) => ShopErrorView(),
-          );
-        },
+            return AsyncValueBuilder(
+              value: cubit.shopDataModel,
+              loading: (context) => ShopLoadingView(),
+              data: (context, data) => ShopDataView(),
+              error: (context, error) => ShopErrorView(),
+            );
+          },
+        ),
       ),
     );
   }

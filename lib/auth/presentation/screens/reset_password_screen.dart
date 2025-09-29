@@ -48,91 +48,95 @@ class ResetPasswordScreen extends StatelessWidget {
             text: localization(context).authForgotPasswordTitle,
             leadingIconAction: () => context.goNamed(AppRoutes.home.name),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  localization(context).authForgotPasswordSetPasswordTitle,
-                  style: AppTextStyles.body2Semi.copyWith(
-                    color: AppColors.neutral_06,
-                    fontSize: 18,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    localization(context).authForgotPasswordSetPasswordTitle,
+                    style: AppTextStyles.body2Semi.copyWith(
+                      color: AppColors.neutral_06,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  localization(context).authForgotPasswordSetPasswordSubtitle,
-                  style: AppTextStyles.caption2.copyWith(
-                    color: AppColors.neutral_04,
+                  const SizedBox(height: 4),
+                  Text(
+                    localization(context).authForgotPasswordSetPasswordSubtitle,
+                    style: AppTextStyles.caption2.copyWith(
+                      color: AppColors.neutral_04,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 40),
-                Form(
-                  key: cubit.newPasswordFormKey,
-                  child: BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
+                  const SizedBox(height: 40),
+                  Form(
+                    key: cubit.newPasswordFormKey,
+                    child: BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
+                      buildWhen:
+                          (_, state) =>
+                              state is ResetPasswordHidePasswordToggledState,
+                      builder: (context, state) {
+                        final cubit = context.read<ResetPasswordCubit>();
+
+                        return AppTextFormField(
+                          hint: localization(context).authFieldPassword,
+                          controller: cubit.newPasswordController,
+                          textInputAction: TextInputAction.done,
+                          validator:
+                              (value) => cubit.validateResetPassword(context),
+                          onFieldSubmitted:
+                              (value) => cubit.resetPassword(context),
+                          obscure: cubit.isPasswordHidden,
+                          suffixIcon: Container(
+                            width: 26,
+                            height: 26,
+                            alignment: Alignment.centerRight,
+                            child: SvgPicture.asset(
+                              cubit.isPasswordHidden
+                                  ? AppIcons.eye
+                                  : AppIcons.strikedEye,
+                              theme: SvgTheme(
+                                currentColor: AppColors.neutral_04,
+                              ),
+                              width: 26,
+                              height: 26,
+                            ),
+                          ),
+                          onSuffixIconPressed: cubit.togglePasswordVisibility,
+                        );
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
+                    listenWhen:
+                        (_, state) =>
+                            state is ResetPasswordRequestDataChangedState,
+                    listener: (context, state) {
+                      final cubit = context.read<ResetPasswordCubit>();
+
+                      if (cubit.resetPasswordModel.isData) {
+                        context.goNamed(AppRoutes.home.name);
+                      }
+                    },
                     buildWhen:
                         (_, state) =>
-                            state is ResetPasswordHidePasswordToggledState,
+                            state is ResetPasswordRequestDataChangedState,
                     builder: (context, state) {
                       final cubit = context.read<ResetPasswordCubit>();
 
-                      return AppTextFormField(
-                        hint: localization(context).authFieldPassword,
-                        controller: cubit.newPasswordController,
-                        textInputAction: TextInputAction.done,
-                        validator:
-                            (value) => cubit.validateResetPassword(context),
-                        onFieldSubmitted:
-                            (value) => cubit.resetPassword(context),
-                        obscure: cubit.isPasswordHidden,
-                        suffixIcon: Container(
-                          width: 26,
-                          height: 26,
-                          alignment: Alignment.centerRight,
-                          child: SvgPicture.asset(
-                            cubit.isPasswordHidden
-                                ? AppIcons.eye
-                                : AppIcons.strikedEye,
-                            theme: SvgTheme(currentColor: AppColors.neutral_04),
-                            width: 26,
-                            height: 26,
-                          ),
-                        ),
-                        onSuffixIconPressed: cubit.togglePasswordVisibility,
+                      return AppButton(
+                        text:
+                            localization(
+                              context,
+                            ).authForgotPasswordSetPasswordButton,
+                        loading: cubit.resetPasswordModel.isLoading,
+                        onPressed: () => cubit.resetPassword(context),
                       );
                     },
                   ),
-                ),
-                const Spacer(),
-                BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
-                  listenWhen:
-                      (_, state) =>
-                          state is ResetPasswordRequestDataChangedState,
-                  listener: (context, state) {
-                    final cubit = context.read<ResetPasswordCubit>();
-
-                    if (cubit.resetPasswordModel.isData) {
-                      context.goNamed(AppRoutes.home.name);
-                    }
-                  },
-                  buildWhen:
-                      (_, state) =>
-                          state is ResetPasswordRequestDataChangedState,
-                  builder: (context, state) {
-                    final cubit = context.read<ResetPasswordCubit>();
-
-                    return AppButton(
-                      text:
-                          localization(
-                            context,
-                          ).authForgotPasswordSetPasswordButton,
-                      loading: cubit.resetPasswordModel.isLoading,
-                      onPressed: () => cubit.resetPassword(context),
-                    );
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

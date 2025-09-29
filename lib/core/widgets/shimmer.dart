@@ -16,13 +16,13 @@ class ShimmerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
+      baseColor: Colors.grey.shade200,
       highlightColor: Colors.grey.shade100,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
+          color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
@@ -38,13 +38,13 @@ class ShimmerCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
+      baseColor: Colors.grey.shade200,
       highlightColor: Colors.grey.shade100,
       child: Container(
         width: radius,
         height: radius,
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
+          color: Colors.grey.shade200,
           shape: BoxShape.circle,
         ),
       ),
@@ -70,7 +70,11 @@ class SliverShimmerBox extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Align(
         alignment: alignment,
-        child: ShimmerBox(width: width, height: height),
+        child: ShimmerBox(
+          width: width,
+          height: height,
+          borderRadius: borderRadius,
+        ),
       ),
     );
   }

@@ -63,7 +63,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   adaptive_grid: ^1.0.4
   sliver_expandable: ^1.1.2
-  sentry_flutter: ^9.3.0
+  # sentry_flutter: ^9.3.0
 
 dev_dependencies:
   flutter_test:

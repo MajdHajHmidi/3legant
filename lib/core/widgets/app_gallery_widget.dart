@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:e_commerce/core/util/periodic_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -25,18 +24,22 @@ class AppGalleryWidget extends StatefulWidget {
 
 class _HomeImageCarouselState extends State<AppGalleryWidget> {
   final pageController = PageController();
-  late Timer timer;
+  late PeriodicTimer timer;
 
   @override
   void initState() {
-    timer = Timer.periodic(3.s, (timer) {
-      final currentPage = pageController.page!.toInt();
-      pageController.animateToPage(
-        currentPage == widget.itemCount - 1 ? 0 : currentPage + 1,
-        duration: 500.ms,
-        curve: Curves.fastOutSlowIn,
-      );
-    });
+    timer = PeriodicTimer(
+      duration: 3.s,
+      onTick: () {
+        final currentPage = pageController.page!.toInt();
+        pageController.animateToPage(
+          currentPage == widget.itemCount - 1 ? 0 : currentPage + 1,
+          duration: 500.ms,
+          curve: Curves.fastOutSlowIn,
+        );
+      },
+    );
+    timer.start();
 
     super.initState();
   }
@@ -51,65 +54,79 @@ class _HomeImageCarouselState extends State<AppGalleryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: widget.borderRadius ?? BorderRadius.zero,
-      child: SizedBox(
-        height: widget.height,
-        child: Stack(
-          children: [
-            PageView(
-              controller: pageController,
-              children:
-                  List.generate(
-                    widget.itemCount,
-                    (index) => widget.itemBuilder(index),
-                  ).toList(),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: IgnorePointer(
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withAlpha(150),
-                        Colors.black.withAlpha(50),
-                        Colors.transparent,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                  ),
-                ),
+    return GestureDetector(
+      // Pause timer
+      onTapDown: (_) => timer.pause(),
+      onHorizontalDragDown: (_) => timer.pause(),
+      onHorizontalDragStart: (_) => timer.pause(),
+      onVerticalDragDown: (_) => timer.pause(),
+      onVerticalDragStart: (_) => timer.pause(),
+      // Resume timer
+      onHorizontalDragCancel: () => timer.resume(),
+      onHorizontalDragEnd: (_) => timer.resume(),
+      onVerticalDragCancel: () => timer.resume(),
+      onVerticalDragEnd: (_) => timer.resume(),
+      onTapUp: (_) => timer.resume(),
+      child: ClipRRect(
+        borderRadius: widget.borderRadius ?? BorderRadius.zero,
+        child: SizedBox(
+          height: widget.height,
+          child: Stack(
+            children: [
+              PageView(
+                controller: pageController,
+                children:
+                    List.generate(
+                      widget.itemCount,
+                      (index) => widget.itemBuilder(index),
+                    ).toList(),
               ),
-            ),
-            Positioned(
-              bottom: 16,
-              left: 0,
-              right: 0,
-              child: IgnorePointer(
-                child: SizedBox(
-                  child: Center(
-                    child: SmoothPageIndicator(
-                      controller: pageController,
-                      count: widget.itemCount,
-                      effect: ExpandingDotsEffect(
-                        dotWidth: 8,
-                        dotHeight: 8,
-                        dotColor: AppColors.neutral_01.withAlpha(200),
-                        activeDotColor: AppColors.neutral_01,
-                        spacing: 12,
-                        expansionFactor: 4,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.black.withAlpha(150),
+                          Colors.black.withAlpha(50),
+                          Colors.transparent,
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              Positioned(
+                bottom: 16,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(
+                  child: SizedBox(
+                    child: Center(
+                      child: SmoothPageIndicator(
+                        controller: pageController,
+                        count: widget.itemCount,
+                        effect: ExpandingDotsEffect(
+                          dotWidth: 8,
+                          dotHeight: 8,
+                          dotColor: AppColors.neutral_01.withAlpha(200),
+                          activeDotColor: AppColors.neutral_01,
+                          spacing: 12,
+                          expansionFactor: 4,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

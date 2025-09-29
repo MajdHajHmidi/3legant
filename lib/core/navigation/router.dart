@@ -1,3 +1,7 @@
+import 'package:e_commerce/cart/application/cart_controller.dart';
+import 'package:e_commerce/cart/presentation/cubit/cart_screen_data_cubit.dart';
+import 'package:e_commerce/cart/presentation/cubit/cart_view_mode_cubit.dart';
+import 'package:e_commerce/cart/presentation/cubit/coupon_cubit.dart';
 import 'package:e_commerce/product_details/data/product_details_repo.dart';
 import 'package:e_commerce/product_details/presentation/cubit/product_details_cubit.dart';
 import 'package:e_commerce/product_details/presentation/screens/product_details_screen.dart';
@@ -15,7 +19,6 @@ import '../../blogs/data/blogs_repo.dart';
 import '../../blogs/presentation/cubit/blogs_cubit.dart';
 import '../../blogs/presentation/screens/blogs_screen.dart';
 import '../../cart/data/cart_repo.dart';
-import '../../cart/presentation/cubit/cart_cubit.dart';
 import '../../cart/presentation/screens/cart_screen.dart';
 import '../../shop/presentation/screens/shop_screen.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +69,6 @@ GoRouter getAppRouter() => GoRouter(
   redirect: (context, state) {
     final session = Supabase.instance.client.auth.currentSession;
     final isLoggedIn = session != null;
-
     // Handle deeplink redirection
     if (state.uri.host == AppConstants.emailPasswordResetSupabaseRedirectHost) {
       return AppRoutes.resetPassword.path;
@@ -175,9 +177,31 @@ GoRouter getAppRouter() => GoRouter(
               path: AppRoutes.cart.path,
               name: AppRoutes.cart.name,
               builder:
-                  (context, state) => BlocProvider(
-                    create:
-                        (_) => CartCubit(cartRepo: serviceLocator<CartRepo>()),
+                  (routeContext, state) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (_) => CartViewModeCubit()),
+                      BlocProvider(
+                        create:
+                            (_) => CartScreenDataCubit(
+                              cartRepo: serviceLocator<CartRepo>(),
+                            ),
+                      ),
+                      BlocProvider(
+                        create:
+                            (_) => CouponCubit(
+                              cartRepo: serviceLocator<CartRepo>(),
+                            ),
+                      ),
+                      RepositoryProvider(
+                        create:
+                            (context) => CartController(
+                              routeContext,
+                              cartViewModeCubit:
+                                  context.read<CartViewModeCubit>(),
+                            ),
+                        dispose: (controller) => controller.dispose(),
+                      ),
+                    ],
                     child: const CartScreen(),
                   ),
             ),

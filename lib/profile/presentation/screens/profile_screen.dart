@@ -21,48 +21,54 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        text: localization(context).yourProfile,
-        leadingIconAction: () {
-          // Close the keybaord if already opened
-          FocusScope.of(context).unfocus();
-          context.goNamed(AppRoutes.home.name);
-        },
-        trailingIcon:
-            BlocConsumer<ProfileSignoutCubit, AsyncValue<void, AppFailure>>(
-              listener: (context, state) {
-                if (state.isError) {
-                  showErrorSnackBar(
-                    context,
-                    localization(context).signoutFailure,
-                  );
-                } else if (state.isData) {
-                  context.goNamed(AppRoutes.auth.name);
-                }
-              },
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return AppCircularProgressIndicator();
-                }
+    return PopScope(
+      onPopInvokedWithResult: (_, _) {
+        // Close the keybaord if already opened
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(
+          text: localization(context).yourProfile,
+          leadingIconAction: () {
+            // Close the keybaord if already opened
+            FocusScope.of(context).unfocus();
+            context.goNamed(AppRoutes.home.name);
+          },
+          trailingIcon:
+              BlocConsumer<ProfileSignoutCubit, AsyncValue<void, AppFailure>>(
+                listener: (context, state) {
+                  if (state.isError) {
+                    showErrorSnackBar(
+                      context,
+                      localization(context).signoutFailure,
+                    );
+                  } else if (state.isData) {
+                    context.goNamed(AppRoutes.auth.name);
+                  }
+                },
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return AppCircularProgressIndicator();
+                  }
 
-                return Icon(Icons.logout, color: AppColors.neutral_07);
-              },
-            ),
-        trailingIconAction: context.read<ProfileSignoutCubit>().signOut,
-      ),
-      body: BlocBuilder<
-        ProfileScreenDataCubit,
-        AsyncValue<ProfileDataModel, AppFailure>
-      >(
-        builder: (context, state) {
-          return AsyncValueBuilder(
-            value: state,
-            loading: (context) => ProfileLoadingView(),
-            data: (context, data) => ProfileDataView(screenDataModel: data),
-            error: (context, error) => ProfileErrorView(failure: error),
-          );
-        },
+                  return Icon(Icons.logout, color: AppColors.neutral_07);
+                },
+              ),
+          trailingIconAction: context.read<ProfileSignoutCubit>().signOut,
+        ),
+        body: BlocBuilder<
+          ProfileScreenDataCubit,
+          AsyncValue<ProfileDataModel, AppFailure>
+        >(
+          builder: (context, state) {
+            return AsyncValueBuilder(
+              value: state,
+              loading: (context) => ProfileLoadingView(),
+              data: (context, data) => ProfileDataView(screenDataModel: data),
+              error: (context, error) => ProfileErrorView(failure: error),
+            );
+          },
+        ),
       ),
     );
   }

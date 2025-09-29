@@ -16,41 +16,43 @@ class BlogsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(text: localization(context).blogs),
-      body: BlocConsumer<BlogsCubit, BlogsState>(
-        listenWhen:
-            (_, state) =>
-                state is BlogsChangedCategoryErrorState ||
-                state is BlogsDataChangedState,
-        listener: (context, state) {
-          final cubit = context.read<BlogsCubit>();
-
-          if (state is BlogsChangedCategoryErrorState) {
-            showErrorSnackBar(
-              context,
-              localization(context).rpcError(state.failure.code),
-            );
-          } else if (state is BlogsDataChangedState) {
-            if (cubit.blogsDataModel.hasPageError) {
+      body: SafeArea(
+        child: BlocConsumer<BlogsCubit, BlogsState>(
+          listenWhen:
+              (_, state) =>
+                  state is BlogsChangedCategoryErrorState ||
+                  state is BlogsDataChangedState,
+          listener: (context, state) {
+            final cubit = context.read<BlogsCubit>();
+        
+            if (state is BlogsChangedCategoryErrorState) {
               showErrorSnackBar(
                 context,
-                localization(
-                  context,
-                ).rpcError(cubit.blogsDataModel.error!.code),
+                localization(context).rpcError(state.failure.code),
               );
+            } else if (state is BlogsDataChangedState) {
+              if (cubit.blogsDataModel.hasPageError) {
+                showErrorSnackBar(
+                  context,
+                  localization(
+                    context,
+                  ).rpcError(cubit.blogsDataModel.error!.code),
+                );
+              }
             }
-          }
-        },
-        buildWhen: (_, state) => state is BlogsDataChangedState,
-        builder: (context, state) {
-          final cubit = context.read<BlogsCubit>();
-
-          return AsyncValueBuilder(
-            value: cubit.blogsDataModel,
-            loading: (context) => BlogsLoadingView(),
-            data: (context, data) => BlogsDataView(cubit: cubit),
-            error: (context, error) => BlogsErrorView(cubit: cubit),
-          );
-        },
+          },
+          buildWhen: (_, state) => state is BlogsDataChangedState,
+          builder: (context, state) {
+            final cubit = context.read<BlogsCubit>();
+        
+            return AsyncValueBuilder(
+              value: cubit.blogsDataModel,
+              loading: (context) => BlogsLoadingView(),
+              data: (context, data) => BlogsDataView(cubit: cubit),
+              error: (context, error) => BlogsErrorView(cubit: cubit),
+            );
+          },
+        ),
       ),
     );
   }

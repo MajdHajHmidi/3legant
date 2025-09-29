@@ -138,14 +138,6 @@ class ShopCubit extends Cubit<ShopState> {
     FilteredProductsModel first,
     FilteredProductsModel second,
   ) {
-    // TODO: Add "Race conditions" check
-    // Check if pages are consecutive
-    // if (first.paginationInfo.currentPage !=
-    //     second.paginationInfo.currentPage - 1) {
-    //   // Pages are not consecutive, skip merge
-    //   return first;
-    // }
-
     return FilteredProductsModel(
       products: [...first.products, ...second.products],
       paginationInfo: second.paginationInfo,

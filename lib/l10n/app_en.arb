@@ -98,5 +98,18 @@
     "favoritesEmpty": "There is no items on your Wishlist, shop items so you can add them to here.",
     "shopProducts": "Shop products",
     "signoutFailure": "Signing out Failed",
-    "accountUpdatedSuccessfully": "Account updated successfully"
+    "accountUpdatedSuccessfully": "Account updated successfully",
+    "cart": "Cart",
+    "shoppingCart": "Shopping Cart",
+    "checkoutDetails": "Checkout Details",
+    "orderComplete": "Order Complete",
+    "products": "Products",
+    "color": "Color",
+    "haveCoupon": "Have a coupon?",
+    "addYourCodeForDiscount": "Add your code for an instant cart discount",
+    "cartSummary": "Cart summary",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "checkout": "Checkout"
+
 }

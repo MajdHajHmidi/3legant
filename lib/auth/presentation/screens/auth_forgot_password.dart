@@ -41,15 +41,17 @@ class AuthForgotPassword extends StatelessWidget {
             text: localization(context).authForgotPasswordTitle,
             leadingIconAction: () => onBackPressed(context, cubit),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 32),
-            child: PageView(
-              controller: cubit.forgotPasswordScreenPageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                BlocProvider.value(value: cubit, child: EnterEmailView()),
-                BlocProvider.value(value: cubit, child: CheckInboxView()),
-              ],
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 32),
+              child: PageView(
+                controller: cubit.forgotPasswordScreenPageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  BlocProvider.value(value: cubit, child: EnterEmailView()),
+                  BlocProvider.value(value: cubit, child: CheckInboxView()),
+                ],
+              ),
             ),
           ),
         ),

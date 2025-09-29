@@ -27,7 +27,7 @@ void setupDependencyInjection() {
     () => SupabaseFavoriteRepo(),
   );
   serviceLocator.registerLazySingleton<CartRepo>(
-    () => SupabaseSqliteCartRepo(),
+    () => SupabaseCartRepo(),
   );
   serviceLocator.registerLazySingleton<ShopRepo>(() => SupabaseShopRepo());
   serviceLocator.registerLazySingleton<BlogsRepo>(() => SupabaseBlogsRepo());

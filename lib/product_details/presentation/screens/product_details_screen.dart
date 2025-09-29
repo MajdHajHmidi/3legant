@@ -18,53 +18,55 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(text: productName),
-      body: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
-        listenWhen:
-            (_, state) =>
-                state is ProductReviewsDataChangedState ||
-                state is ProductDetailsReviewDataChangedState,
-        listener: (context, state) {
-          final cubit = context.read<ProductDetailsCubit>();
+      body: SafeArea(
+        child: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
+          listenWhen:
+              (_, state) =>
+                  state is ProductReviewsDataChangedState ||
+                  state is ProductDetailsReviewDataChangedState,
+          listener: (context, state) {
+            final cubit = context.read<ProductDetailsCubit>();
 
-          if (state is ProductReviewsDataChangedState) {
-            if (cubit.productReviewsModel.hasPageError) {
-              showErrorSnackBar(
-                context,
-                localization(
+            if (state is ProductReviewsDataChangedState) {
+              if (cubit.productReviewsModel.hasPageError) {
+                showErrorSnackBar(
                   context,
-                ).rpcError(cubit.productReviewsModel.error!.code),
-              );
-            }
-          } else if (state is ProductDetailsReviewDataChangedState) {
-            if (cubit.userReviewSubmitModel.isError) {
-              showErrorSnackBar(
-                context,
-                localization(
+                  localization(
+                    context,
+                  ).rpcError(cubit.productReviewsModel.error!.code),
+                );
+              }
+            } else if (state is ProductDetailsReviewDataChangedState) {
+              if (cubit.userReviewSubmitModel.isError) {
+                showErrorSnackBar(
                   context,
-                ).rpcError(cubit.userReviewSubmitModel.error!.code),
-              );
-            } else if (cubit.userReviewSubmitModel.isData) {
-              showSuccessSnackBar(
-                context,
-                localization(context).productReviewSubmitted,
-              );
+                  localization(
+                    context,
+                  ).rpcError(cubit.userReviewSubmitModel.error!.code),
+                );
+              } else if (cubit.userReviewSubmitModel.isData) {
+                showSuccessSnackBar(
+                  context,
+                  localization(context).productReviewSubmitted,
+                );
+              }
             }
-          }
-        },
-        builder: (context, state) {
-          final cubit = context.read<ProductDetailsCubit>();
+          },
+          builder: (context, state) {
+            final cubit = context.read<ProductDetailsCubit>();
 
-          return AsyncValueBuilder(
-            value: cubit.productDetailsModel,
-            loading: (context) => ProductDetailsLoadingView(),
-            data:
-                (context, data) => BlocProvider.value(
-                  value: cubit,
-                  child: ProductDetailsDataView(),
-                ),
-            error: (context, error) => ProductDetailsErrorView(),
-          );
-        },
+            return AsyncValueBuilder(
+              value: cubit.productDetailsModel,
+              loading: (context) => ProductDetailsLoadingView(),
+              data:
+                  (context, data) => BlocProvider.value(
+                    value: cubit,
+                    child: ProductDetailsDataView(),
+                  ),
+              error: (context, error) => ProductDetailsErrorView(),
+            );
+          },
+        ),
       ),
     );
   }
