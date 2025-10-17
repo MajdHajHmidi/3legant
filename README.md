@@ -1,6 +1,6 @@
 <h1 align="center" style="font-size:28px; line-height:1"><b>3legant</b>
 </h1>
-![App Promotion Image](assets/images/3legant_promotion.jpg)
+![alt text](https://github.com/MajdHajHmidi/3legant/blob/main/assets/images/3legant_promotion.jpg?raw=true)
 <h3 align="center" style="font-size:28px; line-height:1">
 Luxury Home Furniture
 </h3>
