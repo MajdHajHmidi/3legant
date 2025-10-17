@@ -54,19 +54,10 @@ class _HomeImageCarouselState extends State<AppGalleryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      // Pause timer
-      onTapDown: (_) => timer.pause(),
-      onHorizontalDragDown: (_) => timer.pause(),
-      onHorizontalDragStart: (_) => timer.pause(),
-      onVerticalDragDown: (_) => timer.pause(),
-      onVerticalDragStart: (_) => timer.pause(),
-      // Resume timer
-      onHorizontalDragCancel: () => timer.resume(),
-      onHorizontalDragEnd: (_) => timer.resume(),
-      onVerticalDragCancel: () => timer.resume(),
-      onVerticalDragEnd: (_) => timer.resume(),
-      onTapUp: (_) => timer.resume(),
+    return Listener(
+      onPointerDown: (_) => timer.pause(),
+      onPointerUp: (_) => timer.resume(),
+      onPointerCancel: (_) => timer.resume(),
       child: ClipRRect(
         borderRadius: widget.borderRadius ?? BorderRadius.zero,
         child: SizedBox(
